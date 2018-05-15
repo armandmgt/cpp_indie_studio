@@ -1,10 +1,12 @@
 set(SOURCE_FILES
         main.cpp
-        gfx/Renderer.cpp
-        ../include/gfx/Renderer.hpp
-        ../include/common/vec.hpp
-        ../include/enum/AnimationType.hpp)
-
+		engine/GameEngine.cpp
+		../include/engine/GameEngine.hpp
+#        gfx/Renderer.cpp
+#        ../include/gfx/Renderer.hpp
+#        ../include/common/vec.hpp
+#        ../include/enum/AnimationType.hpp)
+        )
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4")
 else()

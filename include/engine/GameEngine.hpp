@@ -21,9 +21,9 @@ namespace ids {
 			GameEngine();
 			~GameEngine() noexcept = default;
 
-			std::vector<IPlayer> getPlayers() { return this->_players; }
-			std::vector<IItem> getItems() { return this->_items; }
-			std::vector<IObject> getObjects() { return this->_objects; }
+			std::vector<IPlayer> getPlayers() const noexcept { return this->_players; }
+			std::vector<IItem> getItems() const noexcept { return this->_items; }
+			std::vector<IObject> getObjects() const noexcept { return this->_objects; }
 
 		private:
 
