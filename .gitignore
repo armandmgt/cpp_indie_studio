@@ -1,0 +1,9 @@
+.idea
+*-debug
+
+*.o
+*.tmp
+*.log
+
+tmp/
+garbage/

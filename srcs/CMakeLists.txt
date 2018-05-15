@@ -3,7 +3,9 @@ set(SOURCE_FILES
         engine/GameContainer.cpp
         ../include/engine/GameContainer.hpp
         engine/GameEngine.cpp
-        ../include/engine/GameEngine.hpp)
+        ../include/engine/GameEngine.hpp
+        ../include/common/vec.hpp
+        ../include/enum/AnimationType.hpp)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4")
