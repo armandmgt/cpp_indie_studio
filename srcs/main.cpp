@@ -5,9 +5,20 @@
 ** main
 */
 
+#include <string>
 #include <iostream>
+#include <memory>
+#include "engine/GameContainer.hpp"
 
-int main() {
-	std::cout << "Hello, World!" << std::endl;
+int main()
+{
+	try {
+		std::unique_ptr<ids::GameContainer> gc(ids::GameContainer::create());
+
+		gc->start();
+	} catch (std::exception const &e) {
+		std::cerr << e.what() << std::endl;
+		return 84;
+	}
 	return 0;
 }
