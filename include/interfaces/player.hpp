@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "common/vec.hpp"
+
 namespace ids {
 	class IPlayer {
 		public:
@@ -17,7 +19,6 @@ namespace ids {
 				GREEN,
 			};
 
-			IPlayer();
 			virtual ~IPlayer() noexcept = default;
 	};
 }

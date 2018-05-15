@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+#include <common/vec.hpp>
 #include <interfaces/item.hpp>
 #include <interfaces/player.hpp>
 #include <interfaces/object.hpp>
@@ -27,9 +28,9 @@ namespace ids {
 
 		private:
 
-			void _spawnPlayer(std::pair<float, float>, IPlayer::Color);
-			void _spawnItem(std::pair<float, float>, IItem::Powerup);
-			void _spawnObject(std::pair<float, float>, IObject::Type);
+			void _spawnPlayer(vec2d<float>, IPlayer::Color);
+			void _spawnItem(vec2d<float>, IItem::Powerup);
+			void _spawnObject(vec2d<float>, IObject::Type);
 
 			std::vector<IPlayer> _players;
 			std::vector<IItem> _items;
