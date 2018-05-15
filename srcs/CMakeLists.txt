@@ -1,14 +1,15 @@
 set(SOURCE_FILES
-        main.cpp
-        gfx/Renderer.cpp
-        ../include/gfx/Renderer.hpp
+        ../include/gfx/Renderable.hpp
+        gfx/Renderable.cpp
         ../include/common/vec.hpp
-        ../include/enum/AnimationType.hpp)
+        ../include/enum/AnimationType.hpp
+        gfx/Renderer.cpp
+        ../include/gfx/Renderer.hpp gfx/EventReceiver.cpp ../include/gfx/EventReceiver.hpp)
 
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "/W4")
+    set(CMAKE_CXX_FLAGS "/W4 -lIrrlicht")
 else()
-    set(CMAKE_CXX_FLAGS "-W -Wall")
+    set(CMAKE_CXX_FLAGS "-W -Wall -lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor")
 endif()
 
 add_executable(bomberman ${SOURCE_FILES})
