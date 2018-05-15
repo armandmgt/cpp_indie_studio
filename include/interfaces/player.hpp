@@ -8,9 +8,7 @@
 #pragma once
 
 namespace ids {
-
 	class IPlayer {
-
 		public:
 			enum Color {
 				WHITE,
@@ -22,5 +20,4 @@ namespace ids {
 			IPlayer();
 			virtual ~IPlayer() noexcept = default;
 	};
-
 }

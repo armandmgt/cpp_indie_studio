@@ -8,10 +8,8 @@
 #pragma once
 
 namespace ids {
-
 	class IObject {
 		public:
-
 			enum Type {
 				BOMB,
 				FLAME,
@@ -20,5 +18,4 @@ namespace ids {
 			IObject();
 			virtual ~IObject() noexcept = default;
 	};
-
 }
