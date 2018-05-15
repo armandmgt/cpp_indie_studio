@@ -46,8 +46,7 @@
 	template<typename T>
 	class vec2d {
 	public:
-		vec2d(T value1, T value2) : x(value1),
-						       y(value2)
+		vec2d(T value1, T value2) : x(value1), y(value2)
 		{}
 		~vec2d() = default;
 		vec2d operator+(vec2d &v) {
