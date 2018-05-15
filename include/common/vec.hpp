@@ -16,6 +16,28 @@
 						       z(value3)
 		{}
 		~vec3d() = default;
+		vec3d operator+(vec3d &v) {
+			return vec3d(x + v.x, y + v.y, z + v.z);
+		}
+
+		vec3d operator-(vec3d &v) {
+			return vec3d(x - v.x, y - v.y, z - v.z);
+		}
+
+		vec3d& operator+=(vec3d& v) {
+			x += v.x;
+			y += v.y;
+			z += v.z;
+			return *this;
+		}
+
+		vec3d& operator-=(vec3d& v) {
+			x -= v.x;
+			y -= v.y;
+			z -= v.z;
+			return *this;
+		}
+
 		T x;
 		T y;
 		T z;
@@ -24,10 +46,30 @@
 	template<typename T>
 	class vec2d {
 	public:
-		vec2d(T value1, T value2 , T value3) : x(value1),
+		vec2d(T value1, T value2) : x(value1),
 						       y(value2)
 		{}
 		~vec2d() = default;
+		vec2d operator+(vec2d &v) {
+			return vec2d(x + v.x, y + v.y);
+		}
+
+		vec2d operator-(vec2d &v) {
+			return vec2d(x - v.x, y - v.y);
+		}
+
+		vec2d& operator+=(vec2d& v) {
+			x += v.x;
+			y += v.y;
+			return *this;
+		}
+
+		vec2d& operator-=(vec2d& v) {
+			x -= v.x;
+			y -= v.y;
+			return *this;
+		}
+
 		T x;
 		T y;
 	};
