@@ -8,11 +8,8 @@
 #ifndef EVENT_HPP_
 	#define EVENT_HPP_
 
-	#include <irrlicht.h>
-
-	namespace is {
-
-		class Event : public IEventReceiver
+	namespace ids {
+		class Event
 		{
 			Event();
 			~Event();
