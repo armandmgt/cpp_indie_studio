@@ -13,7 +13,7 @@ gfx::Renderer::Renderer()
 	irr::core::stringw tittleWindow = "Bomberman";
 
 	device = irr::createDevice(irr::video::EDT_OPENGL,
-		irr::core::dimension2d<irr::u32>(1920, 1080), 16, true, false,
+		irr::core::dimension2d<irr::u32>(1920, 1080), 16, true, true,
 				   false, &Event);
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
@@ -33,7 +33,8 @@ bool gfx::Renderer::isRun()
 
 void gfx::Renderer::render(std::vector<gfx::Renderable> &v)
 {
-
+	for (auto &it : v)
+		it.render();
 }
 
 void gfx::Renderer::render()
