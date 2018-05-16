@@ -15,7 +15,6 @@ namespace ids {
 				FLAME,
 			};
 
-			IObject();
 			virtual ~IObject() noexcept = default;
 	};
 }
