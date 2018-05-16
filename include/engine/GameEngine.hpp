@@ -11,9 +11,11 @@
 #include <vector>
 
 #include <common/vec.hpp>
-#include <interfaces/item.hpp>
-#include <interfaces/player.hpp>
-#include <interfaces/object.hpp>
+#include "entities/Player.hpp"
+#include "entities/Item.hpp"
+#include "entities/Object.hpp"
+//#include "entities/Item.hpp"
+//#include "entities/Object.hpp"
 
 namespace ids {
 
@@ -22,19 +24,19 @@ namespace ids {
 			GameEngine();
 			~GameEngine() noexcept = default;
 
-			std::vector<IPlayer> getPlayers() const noexcept { return this->_players; }
-			std::vector<IItem> getItems() const noexcept { return this->_items; }
-			std::vector<IObject> getObjects() const noexcept { return this->_objects; }
+			std::vector<Player> getPlayers() const noexcept { return this->_players; }
+			std::vector<Item> getItems() const noexcept { return this->_items; }
+			std::vector<Object> getObjects() const noexcept { return this->_objects; }
 
 		private:
 
-			void _spawnPlayer(vec2d<float>, IPlayer::Color);
-			void _spawnItem(vec2d<float>, IItem::Powerup);
-			void _spawnObject(vec2d<float>, IObject::Type);
+			void _spawnPlayer(vec2d<float>, Player::Color);
+			void _spawnItem(vec2d<float>, Item::Powerup);
+			void _spawnObject(vec2d<float>, Object::Type);
 
-			std::vector<IPlayer> _players;
-			std::vector<IItem> _items;
-			std::vector<IObject> _objects;
+			std::vector<Player> _players;
+			std::vector<Item> _items;
+			std::vector<Object> _objects;
 	};
 
 }
