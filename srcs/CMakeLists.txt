@@ -10,6 +10,7 @@ set(SOURCE_FILES
 		../include/interfaces/IObject.hpp
 		../include/interfaces/IItem.hpp
 
+		entities/Player.cpp
 		../include/entities/Player.hpp
 		../include/entities/Item.hpp
 		../include/entities/Object.hpp
