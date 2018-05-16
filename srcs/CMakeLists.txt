@@ -6,9 +6,13 @@ set(SOURCE_FILES
 		engine/GameEngine.cpp
 		../include/engine/GameEngine.hpp
 
-		../include/interfaces/player.hpp
-		../include/interfaces/object.hpp
-		../include/interfaces/item.hpp
+		../include/interfaces/IPlayer.hpp
+		../include/interfaces/IObject.hpp
+		../include/interfaces/IItem.hpp
+
+		../include/entities/Player.hpp
+		../include/entities/Item.hpp
+		../include/entities/Object.hpp
 
 		../include/common/vec.hpp
 

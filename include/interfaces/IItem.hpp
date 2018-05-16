@@ -17,7 +17,6 @@ namespace ids {
 				BOMB,
 			};
 
-			IItem();
 			virtual ~IItem() noexcept = default;
 	};
 
