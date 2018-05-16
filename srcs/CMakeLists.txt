@@ -2,13 +2,18 @@ set(SOURCE_FILES
         main.cpp
         engine/GameContainer.cpp
         ../include/engine/GameContainer.hpp
+
 		engine/GameEngine.cpp
 		../include/engine/GameEngine.hpp
+
 		../include/interfaces/player.hpp
 		../include/interfaces/object.hpp
 		../include/interfaces/item.hpp
-        ../include/common/vec.hpp
-        ../include/enum/AnimationType.hpp)
+
+		../include/common/vec.hpp
+
+        ../include/enum/AnimationType.hpp
+        ../include/enum/Directions.hpp)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4")
