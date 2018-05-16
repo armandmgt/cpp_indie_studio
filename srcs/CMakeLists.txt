@@ -1,18 +1,29 @@
 set(SOURCE_FILES
-        ../include/gfx/Renderable.hpp
-        gfx/Renderable.cpp
-        ../include/common/vec.hpp
+        main.cpp
+        engine/GameContainer.cpp
+        ../include/engine/GameContainer.hpp
+
+		engine/GameEngine.cpp
+		../include/engine/GameEngine.hpp
+
+		../include/interfaces/player.hpp
+		../include/interfaces/object.hpp
+		../include/interfaces/item.hpp
+
+		../include/common/vec.hpp
+
         ../include/enum/AnimationType.hpp
-        gfx/Renderer.cpp
-        ../include/gfx/Renderer.hpp gfx/EventReceiver.cpp ../include/gfx/EventReceiver.hpp)
+        ../include/enum/Directions.hpp)
 
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "/W4 -lIrrlicht")
+    set(CMAKE_CXX_FLAGS "/W4")
 else()
-    set(CMAKE_CXX_FLAGS "-W -Wall -lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor")
+    set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wshadow")
 endif()
 
 add_executable(bomberman ${SOURCE_FILES})
+
+target_link_libraries(bomberman Irrlicht)
 
 add_custom_command(TARGET bomberman POST_BUILD
         COMMAND cp bomberman ${CMAKE_SOURCE_DIR})
