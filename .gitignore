@@ -1,0 +1,11 @@
+*.o
+*.tmp
+*.log
+
+*-debug
+.idea
+tmp/
+garbage/
+build/
+
+bomberman
