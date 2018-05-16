@@ -26,7 +26,7 @@ namespace ids {
 			virtual ~IPlayer() noexcept = default;
 
 			virtual Color getColor() const noexcept = 0;
-			virtual std::string &getName() const noexcept = 0;
+			virtual std::string getName() const noexcept = 0;
 			virtual vec2d<float> getPosition() const noexcept = 0;
 			virtual float getSpeed() const noexcept = 0;
 			virtual Directions getDirection() const noexcept = 0;
