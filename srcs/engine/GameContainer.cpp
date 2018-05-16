@@ -7,22 +7,22 @@
 
 #include "engine/GameContainer.hpp"
 
-ids::GameContainer::GameContainer()
+ids::GameContainer::GameContainer() : _ge()
 {
-	device = irr::createDevice(
+	_device = irr::createDevice(
 		irr::video::EDT_SOFTWARE,
 		irr::core::dimension2d<irr::u32>(640, 480), 16, false,
 		false, false, nullptr);
 
-	if (!device)
+	if (!_device)
 		return;
-	device->setWindowCaption(L"Hello World!");
-	driver = device->getVideoDriver();
-	smgr = device->getSceneManager();
-	guienv = device->getGUIEnvironment();
-	guienv->addStaticText(L"Hello World! This is the Irrlicht Software renderer!",
+	_device->setWindowCaption(L"Hello World!");
+	_driver = _device->getVideoDriver();
+	_smgr = _device->getSceneManager();
+	_guienv = _device->getGUIEnvironment();
+	_guienv->addStaticText(L"Hello World! This is the Irrlicht Software renderer!",
 		irr::core::rect<irr::s32>(10,10,260,22), true);
-	smgr->addCameraSceneNode(nullptr, irr::core::vector3df(0,30,-40),
+	_smgr->addCameraSceneNode(nullptr, irr::core::vector3df(0,30,-40),
 		irr::core::vector3df(0,5,0));
 }
 
@@ -33,18 +33,16 @@ ids::GameContainer *ids::GameContainer::create()
 
 void ids::GameContainer::start()
 {
-	while(device->run()) {
-		driver->beginScene(true, true,
+	while(_device->run()) {
+		_driver->beginScene(true, true,
 			irr::video::SColor(255,100,101,140));
-
-		smgr->drawAll();
-		guienv->drawAll();
-
-		driver->endScene();
+		_smgr->drawAll();
+		_guienv->drawAll();
+		_driver->endScene();
 	}
 }
 
 ids::GameContainer::~GameContainer()
 {
-	device->drop();
+	_device->drop();
 }

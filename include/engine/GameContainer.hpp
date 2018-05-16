@@ -9,6 +9,8 @@
 #define CPP_INDIE_STUDIO_GAMECONTAINER_HPP
 
 #include <irrlicht/irrlicht.h>
+#include "GameEngine.hpp"
+
 #ifdef _IRR_WINDOWS_
 #pragma comment(lib, "Irrlicht.lib")
 #pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
@@ -27,10 +29,11 @@ namespace ids {
 		private:
 		GameContainer();
 
-		irr::video::IVideoDriver* driver;
-		irr::scene::ISceneManager* smgr;
-		irr::gui::IGUIEnvironment* guienv;
-		irr::IrrlichtDevice *device;
+		irr::video::IVideoDriver* _driver;
+		irr::scene::ISceneManager* _smgr;
+		irr::gui::IGUIEnvironment* _guienv;
+		irr::IrrlichtDevice *_device;
+		GameEngine _ge;
 	};
 }
 
