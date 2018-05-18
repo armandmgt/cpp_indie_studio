@@ -17,7 +17,6 @@ gfx::Renderer::Renderer()
 				   false, &Event);
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
-	smgr->addCameraSceneNodeFPS();
 	device->setWindowCaption(tittleWindow.c_str());
 }
 
@@ -46,7 +45,10 @@ void gfx::Renderer::render()
 
 vec2d<int> gfx::Renderer::getMousePosition()
 {
-	return vec2d<int>(0, 0);
+	gfx::MyEventReceiver::SMouseState mouse =  Event.GetMouseState();
+	vec2d<int> position(mouse.position.X, mouse.position.Y);
+
+	return position;
 }
 
 ids::eventKey gfx::Renderer::pollEvent()
@@ -64,17 +66,41 @@ ids::eventKey gfx::Renderer::pollEvent()
 
 void gfx::Renderer::renderGameBoad()
 {
+}
 
+void gfx::Renderer::newScene()
+{
+
+}
+
+irr::scene::ISceneManager *gfx::Renderer::getScene()
+{
+	return smgr;
+}
+
+void gfx::Renderer::addArchive(std::string const &filename)
+{
+	device->getFileSystem()->addFileArchive(filename.c_str());
+}
+
+void gfx::Renderer::clear()
+{
+	smgr->clear();
 }
 
 int main()
 {
 	gfx::Renderer window;
+	gfx::Renderable asset;
 
+	window.addArchive("../../assets/meshs/map-20kdm2.pk3");
+	asset.setMesh(window.getScene(), "20kdm2.bsp");
+	asset.setPosition(vec3d<float>(0,0,0));
 	while (window.isRun()) {
 		if (window.pollEvent() == ids::QUIT) {
 			return 0;
 		}
+		window.clear();
 		window.render();
 	}
 }

@@ -10,6 +10,8 @@
 
 #include <string>
 #include <unordered_map>
+#include <irrlicht/irrlicht.h>
+#include <memory>
 #include "common/vec.hpp"
 #include "enum/AnimationType.hpp"
 
@@ -17,12 +19,11 @@ namespace gfx {
 
 	class Renderable {
 	public:
-		Renderable() = default;
+		Renderable();
 		~Renderable() = default;
-		void pushOnScreen();
 		void removeFromScreen();
 		void setAnimation(AnimationType, const std::string &);
-		void setMesh(std::string const &);
+		void setMesh(irr::scene::ISceneManager *, std::string const &);
 		void setTexture(const std::string &);
 		vec3d<float> getPosition() const;
 		void render();
@@ -31,7 +32,10 @@ namespace gfx {
 		bool is3D() const;
 		bool isAnimable() const;
 
-//	private:
+	private:
+		vec3d<float> positions;
+		irr::scene::IAnimatedMesh *mesh = nullptr;
+		irr::scene::ISceneNode *node = nullptr;
 		// std::unordered_map<AnimationType, Animation> animationMap;
 
 	};
