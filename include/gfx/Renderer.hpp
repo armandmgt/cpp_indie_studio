@@ -25,8 +25,12 @@ namespace gfx {
 		void render(std::vector<Renderable> &v);
 		void render();
 		bool isRun();
+		void newScene();
+		irr::scene::ISceneManager *getScene();
 		vec2d<int> getMousePosition();
 		ids::eventKey pollEvent();
+		void addArchive(std::string const &filename);
+		void clear();
 
 	private:
 		void renderGameBoad();
