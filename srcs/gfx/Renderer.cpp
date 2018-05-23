@@ -19,7 +19,7 @@ gfx::Renderer::Renderer()
 				   false, &Event);
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
-	smgr->addCameraSceneNode();
+	smgr->addCameraSceneNodeFPS();
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
 }
