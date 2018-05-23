@@ -7,18 +7,27 @@
 
 #include <string>
 #include <iostream>
-#include <memory>
-#include "engine/GameContainer.hpp"
+#include <settingManager/settingManager.hpp>
+#include "gfx/Renderable.hpp"
+#include "gfx/Renderer.hpp"
 
 int main()
 {
-	try {
-		std::unique_ptr<ids::GameContainer> gc(ids::GameContainer::create());
+	std::string filename("../../settings/settings.xml");
+	gfx::Renderer window;
+	gfx::Renderable asset;
+	opt::settingManager settings(filename);
 
-		gc->start();
-	} catch (std::exception const &e) {
-		std::cerr << e.what() << std::endl;
-		return 84;
+	settings.load();
+//	window.addArchive(settings.getValue("archive"));
+//	asset.setMesh(window.getScene(), settings.getValue("mesh"));
+//	asset.setPosition(vec3d<float>(-1300,-144,-1249));
+	window.load2D("../../assets/textures/texture.jpg");
+	while (window.isRun()) {
+		if (window.pollEvent() == ids::QUIT) {
+			break;
+		}
+		window.render();
 	}
 	return 0;
 }

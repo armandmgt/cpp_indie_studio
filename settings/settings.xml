@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<player>
+    <archive name="archive" value="../../assets/meshs/map-20kdm2.pk3">
+        <file name="mesh" value="20kdm2.bsp"/>
+    </archive>
+</player>

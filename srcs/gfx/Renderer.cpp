@@ -8,6 +8,8 @@
 #include <iostream>
 #include "gfx/Renderer.hpp"
 
+//TODO Sound
+
 gfx::Renderer::Renderer()
 {
 	irr::core::stringw tittleWindow = "Bomberman";
@@ -17,7 +19,9 @@ gfx::Renderer::Renderer()
 				   false, &Event);
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
+	smgr->addCameraSceneNode();
 	device->setWindowCaption(tittleWindow.c_str());
+	guienv = device->getGUIEnvironment();
 }
 
 gfx::Renderer::~Renderer()
@@ -38,8 +42,15 @@ void gfx::Renderer::render(std::vector<gfx::Renderable> &v)
 
 void gfx::Renderer::render()
 {
-	driver->beginScene(true, true, irr::video::SColor(255,255,255,255));
+	driver->beginScene(true, true, irr::video::SColor(0,0,0,0));
 	smgr->drawAll();
+	guienv->drawAll();
+	driver->enableMaterial2D();
+	for (auto &image : images) {
+		driver->draw2DImage(image, irr::core::position2d<irr::s32>(0,0),
+				    irr::core::rect<irr::s32>(0,0,10000,10000));
+	}
+	driver->enableMaterial2D(false);
 	driver->endScene();
 }
 
@@ -64,13 +75,8 @@ ids::eventKey gfx::Renderer::pollEvent()
 	return ids::NONE;
 }
 
-void gfx::Renderer::renderGameBoad()
-{
-}
-
 void gfx::Renderer::newScene()
 {
-
 }
 
 irr::scene::ISceneManager *gfx::Renderer::getScene()
@@ -78,29 +84,24 @@ irr::scene::ISceneManager *gfx::Renderer::getScene()
 	return smgr;
 }
 
-void gfx::Renderer::addArchive(std::string const &filename)
+void gfx::Renderer::addArchive(irr::core::stringw const &filename)
 {
-	device->getFileSystem()->addFileArchive(filename.c_str());
+	device->getFileSystem()->addFileArchive(filename);
 }
 
-void gfx::Renderer::clear()
+void gfx::Renderer::clearScene()
 {
 	smgr->clear();
 }
 
-int main()
+//TODO Problem to display the text
+void
+gfx::Renderer::drawText(vec2d<int> const &v, std::string const &text, bool fillBackground)
 {
-	gfx::Renderer window;
-	gfx::Renderable asset;
+	guienv->addStaticText(L"coucocou", irr::core::rect<irr::s32>(v.x,v.y,260,22), fillBackground);
+}
 
-	window.addArchive("../../assets/meshs/map-20kdm2.pk3");
-	asset.setMesh(window.getScene(), "20kdm2.bsp");
-	asset.setPosition(vec3d<float>(0,0,0));
-	while (window.isRun()) {
-		if (window.pollEvent() == ids::QUIT) {
-			return 0;
-		}
-		window.clear();
-		window.render();
-	}
+void gfx::Renderer::load2D(irr::core::stringw const &filename)
+{
+	images.push_back(driver->getTexture(filename));
 }
