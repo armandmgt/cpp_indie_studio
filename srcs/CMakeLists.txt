@@ -1,10 +1,14 @@
 set(SOURCE_FILES
+        main.cpp
         ../include/gfx/Renderable.hpp
-        gfx/Renderable.cpp
+        ../include/gfx/Renderable.cpp
         ../include/common/vec.hpp
         ../include/enum/AnimationType.hpp
         gfx/Renderer.cpp
-        ../include/gfx/Renderer.hpp gfx/EventReceiver.cpp ../include/gfx/EventReceiver.hpp)
+        ../include/gfx/Renderer.hpp gfx/EventReceiver.cpp
+        ../include/gfx/EventReceiver.hpp
+        settingManager/settingManager.cpp
+        ../include/settingManager/settingManager.hpp gfx/Image2D.hpp)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4 -lIrrlicht")

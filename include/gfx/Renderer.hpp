@@ -29,15 +29,18 @@ namespace gfx {
 		irr::scene::ISceneManager *getScene();
 		vec2d<int> getMousePosition();
 		ids::eventKey pollEvent();
-		void addArchive(std::string const &filename);
-		void clear();
+		void load2D(irr::core::stringw const &filename);
+		void addArchive(irr::core::stringw const &filename);
+		void clearScene();
+		void drawText(vec2d<int> const &p, std::string const &filename, bool fillBackground = true);
 
 	private:
-		void renderGameBoad();
 
 		irr::IrrlichtDevice *device;
 		irr::video::IVideoDriver *driver;
 		irr::scene::ISceneManager *smgr;
+		irr::gui::IGUIEnvironment* guienv;
+		std::vector<irr::video::ITexture *> images;
 		MyEventReceiver Event;
 	};
 };

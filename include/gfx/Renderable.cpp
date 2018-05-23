@@ -8,9 +8,11 @@
 #include <iostream>
 #include "gfx/Renderable.hpp"
 
-gfx::Renderable::Renderable() : positions(0.0, 0.0, 0.0)
+gfx::Renderable::Renderable() : positions(0.0, 0.0, 0.0),
+				mesh(nullptr),
+				node(nullptr),
+				meshSet(false)
 {
-
 }
 
 
@@ -30,7 +32,7 @@ void gfx::Renderable::setTexture(std::string const &filename)
 
 }
 
-void gfx::Renderable::setMesh(irr::scene::ISceneManager *scene, std::string const &filename)
+void gfx::Renderable::setMesh(irr::scene::ISceneManager *scene, irr::core::stringw const &filename)
 {
 	mesh = scene->getMesh(filename.c_str());
 	if (mesh) {
@@ -46,18 +48,15 @@ vec3d<float> gfx::Renderable::getPosition() const
 
 void gfx::Renderable::render()
 {
-
 }
 
 void gfx::Renderable::setPosition(vec3d<float> const &setposition)
 {
 	if (node) {
-		node->setPosition(irr::core::vector3df(setposition.x,
-						       setposition.y,
-						       setposition.z));
-		positions.x = setposition.x;
-		positions.y = setposition.y;
-		positions.z = setposition.z;
+		positions = setposition;
+		node->setPosition(irr::core::vector3df(positions.x,
+						       positions.y,
+						       positions.z));
 	}
 }
 
@@ -68,7 +67,7 @@ void gfx::Renderable::playAnimation(AnimationType type) const
 
 bool gfx::Renderable::is3D() const
 {
-	return false;
+	return meshSet;
 }
 
 bool gfx::Renderable::isAnimable() const

@@ -23,9 +23,9 @@ namespace gfx {
 		~Renderable() = default;
 		void removeFromScreen();
 		void setAnimation(AnimationType, const std::string &);
-		void setMesh(irr::scene::ISceneManager *, std::string const &);
-		void setTexture(const std::string &);
-		vec3d<float> getPosition() const;
+		void setMesh(irr::scene::ISceneManager *, irr::core::stringw const &);
+	  	void setTexture(const std::string &);
+ 		vec3d<float> getPosition() const;
 		void render();
 		void setPosition(vec3d<float> const &);
 		void playAnimation(AnimationType) const;
@@ -34,8 +34,9 @@ namespace gfx {
 
 	private:
 		vec3d<float> positions;
-		irr::scene::IAnimatedMesh *mesh = nullptr;
-		irr::scene::ISceneNode *node = nullptr;
+		irr::scene::IAnimatedMesh *mesh;
+		irr::scene::ISceneNode *node;
+		bool meshSet;
 		// std::unordered_map<AnimationType, Animation> animationMap;
 
 	};
