@@ -47,8 +47,8 @@ void gfx::Renderer::render()
 	guienv->drawAll();
 	driver->enableMaterial2D();
 	for (auto &image : images) {
-		driver->draw2DImage(image, irr::core::position2d<irr::s32>(0,0),
-				    irr::core::rect<irr::s32>(0,0,10000,10000));
+		driver->draw2DImage(image.image,
+				    {image.position.x, image.position.y}, image.size);
 	}
 	driver->enableMaterial2D(false);
 	driver->endScene();
@@ -101,7 +101,22 @@ gfx::Renderer::drawText(vec2d<int> const &v, std::string const &text, bool fillB
 	guienv->addStaticText(L"coucocou", irr::core::rect<irr::s32>(v.x,v.y,260,22), fillBackground);
 }
 
-void gfx::Renderer::load2D(irr::core::stringw const &filename)
+void gfx::Renderer::load2D(irr::core::stringw const &filename, vec2d<int> &positon,
+			   irr::core::rect<irr::s32> &size)
 {
-	images.push_back(driver->getTexture(filename));
+	irr::video::ITexture *text = driver->getTexture(filename);
+
+	images.emplace_back(text, positon, size);
+}
+
+void gfx::Renderer::load2D(irr::core::stringw const &filename, vec2d<int> &positon)
+{
+	irr::core::rect<irr::s32> size;
+	irr::video::ITexture *text = driver->getTexture(filename);
+	irr::core::vector2d<int> pos(positon.x, positon.y);
+	irr::core::vector2d<int> pos2(text->getOriginalSize().Height,
+				      text->getOriginalSize().Width);
+	size.UpperLeftCorner = pos;
+	size.LowerRightCorner = pos2;
+	images.emplace_back(text, positon, std::move(size));
 }

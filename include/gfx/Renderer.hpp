@@ -12,6 +12,7 @@
 #include "common/vec.hpp"
 #include "enum/EventEnum.hpp"
 #include "Renderable.hpp"
+#include "gfx/Image2D.hpp"
 #include "EventReceiver.hpp"
 
 namespace gfx {
@@ -29,7 +30,9 @@ namespace gfx {
 		irr::scene::ISceneManager *getScene();
 		vec2d<int> getMousePosition();
 		ids::eventKey pollEvent();
-		void load2D(irr::core::stringw const &filename);
+		void load2D(irr::core::stringw const &filename, vec2d<int> &positon,
+			    irr::core::rect<irr::s32> &size);
+		void load2D(irr::core::stringw const &filename, vec2d<int> &positon);
 		void addArchive(irr::core::stringw const &filename);
 		void clearScene();
 		void drawText(vec2d<int> const &p, std::string const &filename, bool fillBackground = true);
@@ -40,7 +43,7 @@ namespace gfx {
 		irr::video::IVideoDriver *driver;
 		irr::scene::ISceneManager *smgr;
 		irr::gui::IGUIEnvironment* guienv;
-		std::vector<irr::video::ITexture *> images;
+		std::vector<gfx::image2D> images;
 		MyEventReceiver Event;
 	};
 };

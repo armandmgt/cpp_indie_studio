@@ -16,12 +16,14 @@ int main()
 	gfx::Renderer window;
 	gfx::Renderable asset;
 	opt::settingManager settings(filename);
+	vec2d<int> pos(0,0);
+	irr::core::rect<irr::s32> size(0,0,100,500);
 
 	settings.load();
 //	window.addArchive(settings.getValue("archive"));
 //	asset.setMesh(window.getScene(), settings.getValue("mesh"));
 //	asset.setPosition(vec3d<float>(-1300,-144,-1249));
-	window.load2D("../../assets/textures/texture.jpg");
+	window.load2D("../../assets/textures/texture.jpg", pos, size);
 	while (window.isRun()) {
 		if (window.pollEvent() == ids::QUIT) {
 			break;
