@@ -10,6 +10,7 @@
 
 gfx::Renderable::Renderable() : positions(0.0, 0.0, 0.0),
 				mesh(nullptr),
+				animatedMesh(nullptr),
 				node(nullptr),
 				meshSet(false)
 {
@@ -38,6 +39,16 @@ void gfx::Renderable::setMesh(irr::scene::ISceneManager *scene, irr::core::strin
 	if (mesh) {
 		node = scene->addOctreeSceneNode(mesh->getMesh(0), nullptr, -1,
 						 1024);
+	}
+}
+
+void gfx::Renderable::setAnimatedMesh(irr::scene::ISceneManager *scene, irr::core::stringw const &filename)
+{
+	animatedMesh = scene->addAnimatedMeshSceneNode(scene->getMesh(filename.c_str()));
+	if (animatedMesh) {
+//		node = scene->addOctreeSceneNode(mesh->getMesh(0), nullptr, -1,
+//						 1024);
+		animatedMesh->setAnimationSpeed(8.f);
 	}
 }
 
