@@ -9,6 +9,7 @@
 #include <settingManager/settingManager.hpp>
 #include "gfx/Renderable.hpp"
 #include "gfx/Renderer.hpp"
+#include "menu/AMenu.hpp"
 
 int main()
 {

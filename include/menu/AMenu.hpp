@@ -15,14 +15,14 @@
 				GAME, QUIT, MENU, SETTINGS, SCORE, PAUSE
 			};
 		public:
-			AMenu(shared_ptr<Renderer> rend);
+			AMenu(std::shared_ptr<gfx::Renderer> rend);
 			virtual ~AMenu();
 		protected:
 			bool setWindow();
 			void computeEvent();
-			State getSceneId();
-			Renderer &_rend;
-			std::vector<vec2d<int>> _posBackground;
+			SceneId getSceneId();
+			std::shared_ptr<gfx::Renderer> _rend;
+			vec2d<int> _posBackground;
 		};
 	}}
 
