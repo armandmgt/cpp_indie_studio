@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <irrlicht/ITexture.h>
+#include "common/vec.hpp"
 
 namespace gfx {
 	class image2D {

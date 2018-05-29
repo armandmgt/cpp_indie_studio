@@ -10,12 +10,13 @@
 
 //TODO Sound
 
-gfx::Renderer::Renderer()
+gfx::Renderer::Renderer() noexcept
+
 {
 	irr::core::stringw tittleWindow = "Bomberman";
 
 	device = irr::createDevice(irr::video::EDT_OPENGL,
-		irr::core::dimension2d<irr::u32>(1920, 1080), 16, true, true,
+		irr::core::dimension2d<irr::u32>(1920, 1080), 32, true, true,
 				   false, &Event);
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
@@ -42,7 +43,7 @@ void gfx::Renderer::render(std::vector<gfx::Renderable> &v)
 
 void gfx::Renderer::render()
 {
-	driver->beginScene(true, true, irr::video::SColor(0,0,0,0));
+	driver->beginScene(true, true, irr::video::SColor(255,255,255,255));
 	smgr->drawAll();
 	guienv->drawAll();
 	driver->enableMaterial2D();
@@ -113,10 +114,18 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, vec2d<int> &posit
 {
 	irr::core::rect<irr::s32> size;
 	irr::video::ITexture *text = driver->getTexture(filename);
-	irr::core::vector2d<int> pos(positon.x, positon.y);
-	irr::core::vector2d<int> pos2(text->getOriginalSize().Height,
-				      text->getOriginalSize().Width);
+	irr::core::vector2d<int> pos(0, 0);
+	irr::core::vector2d<int> pos2(text->getOriginalSize().Width,
+				      text->getOriginalSize().Height);
 	size.UpperLeftCorner = pos;
 	size.LowerRightCorner = pos2;
+	driver->makeColorKeyTexture(text, irr::core::position2d<irr::s32>(0,0));
 	images.emplace_back(text, positon, std::move(size));
 }
+
+irr::video::IVideoDriver *gfx::Renderer::getDriver()
+{
+	return driver;
+}
+
+
