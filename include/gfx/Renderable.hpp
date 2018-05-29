@@ -26,6 +26,8 @@ namespace gfx {
 		void setAnimatedMesh(irr::scene::ISceneManager *, irr::core::stringw const &);
 		void setMesh(irr::scene::ISceneManager *, irr::core::stringw const &);
 	  	void setTexture(const std::string &);
+	  	void setTextureonMesh(irr::core::stringw const &filename,
+				      irr::video::IVideoDriver *driver);
  		vec3d<float> getPosition() const;
 		void render();
 		void setPosition(vec3d<float> const &);

@@ -44,10 +44,9 @@ void gfx::Renderable::setMesh(irr::scene::ISceneManager *scene, irr::core::strin
 
 void gfx::Renderable::setAnimatedMesh(irr::scene::ISceneManager *scene, irr::core::stringw const &filename)
 {
-	animatedMesh = scene->addAnimatedMeshSceneNode(scene->getMesh(filename.c_str()));
+	mesh = scene->getMesh(filename.c_str());
+	animatedMesh = scene->addAnimatedMeshSceneNode(mesh);
 	if (animatedMesh) {
-//		node = scene->addOctreeSceneNode(mesh->getMesh(0), nullptr, -1,
-//						 1024);
 		animatedMesh->setAnimationSpeed(8.f);
 	}
 }
@@ -64,11 +63,16 @@ void gfx::Renderable::render()
 void gfx::Renderable::setPosition(vec3d<float> const &setposition)
 {
 	if (node) {
-		positions = setposition;
 		node->setPosition(irr::core::vector3df(positions.x,
 						       positions.y,
 						       positions.z));
 	}
+	if (animatedMesh) {
+		animatedMesh->setPosition((irr::core::vector3df(positions.x,
+								positions.y,
+								positions.z)));
+	}
+	positions = setposition;
 }
 
 void gfx::Renderable::playAnimation(AnimationType type) const
@@ -84,5 +88,13 @@ bool gfx::Renderable::is3D() const
 bool gfx::Renderable::isAnimable() const
 {
 	return false;
+}
+
+void gfx::Renderable::setTextureonMesh(irr::core::stringw const &filename,
+				       irr::video::IVideoDriver *driver) {
+
+	if (animatedMesh) {
+		animatedMesh->setMaterialTexture(0, driver->getTexture(filename.c_str()));
+	}
 }
 
