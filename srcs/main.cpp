@@ -23,7 +23,7 @@ int main()
 	settings.load();
 	window.addArchive(settings.getValue("archive"));
 	//asset.setMesh(window.getScene(), settings.getValue("mesh"))
-	asset.setAnimatedMesh(window.getScene(), "/home/zombre/tek2/cpp_indie_studio/assets/meshs/lego022.obj");
+	asset.setAnimatedMesh(window.getScene(), "../../assets/meshs/ground.obj");
 	asset.setPosition(vec3d<float>(150, 150, 150));
 	while (window.isRun()) {
 		if (window.pollEvent() == ids::QUIT) {

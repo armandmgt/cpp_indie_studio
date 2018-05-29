@@ -16,7 +16,7 @@ gfx::Renderer::Renderer() noexcept
 	irr::core::stringw tittleWindow = "Bomberman";
 
 	device = irr::createDevice(irr::video::EDT_OPENGL,
-		irr::core::dimension2d<irr::u32>(1920, 1080), 32, true, true,
+		irr::core::dimension2d<irr::u32>(1920, 1080), 1024, true, true,
 				   false, &Event);
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
