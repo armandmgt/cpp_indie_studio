@@ -38,7 +38,7 @@ gfx::Renderer::Renderer() noexcept : _id(0)
 	 keyMap[6].KeyCode = irr::KEY_RIGHT;
 	 keyMap[7].Action = irr::EKA_STRAFE_RIGHT;
 	 keyMap[7].KeyCode = irr::KEY_KEY_D;
-	smgr->addCameraSceneNodeFPS(nullptr, 100.f, 0.4f, -1, keyMap, 8);
+	smgr->addCameraSceneNode(nullptr, 100.f, 0.4f, -1, keyMap, 8);
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
 	smgr->addLightSceneNode(nullptr, {0, 20, 0}, {1.f, 1.f, 1.f}, 200.f);
@@ -89,7 +89,11 @@ vec2d<int> gfx::Renderer::getMousePosition()
 ids::eventKey gfx::Renderer::pollEvent()
 {
 	static mabBinding const binding = {
-		{irr::KEY_ESCAPE, ids::QUIT}
+		{irr::KEY_ESCAPE, ids::QUIT},
+		{irr::KEY_KEY_D, ids::LEFT},
+		{irr::KEY_KEY_Q, ids::RIGHT},
+		{irr::KEY_KEY_Z, ids::UP},
+		{irr::KEY_KEY_S, ids::DOWN}
 	};
 
 	for (auto &it : binding) {
