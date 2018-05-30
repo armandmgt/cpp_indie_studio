@@ -8,9 +8,7 @@
 #include <iostream>
 #include "gfx/Renderer.hpp"
 
-//TODO Sound
-
-gfx::Renderer::Renderer() noexcept
+gfx::Renderer::Renderer() noexcept : _id(0)
 
 {
 	irr::core::stringw tittleWindow = "Bomberman";
@@ -23,6 +21,9 @@ gfx::Renderer::Renderer() noexcept
 	smgr->addCameraSceneNodeFPS();
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
+	smgr->addLightSceneNode(nullptr, irr::core::vector3df(10,100,0),
+				irr::video::SColorf(1.0f, 0.6f, 0.7f, 1.0f), 800.0f);
+	smgr->setShadowColor(irr::video::SColor(127,0,0,0));
 }
 
 gfx::Renderer::~Renderer()
@@ -30,15 +31,9 @@ gfx::Renderer::~Renderer()
 	device->drop();
 }
 
-bool gfx::Renderer::isRun()
+bool gfx::Renderer::isRun() const
 {
 	return device->run();
-}
-
-void gfx::Renderer::render(std::vector<gfx::Renderable> &v)
-{
-	for (auto &it : v)
-		it.render();
 }
 
 void gfx::Renderer::render()
@@ -53,6 +48,11 @@ void gfx::Renderer::render()
 	}
 	driver->enableMaterial2D(false);
 	driver->endScene();
+}
+
+void gfx::Renderer::clearScene()
+{
+	smgr->clear();
 }
 
 vec2d<int> gfx::Renderer::getMousePosition()
@@ -76,30 +76,9 @@ ids::eventKey gfx::Renderer::pollEvent()
 	return ids::NONE;
 }
 
-void gfx::Renderer::newScene()
-{
-}
-
-irr::scene::ISceneManager *gfx::Renderer::getScene()
-{
-	return smgr;
-}
-
 void gfx::Renderer::addArchive(irr::core::stringw const &filename)
 {
 	device->getFileSystem()->addFileArchive(filename);
-}
-
-void gfx::Renderer::clearScene()
-{
-	smgr->clear();
-}
-
-//TODO Problem to display the text
-void
-gfx::Renderer::drawText(vec2d<int> const &v, std::string const &text, bool fillBackground)
-{
-	guienv->addStaticText(L"coucocou", irr::core::rect<irr::s32>(v.x,v.y,260,22), fillBackground);
 }
 
 void gfx::Renderer::load2D(irr::core::stringw const &filename, vec2d<int> &positon,
@@ -123,9 +102,76 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, vec2d<int> &posit
 	images.emplace_back(text, positon, std::move(size));
 }
 
-irr::video::IVideoDriver *gfx::Renderer::getDriver()
+gfx::idSprite gfx::Renderer::createMesh(irr::core::stringw const &filename)
 {
-	return driver;
+	meshs.push_back(smgr->getMesh(filename.c_str()));
+	animatedMeshs.push_back(smgr->addAnimatedMeshSceneNode(meshs[_id]));
+	animatedMeshs[_id]->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+	animatedMeshs[_id]->setMaterialType(irr::video::EMT_REFLECTION_2_LAYER);
+	animatedMeshs[_id]->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
+	animatedMeshs[_id]->setScale(irr::core::vector3df(2,2,2));
+	animatedMeshs[_id]->addShadowVolumeSceneNode(nullptr, -1, true);
+	animatedMeshs[_id]->setMaterialFlag(irr::video::EMF_NORMALIZE_NORMALS, true);
+	return _id++;
+}
+
+bool gfx::Renderer::addTexture(gfx::idSprite id, std::string filename)
+{
+	return false;
+}
+
+bool gfx::Renderer::setAnimationSpeed(gfx::idSprite id, float speed)
+{
+	if (animatedMeshs[id]) {
+		animatedMeshs[id]->setAnimationSpeed(speed);
+		return true;
+	}
+	return false;
+}
+
+bool gfx::Renderer::setPosition(gfx::idSprite id, vec3d<float> position)
+{
+	if (animatedMeshs[id]) {
+		animatedMeshs[id]->setPosition({position.x,
+					       position.y,
+					       position.z});
+		return true;
+	}
+	return false;
+}
+
+bool gfx::Renderer::rotateMesh(gfx::idSprite id, vec3d<float> angle)
+{
+	if (animatedMeshs[id]) {
+		animatedMeshs[id]->setRotation({angle.x,
+					       angle.y,
+					       angle.z});
+		return true;
+	}
+	return false;
+}
+
+vec3d<float> gfx::Renderer::getSizeMesh(gfx::idSprite id)
+{
+	vec3d<float> size(0,0,0);
+	auto *edges = new irr::core::vector3d<irr::f32>[8];
+	auto boundingBox = animatedMeshs[id]->getTransformedBoundingBox();
+	boundingBox.getEdges(edges);
+
+	size.y = edges[1].Y - edges[0].Y;
+	size.x = edges[5].X - edges[1].X;
+	size.z = edges[2].Z - edges[0].Z;
+	return size;
+}
+
+gfx::idSprite gfx::Renderer::createb3dMesh(irr::core::stringw const &file)
+{
+	meshs.push_back(smgr->getMesh(file.c_str()));
+	animatedMeshs.push_back(smgr->addAnimatedMeshSceneNode(meshs[_id]));
+	animatedMeshs[_id]->setAnimationSpeed(8.f);
+	animatedMeshs[_id]->getMaterial(0).NormalizeNormals = true;
+	animatedMeshs[_id]->getMaterial(0).Lighting = true;
+	return _id++;
 }
 
 
