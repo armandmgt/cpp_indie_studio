@@ -18,12 +18,35 @@ gfx::Renderer::Renderer() noexcept : _id(0)
 				   false, &Event);
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
-	smgr->addCameraSceneNode();
+	irr::SKeyMap keyMap[8];
+	 keyMap[0].Action = irr::EKA_MOVE_FORWARD;
+	 keyMap[0].KeyCode = irr::KEY_UP;
+	 keyMap[1].Action = irr::EKA_MOVE_FORWARD;
+	 keyMap[1].KeyCode = irr::KEY_KEY_W;
+
+	 keyMap[2].Action = irr::EKA_MOVE_BACKWARD;
+	 keyMap[2].KeyCode = irr::KEY_DOWN;
+	 keyMap[3].Action = irr::EKA_MOVE_BACKWARD;
+	 keyMap[3].KeyCode = irr::KEY_KEY_S;
+
+	 keyMap[4].Action = irr::EKA_STRAFE_LEFT;
+	 keyMap[4].KeyCode = irr::KEY_LEFT;
+	 keyMap[5].Action = irr::EKA_STRAFE_LEFT;
+	 keyMap[5].KeyCode = irr::KEY_KEY_A;
+
+	 keyMap[6].Action = irr::EKA_STRAFE_RIGHT;
+	 keyMap[6].KeyCode = irr::KEY_RIGHT;
+	 keyMap[7].Action = irr::EKA_STRAFE_RIGHT;
+	 keyMap[7].KeyCode = irr::KEY_KEY_D;
+	smgr->addCameraSceneNodeFPS(nullptr, 100.f, 0.4f, -1, keyMap, 8);
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
-	smgr->addLightSceneNode(nullptr, irr::core::vector3df(10,100,0),
-				irr::video::SColorf(1.0f, 0.6f, 0.7f, 1.0f), 800.0f);
-	smgr->setShadowColor(irr::video::SColor(127,0,0,0));
+	smgr->addLightSceneNode(nullptr, {0, 20, 0}, {1.f, 1.f, 1.f}, 200.f);
+	smgr->addSphereSceneNode(1.f, 16, nullptr, -1, {0,0,0}, {255,228,181});
+	smgr->addSphereSceneNode(1.f, 16, nullptr, -1, {10,0,0}, {255,0,0});
+	smgr->addSphereSceneNode(1.f, 16, nullptr, -1, {0,10,0}, {0,0,255});
+	smgr->addSphereSceneNode(1.f, 16, nullptr, -1, {0,0,10}, {0,255,0});
+	smgr->addSphereSceneNode(5.f, 16, nullptr, -1, {0,10,-5});
 }
 
 gfx::Renderer::~Renderer()
@@ -38,13 +61,13 @@ bool gfx::Renderer::isRun() const
 
 void gfx::Renderer::render()
 {
-	driver->beginScene(true, true, irr::video::SColor(255,255,255,255));
+	driver->beginScene(true, true, irr::video::SColor(255, 113, 113, 113));
 	smgr->drawAll();
 	guienv->drawAll();
 	driver->enableMaterial2D();
 	for (auto &image : images) {
-		driver->draw2DImage(image.image,
-				    {image.position.x, image.position.y}, image.size);
+		driver->draw2DImage(image.image, {image.position.x, image
+			.position.y}, image.size);
 	}
 	driver->enableMaterial2D(false);
 	driver->endScene();
@@ -66,11 +89,7 @@ vec2d<int> gfx::Renderer::getMousePosition()
 ids::eventKey gfx::Renderer::pollEvent()
 {
 	static mabBinding const binding = {
-		{irr::KEY_ESCAPE, ids::QUIT},
-		{irr::KEY_KEY_D, ids::LEFT},
-		{irr::KEY_KEY_Q, ids::RIGHT},
-		{irr::KEY_KEY_Z, ids::UP},
-		{irr::KEY_KEY_S, ids::DOWN}
+		{irr::KEY_ESCAPE, ids::QUIT}
 	};
 
 	for (auto &it : binding) {
@@ -109,14 +128,11 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, vec2d<int> &posit
 gfx::idSprite gfx::Renderer::createMesh(irr::core::stringw const &filename)
 {
 	meshs.push_back(smgr->getMesh(filename.c_str()));
-	animatedMeshs.push_back(smgr->addAnimatedMeshSceneNode(meshs[_id]));
-	animatedMeshs[_id]->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	animatedMeshs[_id]->setMaterialType(irr::video::EMT_REFLECTION_2_LAYER);
-	animatedMeshs[_id]->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
-	animatedMeshs[_id]->setScale(irr::core::vector3df(2,2,2));
-	animatedMeshs[_id]->addShadowVolumeSceneNode(nullptr, -1, true);
-	animatedMeshs[_id]->setMaterialFlag(irr::video::EMF_NORMALIZE_NORMALS, true);
-	return _id++;
+	animatedMeshs.push_back(smgr->addAnimatedMeshSceneNode(meshs.back()));
+	auto const &aniMesh = animatedMeshs.back();
+	aniMesh->setScale(irr::core::vector3df(10));
+	aniMesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
+	return animatedMeshs.size() - 1;
 }
 
 bool gfx::Renderer::addTexture(gfx::idSprite id, std::string filename)
@@ -170,15 +186,14 @@ vec3d<float> gfx::Renderer::getSizeMesh(gfx::idSprite id)
 
 gfx::idSprite gfx::Renderer::createb3dMesh(irr::core::stringw const &file)
 {
-	auto mesh = smgr->getMesh(file.c_str());
-	meshs.push_back(mesh);
-	animatedMeshs.push_back(smgr->addAnimatedMeshSceneNode(meshs[_id],
-							       nullptr));
-	animatedMeshs[_id]->setAnimationSpeed(8.f);
-	animatedMeshs[_id]->setScale(irr::core::vector3df(2));
-	animatedMeshs[_id]->getMaterial(0).NormalizeNormals = true;
-	animatedMeshs[_id]->getMaterial(0).Lighting = true;
-	return _id++;
+	meshs.push_back(smgr->getMesh(file.c_str()));
+	animatedMeshs.push_back(smgr->addAnimatedMeshSceneNode(meshs.back()));
+	auto const &aniMesh = animatedMeshs.back();
+	aniMesh->setAnimationSpeed(8.f);
+	aniMesh->getMaterial(0).NormalizeNormals = true;
+	aniMesh->getMaterial(0).Lighting = true;
+	aniMesh->setScale(irr::core::vector3df(9));
+	return animatedMeshs.size() - 1;
 }
 
 
