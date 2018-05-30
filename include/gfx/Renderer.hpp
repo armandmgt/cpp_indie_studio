@@ -18,11 +18,11 @@
 namespace gfx {
 
 	using mabBinding = std::unordered_map<irr::EKEY_CODE, ids::eventKey>;
-	using idSprite = size_t;
+	using idSprite = long;
 
 	class Renderer {
 	public:
-		Renderer() noexcept;
+		Renderer();
 		~Renderer();
 		void render();
 		bool isRun() const;
