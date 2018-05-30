@@ -9,6 +9,10 @@
 #include "settingManager/settingManager.hpp"
 #include "gfx/Renderer.hpp"
 
+static void createGround(size_t xSize, size_t zSize,
+	const irr::core::stringw &assetPath, gfx::Renderer &renderer
+);
+
 int main()
 {
 	irr::core::stringw assetPath("../../assets/meshs/ground.obj");
@@ -22,29 +26,34 @@ int main()
 	position = {0,0,0};
 //	id = window.createb3dMesh("../../assets/meshs/perso.b3d");
 //	window.setPosition(id, positionlego);
-	//id = window.createMesh(assetPath);
-	//window.setPosition(id, positionlego);
+	createGround(21, 20, assetPath, window);
 	while (window.isRun()) {
 		auto event = window.pollEvent();
 		if (event == ids::QUIT) {
 			break;
-		} else if (event == ids::LEFT) {
-			positionlego.x = positionlego.x + 1;
-			window.setPosition(id, positionlego);
-		} else if (event == ids::RIGHT) {
-			positionlego.x = positionlego.x - 1;
-			window.setPosition(id, positionlego);
-		} else if (event == ids::UP) {
-			positionlego.z = positionlego.z + 1;
-			window.setPosition(id, positionlego);
-		} else if (event == ids::DOWN) {
-			positionlego.z = positionlego.z - 1;
-			window.setPosition(id, positionlego);
 		}
-		rotation.x = rotation.x + 1;
-		rotation.y = rotation.y + 1;
-		window.rotateMesh(id, rotation);
 		window.render();
 	}
 	return 0;
+}
+
+static void createGround(size_t xSize, size_t zSize,
+	irr::core::stringw const &assetPath, gfx::Renderer &renderer)
+{
+	vec3d<float> pos{0, 0, 0};
+
+	for (size_t x = 0; x < xSize; x++) {
+		vec3d<float> size(0,0,0);
+		for (size_t z = 0; z < zSize; z++) {
+			gfx::idSprite id;
+			if (id = renderer.createMesh(assetPath); id == -1) {
+				return;
+			}
+			renderer.setPosition(id, pos);
+			size = renderer.getSizeMesh(id);
+			pos.z += size.z;
+		}
+		pos.z = 0;
+		pos.x += size.x;
+	}
 }

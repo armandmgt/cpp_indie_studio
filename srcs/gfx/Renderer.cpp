@@ -8,45 +8,41 @@
 #include <iostream>
 #include "gfx/Renderer.hpp"
 
-gfx::Renderer::Renderer() noexcept : _id(0)
+gfx::Renderer::Renderer() : _id(0)
 
 {
 	irr::core::stringw tittleWindow = "Bomberman";
 
-	device = irr::createDevice(irr::video::EDT_OPENGL,
+	if (device = irr::createDevice(irr::video::EDT_OPENGL,
 		irr::core::dimension2d<irr::u32>(1920, 1080), 1024, true, true,
-				   false, &Event);
+		false, &Event); !device)
+		throw std::exception();
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
-	irr::SKeyMap keyMap[8];
-	 keyMap[0].Action = irr::EKA_MOVE_FORWARD;
-	 keyMap[0].KeyCode = irr::KEY_UP;
-	 keyMap[1].Action = irr::EKA_MOVE_FORWARD;
-	 keyMap[1].KeyCode = irr::KEY_KEY_W;
-
-	 keyMap[2].Action = irr::EKA_MOVE_BACKWARD;
-	 keyMap[2].KeyCode = irr::KEY_DOWN;
-	 keyMap[3].Action = irr::EKA_MOVE_BACKWARD;
-	 keyMap[3].KeyCode = irr::KEY_KEY_S;
-
-	 keyMap[4].Action = irr::EKA_STRAFE_LEFT;
-	 keyMap[4].KeyCode = irr::KEY_LEFT;
-	 keyMap[5].Action = irr::EKA_STRAFE_LEFT;
-	 keyMap[5].KeyCode = irr::KEY_KEY_A;
-
-	 keyMap[6].Action = irr::EKA_STRAFE_RIGHT;
-	 keyMap[6].KeyCode = irr::KEY_RIGHT;
-	 keyMap[7].Action = irr::EKA_STRAFE_RIGHT;
-	 keyMap[7].KeyCode = irr::KEY_KEY_D;
-	smgr->addCameraSceneNode(nullptr, 100.f, 0.4f, -1, keyMap, 8);
+	if (!driver || !smgr)
+		throw std::exception();
+	irr::SKeyMap keyMap[4];
+	keyMap[0].Action = irr::EKA_MOVE_FORWARD;
+	keyMap[0].KeyCode = irr::KEY_KEY_W;
+	keyMap[1].Action = irr::EKA_MOVE_BACKWARD;
+	keyMap[1].KeyCode = irr::KEY_KEY_S;
+	keyMap[2].Action = irr::EKA_STRAFE_LEFT;
+	keyMap[2].KeyCode = irr::KEY_KEY_A;
+	keyMap[3].Action = irr::EKA_STRAFE_RIGHT;
+	keyMap[3].KeyCode = irr::KEY_KEY_D;
+	smgr->addCameraSceneNodeFPS(nullptr, 100.f, 0.4f, -1, keyMap, 4);
+	device->getCursorControl()->setVisible(false);
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
-	smgr->addLightSceneNode(nullptr, {0, 20, 0}, {1.f, 1.f, 1.f}, 200.f);
-	smgr->addSphereSceneNode(1.f, 16, nullptr, -1, {0,0,0}, {255,228,181});
-	smgr->addSphereSceneNode(1.f, 16, nullptr, -1, {10,0,0}, {255,0,0});
-	smgr->addSphereSceneNode(1.f, 16, nullptr, -1, {0,10,0}, {0,0,255});
-	smgr->addSphereSceneNode(1.f, 16, nullptr, -1, {0,0,10}, {0,255,0});
-	smgr->addSphereSceneNode(5.f, 16, nullptr, -1, {0,10,-5});
+	auto light = smgr->addLightSceneNode(nullptr,
+		irr::core::vector3df{0, 300, -190},
+		irr::video::SColorf{.7, .7, .3, 0}, 500.f);
+	irr::scene::IBillboardSceneNode* bill = smgr->addBillboardSceneNode(
+		light, irr::core::dimension2d<irr::f32>(10, 10));
+	bill->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+	bill->setMaterialFlag(irr::video::EMF_ZWRITE_ENABLE, false);
+	bill->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
+	light->setDebugDataVisible(irr::scene::EDS_FULL);
 }
 
 gfx::Renderer::~Renderer()
@@ -90,10 +86,10 @@ ids::eventKey gfx::Renderer::pollEvent()
 {
 	static mabBinding const binding = {
 		{irr::KEY_ESCAPE, ids::QUIT},
-		{irr::KEY_KEY_D, ids::LEFT},
-		{irr::KEY_KEY_Q, ids::RIGHT},
-		{irr::KEY_KEY_Z, ids::UP},
-		{irr::KEY_KEY_S, ids::DOWN}
+		{irr::KEY_LEFT, ids::LEFT},
+		{irr::KEY_RIGHT, ids::RIGHT},
+		{irr::KEY_UP, ids::UP},
+		{irr::KEY_DOWN, ids::DOWN}
 	};
 
 	for (auto &it : binding) {
@@ -131,12 +127,20 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, vec2d<int> &posit
 
 gfx::idSprite gfx::Renderer::createMesh(irr::core::stringw const &filename)
 {
-	meshs.push_back(smgr->getMesh(filename.c_str()));
-	animatedMeshs.push_back(smgr->addAnimatedMeshSceneNode(meshs.back()));
-	auto const &aniMesh = animatedMeshs.back();
-	aniMesh->setScale(irr::core::vector3df(10));
-	aniMesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
-	return animatedMeshs.size() - 1;
+	irr::scene::IAnimatedMesh *mesh;
+	irr::scene::IAnimatedMeshSceneNode *aniMesh;
+
+	if (mesh = smgr->getMesh(filename.c_str()); !mesh) {
+		return -1;
+	} else if (aniMesh = smgr->addAnimatedMeshSceneNode(mesh); !aniMesh) {
+		return -1;
+	} else {
+		meshs.push_back(mesh);
+		animatedMeshs.push_back(aniMesh);
+		aniMesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING,
+			false);
+		return animatedMeshs.size() - 1;
+	}
 }
 
 bool gfx::Renderer::addTexture(gfx::idSprite id, std::string filename)
@@ -177,27 +181,28 @@ bool gfx::Renderer::rotateMesh(gfx::idSprite id, vec3d<float> angle)
 
 vec3d<float> gfx::Renderer::getSizeMesh(gfx::idSprite id)
 {
-	vec3d<float> size(0,0,0);
-	auto *edges = new irr::core::vector3d<irr::f32>[8];
-	auto boundingBox = animatedMeshs[id]->getTransformedBoundingBox();
-	boundingBox.getEdges(edges);
-
-	size.y = edges[1].Y - edges[0].Y;
-	size.x = edges[5].X - edges[1].X;
-	size.z = edges[2].Z - edges[0].Z;
-	return size;
+	irr::core::vector3df extent = animatedMeshs.at(id)
+		->getTransformedBoundingBox().getExtent();
+	return {extent.X, extent.Y, extent.Z};
 }
 
-gfx::idSprite gfx::Renderer::createb3dMesh(irr::core::stringw const &file)
+gfx::idSprite gfx::Renderer::createb3dMesh(irr::core::stringw const &filename)
 {
-	meshs.push_back(smgr->getMesh(file.c_str()));
-	animatedMeshs.push_back(smgr->addAnimatedMeshSceneNode(meshs.back()));
-	auto const &aniMesh = animatedMeshs.back();
-	aniMesh->setAnimationSpeed(8.f);
-	aniMesh->getMaterial(0).NormalizeNormals = true;
-	aniMesh->getMaterial(0).Lighting = true;
-	aniMesh->setScale(irr::core::vector3df(9));
-	return animatedMeshs.size() - 1;
+	irr::scene::IAnimatedMesh *mesh;
+	irr::scene::IAnimatedMeshSceneNode *aniMesh;
+
+	if (mesh = smgr->getMesh(filename.c_str()); !mesh) {
+		return -1;
+	} else if (aniMesh = smgr->addAnimatedMeshSceneNode(mesh); !aniMesh) {
+		return -1;
+	} else {
+		meshs.push_back(mesh);
+		animatedMeshs.push_back(aniMesh);
+		aniMesh->setAnimationSpeed(8.f);
+		aniMesh->getMaterial(0).NormalizeNormals = true;
+		aniMesh->getMaterial(0).Lighting = true;
+		aniMesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING,
+			false);
+		return animatedMeshs.size() - 1;
+	}
 }
-
-
