@@ -18,7 +18,7 @@ gfx::Renderer::Renderer() noexcept : _id(0)
 				   false, &Event);
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
-	smgr->addCameraSceneNodeFPS();
+	smgr->addCameraSceneNode();
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
 	smgr->addLightSceneNode(nullptr, irr::core::vector3df(10,100,0),
@@ -66,7 +66,11 @@ vec2d<int> gfx::Renderer::getMousePosition()
 ids::eventKey gfx::Renderer::pollEvent()
 {
 	static mabBinding const binding = {
-		{irr::KEY_ESCAPE, ids::QUIT}
+		{irr::KEY_ESCAPE, ids::QUIT},
+		{irr::KEY_KEY_D, ids::LEFT},
+		{irr::KEY_KEY_Q, ids::RIGHT},
+		{irr::KEY_KEY_Z, ids::UP},
+		{irr::KEY_KEY_S, ids::DOWN}
 	};
 
 	for (auto &it : binding) {
@@ -166,9 +170,12 @@ vec3d<float> gfx::Renderer::getSizeMesh(gfx::idSprite id)
 
 gfx::idSprite gfx::Renderer::createb3dMesh(irr::core::stringw const &file)
 {
-	meshs.push_back(smgr->getMesh(file.c_str()));
-	animatedMeshs.push_back(smgr->addAnimatedMeshSceneNode(meshs[_id]));
+	auto mesh = smgr->getMesh(file.c_str());
+	meshs.push_back(mesh);
+	animatedMeshs.push_back(smgr->addAnimatedMeshSceneNode(meshs[_id],
+							       nullptr));
 	animatedMeshs[_id]->setAnimationSpeed(8.f);
+	animatedMeshs[_id]->setScale(irr::core::vector3df(2));
 	animatedMeshs[_id]->getMaterial(0).NormalizeNormals = true;
 	animatedMeshs[_id]->getMaterial(0).Lighting = true;
 	return _id++;
