@@ -1,24 +1,19 @@
 set(SOURCE_FILES
         main.cpp
-        engine/GameContainer.cpp
-        ../include/engine/GameContainer.hpp
-
-		engine/GameEngine.cpp
-		../include/engine/GameEngine.hpp
+		../include/engine/GameContainer.hpp
+		../include/engine/Components.hpp
 
 		../include/interfaces/IPlayer.hpp
 		../include/interfaces/IObject.hpp
 		../include/interfaces/IItem.hpp
 
-		entities/Player.cpp
-		../include/entities/Player.hpp
-		../include/entities/Item.hpp
-		../include/entities/Object.hpp
-
 		../include/common/vec.hpp
 
         ../include/enum/AnimationType.hpp
-        ../include/enum/Directions.hpp)
+        ../include/enum/Directions.hpp
+		../include/engine/Entity.hpp
+		world/World.cpp
+		../include/world/World.hpp)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4")
