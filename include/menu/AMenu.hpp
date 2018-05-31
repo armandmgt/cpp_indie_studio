@@ -8,22 +8,36 @@
 #ifndef AMENU_HPP
 	#define AMENU_HPP
 	#include "gfx/Renderer.hpp"
+	#include "IScene.hpp"
+	#include <string>
 
 	namespace ids { namespace menu {
-		class AMenu {
-			enum SceneId {
-				GAME, QUIT, MENU, SETTINGS, SCORE, PAUSE
+		class AMenu : public IScene {
+
+			struct button {
+				vec2d<int> pos;
+				vec2d<int> size;
+				irr::core::stringw inactive;
+				irr::core::stringw active;
+				SceneId	action;
+				bool hovered;
 			};
 		public:
-			AMenu(std::shared_ptr<gfx::Renderer> rend);
-			virtual ~AMenu();
+			explicit AMenu(gfx::Renderer *rend);
+			~AMenu() = default;
+			void computeEvent(vec2d<int> &mousePos);
+			SceneId getSceneId();
 		protected:
 			bool setWindow();
-			void computeEvent();
-			SceneId getSceneId();
-			std::shared_ptr<gfx::Renderer> _rend;
+			bool buttonEvent();
+			gfx::Renderer *_rend;
 			vec2d<int> _posBackground;
+			std::vector<struct button> _infoButtons;
+			SceneId		_id;
+			vec2d<int>	_mousePos;
+
 		};
+
 	}}
 
 #endif //AMENU_HPP

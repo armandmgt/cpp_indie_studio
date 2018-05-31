@@ -8,8 +8,10 @@ set(SOURCE_FILES
         ../include/gfx/Renderer.hpp gfx/EventReceiver.cpp
         ../include/gfx/EventReceiver.hpp
         settingManager/settingManager.cpp
-        ../include/settingManager/settingManager.hpp ../include/gfx/Image2D.hpp)
-
+        ../include/settingManager/settingManager.hpp ../include/gfx/Image2D.hpp
+        Menu/AMenu.cpp
+        ../include/menu/AMenu.hpp ../include/IScene.hpp ../include/menu/Launch.hpp
+        Menu/Launch.cpp)
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4 -lIrrlicht")
 else()

@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "gfx/Renderer.hpp"
+#include "irrlicht/driverChoice.h"
 
 //TODO Sound
 
@@ -22,6 +23,10 @@ gfx::Renderer::Renderer()
 	smgr->addCameraSceneNode();
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
+
+//	boutonQuitter = env->addButton(core::rect<s32>(214,98,379,226), 0, 1, L"");
+//	irr::gui::IGUIButton::IGUIButton *play;
+//	irr::IGUIButton::setImage(driver->getTexture ("lien_quitter.PNG"));
 }
 
 gfx::Renderer::~Renderer()
@@ -48,7 +53,8 @@ void gfx::Renderer::render()
 	driver->enableMaterial2D();
 	for (auto &image : images) {
 		driver->draw2DImage(image.image,
-				    {image.position.x, image.position.y}, image.size);
+				    {image.position.x, image.position.y}, image.size , 0, irr::video::SColor(255,255,255,255), true);
+
 	}
 	driver->enableMaterial2D(false);
 	driver->endScene();
@@ -58,7 +64,6 @@ vec2d<int> gfx::Renderer::getMousePosition()
 {
 	gfx::MyEventReceiver::SMouseState mouse =  Event.GetMouseState();
 	vec2d<int> position(mouse.position.X, mouse.position.Y);
-
 	return position;
 }
 
@@ -105,7 +110,6 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, vec2d<int> &posit
 			   irr::core::rect<irr::s32> &size)
 {
 	irr::video::ITexture *text = driver->getTexture(filename);
-
 	images.emplace_back(text, positon, size);
 }
 
@@ -113,9 +117,9 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, vec2d<int> &posit
 {
 	irr::core::rect<irr::s32> size;
 	irr::video::ITexture *text = driver->getTexture(filename);
-	irr::core::vector2d<int> pos(positon.x, positon.y);
-	irr::core::vector2d<int> pos2(text->getOriginalSize().Height,
-				      text->getOriginalSize().Width);
+	irr::core::vector2d<int> pos(0, 0);
+	irr::core::vector2d<int> pos2(text->getOriginalSize().Width,
+				      text->getOriginalSize().Height);
 	size.UpperLeftCorner = pos;
 	size.LowerRightCorner = pos2;
 	images.emplace_back(text, positon, std::move(size));

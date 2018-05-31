@@ -8,8 +8,7 @@
 #include <iostream>
 #include <settingManager/settingManager.hpp>
 #include "gfx/Renderable.hpp"
-#include "gfx/Renderer.hpp"
-#include "menu/AMenu.hpp"
+#include "menu/Launch.hpp"
 
 int main()
 {
@@ -18,18 +17,27 @@ int main()
 	gfx::Renderable asset;
 	opt::settingManager settings(filename);
 	vec2d<int> pos(0,0);
-	irr::core::rect<irr::s32> size(0,0,100,500);
+	irr::core::rect<irr::s32> size(0,0,1920, 1080);
 
 	settings.load();
 //	window.addArchive(settings.getValue("archive"));
 //	asset.setMesh(window.getScene(), settings.getValue("mesh"));
 //	asset.setPosition(vec3d<float>(-1300,-144,-1249));
-	window.load2D("../../assets/textures/texture.jpg", pos, size);
+	ids::menu::Launch testmenu(&window);
 	while (window.isRun()) {
 		if (window.pollEvent() == ids::QUIT) {
 			break;
 		}
+		vec2d<int> mousePos = window.getMousePosition();
+		testmenu.computeEvent(mousePos);
 		window.render();
+		switch (testmenu.getSceneId()) {
+			case ids::IScene::QUIT:
+				return 0;
+				break;
+			default:
+				break;
+		}
 	}
 	return 0;
 }
