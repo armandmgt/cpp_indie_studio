@@ -17,6 +17,17 @@ namespace ecs {
 		POWER,
 	};
 
+	enum {
+		COMP_NONE = 0,
+		COMP_CHARACTER = 1 << 0,
+		COMP_EXPLOSION = 1 << 1,
+		COMP_COLLECTIBLE = 1 << 2,
+		COMP_VELOCITY = 1 << 3,
+		COMP_POSITION = 1 << 4,
+		COMP_INPUT = 1 << 5,
+		COMP_AIINPUT = 1 << 6,
+	};
+
 	struct Character {
 		bool invincibility;
 		bool footPowerUp;
