@@ -26,7 +26,6 @@ namespace ecs {
 
 
 	private:
-		entityId currentId;
 		std::unordered_map<entityId, Entity> _world;
 
 	};
