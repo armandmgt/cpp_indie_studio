@@ -9,8 +9,8 @@ set(SOURCE_FILES
 
 		../include/common/vec.hpp
 
-        ../include/enum/AnimationType.hpp
-        ../include/enum/Directions.hpp
+	        ../include/enum/AnimationType.hpp
+	        ../include/enum/Directions.hpp
 		../include/engine/Entity.hpp
 		world/World.cpp
 		../include/world/World.hpp)
