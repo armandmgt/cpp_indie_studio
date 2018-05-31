@@ -24,8 +24,6 @@ int main()
 
 	gfx::idSprite id;
 	position = {0,0,0};
-//	id = window.createb3dMesh("../../assets/meshs/perso.b3d");
-//	window.setPosition(id, positionlego);
 	createGround(21, 20, assetPath, window);
 	while (window.isRun()) {
 		auto event = window.pollEvent();
