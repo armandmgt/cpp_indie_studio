@@ -11,7 +11,7 @@ Map::Map() {}
 
 Map::Map(size_t length, size_t width) : _length(length), _width(width) {}
 
-void Map::setCellItem(pos_t *pos, item item)
+void Map::setCellItem(map_pos *pos, map_item item)
 {
 	_map[pos->y][pos->x] = item;
 }
@@ -92,7 +92,7 @@ void Map::_fillMap()
 {
 	auto yMod = _width % 2 ? 3 : 2;
 
-	_map.push_back(std::string(_length, '#'));
+	_map.emplace_back(std::string(_length, '#'));
 	for (size_t i = 1; i < _width; i++) {
 		std::string tmp(_length, '*');
 		if (i % yMod == 0) {
@@ -102,7 +102,7 @@ void Map::_fillMap()
 		tmp[tmp.size() - 1] = '#';
 		_map.push_back(tmp);
 	}
-	_map.push_back(std::string(_length, '#'));
+	_map.emplace_back(std::string(_length, '#'));
 }
 
 void Map::initMap(size_t wallPct)
@@ -116,11 +116,6 @@ void Map::initMap(size_t wallPct)
 	_digTopRightCorner();
 	_digBottomLeftCorner();
 	_digBottomRightCorner();
-}
-
-std::vector<std::string> &Map::getMap()
-{
-	return _map;
 }
 
 void Map::printMap() const

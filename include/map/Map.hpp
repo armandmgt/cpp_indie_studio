@@ -10,14 +10,14 @@
 #include <iostream>
 #include <map>
 
-typedef enum direction {
+enum direction {
 	RIGHT,
 	DOWN,
 	LEFT,
 	UP
-}	direction;
+};
 
-typedef enum item {
+enum map_item {
 	BREAKABLE_WALL = '*',
 	BOMB = 'O',
 	KICK_POWERUP = '|',
@@ -25,12 +25,12 @@ typedef enum item {
 	BOMB_UP = 'B',
 	FIRE_UP = 'F',
 	EMPTY = ' '
-}	item;
+};
 
-typedef struct pos_s {
+struct map_pos {
 	size_t x;
 	size_t y;
-} pos_t;
+};
 
 class Map
 {
@@ -40,10 +40,10 @@ public:
 	~Map() noexcept = default;
 
 	void initMap(size_t);
-	std::vector<std::string> &getMap();
+	std::vector<std::string> &getMap() { return this->_map; };
 	void printMap() const;
 	bool digPosition(size_t, size_t);
-	void setCellItem(pos_t *, item);
+	void setCellItem(map_pos *, map_item);
 
 private:
 	std::vector<std::string> _map;
@@ -58,7 +58,7 @@ private:
 	void _digBottomLeftCorner();
 	void _digBottomRightCorner();
 
-	std::map<int, item> _gamble = {
+	std::map<int, map_item> _gamble = {
 		{40, BREAKABLE_WALL},
 		{70, KICK_POWERUP},
 		{80, SPEED_UP},
