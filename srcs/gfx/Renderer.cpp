@@ -9,24 +9,29 @@
 #include "gfx/Renderer.hpp"
 #include "irrlicht/driverChoice.h"
 
-//TODO Sound
+gfx::Renderer::Renderer() : _id(0)
 
-gfx::Renderer::Renderer()
 {
 	irr::core::stringw tittleWindow = "Bomberman";
 
-	device = irr::createDevice(irr::video::EDT_OPENGL,
-		irr::core::dimension2d<irr::u32>(1920, 1080), 16, true, true,
-				   false, &Event);
+	if (device = irr::createDevice(irr::video::EDT_OPENGL,
+		irr::core::dimension2d<irr::u32>(1920, 1080), 1024, true, true,
+		false, &Event); !device)
+		throw std::exception();
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
-	smgr->addCameraSceneNode();
+	//smgr->addCameraSceneNodeFPS();
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
-
-//	boutonQuitter = env->addButton(core::rect<s32>(214,98,379,226), 0, 1, L"");
-//	irr::gui::IGUIButton::IGUIButton *play;
-//	irr::IGUIButton::setImage(driver->getTexture ("lien_quitter.PNG"));
+	auto light = smgr->addLightSceneNode(nullptr,
+		irr::core::vector3df{0, 300, -190},
+		irr::video::SColorf{.7, .7, .3, 0}, 500.f);
+	irr::scene::IBillboardSceneNode* bill = smgr->addBillboardSceneNode(
+		light, irr::core::dimension2d<irr::f32>(10, 10));
+	bill->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+	bill->setMaterialFlag(irr::video::EMF_ZWRITE_ENABLE, false);
+	bill->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
+	light->setDebugDataVisible(irr::scene::EDS_FULL);
 }
 
 gfx::Renderer::~Renderer()
@@ -34,30 +39,28 @@ gfx::Renderer::~Renderer()
 	device->drop();
 }
 
-bool gfx::Renderer::isRun()
+bool gfx::Renderer::isRun() const
 {
 	return device->run();
 }
 
-void gfx::Renderer::render(std::vector<gfx::Renderable> &v)
-{
-	for (auto &it : v)
-		it.render();
-}
-
 void gfx::Renderer::render()
 {
-	driver->beginScene(true, true, irr::video::SColor(0,0,0,0));
+	driver->beginScene(true, true, irr::video::SColor(255, 113, 113, 113));
 	smgr->drawAll();
 	guienv->drawAll();
 	driver->enableMaterial2D();
 	for (auto &image : images) {
 		driver->draw2DImage(image.image,
 				    {image.position.x, image.position.y}, image.size , 0, irr::video::SColor(255,255,255,255), true);
-
 	}
 	driver->enableMaterial2D(false);
 	driver->endScene();
+}
+
+void gfx::Renderer::clearScene()
+{
+	smgr->clear();
 }
 
 vec2d<int> gfx::Renderer::getMousePosition()
@@ -70,7 +73,11 @@ vec2d<int> gfx::Renderer::getMousePosition()
 ids::eventKey gfx::Renderer::pollEvent()
 {
 	static mabBinding const binding = {
-		{irr::KEY_ESCAPE, ids::QUIT}
+		{irr::KEY_ESCAPE, ids::QUIT},
+		{irr::KEY_LEFT, ids::LEFT},
+		{irr::KEY_RIGHT, ids::RIGHT},
+		{irr::KEY_UP, ids::UP},
+		{irr::KEY_DOWN, ids::DOWN}
 	};
 
 	for (auto &it : binding) {
@@ -80,30 +87,9 @@ ids::eventKey gfx::Renderer::pollEvent()
 	return ids::NONE;
 }
 
-void gfx::Renderer::newScene()
-{
-}
-
-irr::scene::ISceneManager *gfx::Renderer::getScene()
-{
-	return smgr;
-}
-
 void gfx::Renderer::addArchive(irr::core::stringw const &filename)
 {
 	device->getFileSystem()->addFileArchive(filename);
-}
-
-void gfx::Renderer::clearScene()
-{
-	smgr->clear();
-}
-
-//TODO Problem to display the text
-void
-gfx::Renderer::drawText(vec2d<int> const &v, std::string const &text, bool fillBackground)
-{
-	guienv->addStaticText(L"coucocou", irr::core::rect<irr::s32>(v.x,v.y,260,22), fillBackground);
 }
 
 void gfx::Renderer::load2D(irr::core::stringw const &filename, vec2d<int> &positon,
@@ -122,5 +108,88 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, vec2d<int> &posit
 				      text->getOriginalSize().Height);
 	size.UpperLeftCorner = pos;
 	size.LowerRightCorner = pos2;
+	driver->makeColorKeyTexture(text, irr::core::position2d<irr::s32>(0,0));
 	images.emplace_back(text, positon, std::move(size));
 }
+
+gfx::idSprite gfx::Renderer::createMesh(irr::core::stringw const &filename)
+{
+	irr::scene::IAnimatedMesh *mesh;
+	irr::scene::IAnimatedMeshSceneNode *aniMesh;
+
+	if (mesh = smgr->getMesh(filename.c_str()); !mesh) {
+		return -1;
+	} else if (aniMesh = smgr->addAnimatedMeshSceneNode(mesh); !aniMesh) {
+		return -1;
+	} else {
+		meshs.push_back(mesh);
+		animatedMeshs.push_back(aniMesh);
+		aniMesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING,
+			false);
+		return animatedMeshs.size() - 1;
+	}
+}
+
+bool gfx::Renderer::addTexture(gfx::idSprite id, std::string filename)
+{
+	return false;
+}
+
+bool gfx::Renderer::setAnimationSpeed(gfx::idSprite id, float speed)
+{
+	if (animatedMeshs[id]) {
+		animatedMeshs[id]->setAnimationSpeed(speed);
+		return true;
+	}
+	return false;
+}
+
+bool gfx::Renderer::setPosition(gfx::idSprite id, vec3d<float> position)
+{
+	if (animatedMeshs[id]) {
+		animatedMeshs[id]->setPosition({position.x,
+					       position.y,
+					       position.z});
+		return true;
+	}
+	return false;
+}
+
+bool gfx::Renderer::rotateMesh(gfx::idSprite id, vec3d<float> angle)
+{
+	if (animatedMeshs[id]) {
+		animatedMeshs[id]->setRotation({angle.x,
+					       angle.y,
+					       angle.z});
+		return true;
+	}
+	return false;
+}
+
+vec3d<float> gfx::Renderer::getSizeMesh(gfx::idSprite id)
+{
+	irr::core::vector3df extent = animatedMeshs.at(id)->getTransformedBoundingBox().getExtent();
+	return {extent.X, extent.Y, extent.Z};
+}
+
+gfx::idSprite gfx::Renderer::createb3dMesh(irr::core::stringw const &filename)
+{
+	irr::scene::IAnimatedMesh *mesh;
+	irr::scene::IAnimatedMeshSceneNode *aniMesh;
+
+	if (mesh = smgr->getMesh(filename.c_str()); !mesh) {
+		return -1;
+	} else if (aniMesh = smgr->addAnimatedMeshSceneNode(mesh); !aniMesh) {
+		return -1;
+	} else {
+		meshs.push_back(mesh);
+		animatedMeshs.push_back(aniMesh);
+		aniMesh->getMaterial(0).NormalizeNormals = true;
+		aniMesh->getMaterial(0).Lighting = true;
+		aniMesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING,
+			false);
+		return animatedMeshs.size() - 1;
+	}
+}
+
+

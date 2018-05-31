@@ -31,21 +31,21 @@ bool opt::settingManager::load()
 	irr::io::IXMLReader* xml = NullDevice->getFileSystem()->createXMLReader(filename.c_str());
 	if (!xml)
 		return false;
-	while (xml->read())
-	{
-		switch (xml->getNodeType())
-		{
-			case irr::io::EXN_ELEMENT:
-			{
-				irr::core::stringw key = xml->getAttributeValueSafe(L"name");
-				if (!key.empty())
-				{
-					settings[key] = xml->getAttributeValueSafe(L"value");
+	while (xml->read()) {
+		switch (xml->getNodeType()) {
+			case irr::io::EXN_ELEMENT: {
+				irr::core::stringw key = xml->getAttributeValueSafe(
+					L"name");
+				if (!key.empty()) {
+					settings[key] = xml->getAttributeValueSafe(
+						L"value");
 				}
+				break;
 			}
-			break;
 			case irr::io::EXN_ELEMENT_END:
 				currentSection=L"";
+				break;
+			default:
 				break;
 		}
 	}

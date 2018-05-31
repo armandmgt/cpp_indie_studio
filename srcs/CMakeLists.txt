@@ -1,7 +1,5 @@
 set(SOURCE_FILES
         main.cpp
-        ../include/gfx/Renderable.hpp
-        gfx/Renderable.cpp
         ../include/common/vec.hpp
         ../include/enum/AnimationType.hpp
         gfx/Renderer.cpp
