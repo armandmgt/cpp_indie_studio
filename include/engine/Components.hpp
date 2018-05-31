@@ -17,7 +17,7 @@ namespace ecs {
 		POWER,
 	};
 
-	enum {
+	enum comp : std::size_t {
 		COMP_NONE = 0,
 		COMP_CHARACTER = 1 << 0,
 		COMP_EXPLOSION = 1 << 1,
