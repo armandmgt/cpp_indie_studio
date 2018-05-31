@@ -26,6 +26,7 @@ namespace ecs {
 		COMP_POSITION = 1 << 4,
 		COMP_INPUT = 1 << 5,
 		COMP_AIINPUT = 1 << 6,
+		COMP_DESTRUCTIBLE = 1 << 7,
 	};
 
 	struct Character {

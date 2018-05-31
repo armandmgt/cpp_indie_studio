@@ -7,18 +7,18 @@
 #include <engine/Components.hpp>
 #include "world/World.hpp"
 
-ecs::entityId ecs::world::createEntity(ecs::entityType type)
-{
-	static std::unordered_map<entityType, std::bitset<Entity::bitSize>> map {
-		{PLAYER, },
-		{POWERUP, },
-		{BOMB, },
-		{WALL, },
-		{FLAMME, }
-	};
-	return _world.size() - 1;
-}
+namespace ecs {
+	entityId world::createEntity(entityType type) {
+		static std::unordered_map<entityType, std::bitset<Entity::bitSize>> map {
+			{PLAYER, COMP_POSITION | COMP_VELOCITY | COMP_CHARACTER | COMP_DESTRUCTIBLE},
+			{POWERUP, COMP_POSITION | COMP_COLLECTIBLE},
+			{BOMB, COMP_VELOCITY | COMP_EXPLOSION},
+			{WALL, COMP_POSITION | COMP_DESTRUCTIBLE},
+			{FLAMME, COMP_POSITION}
+		};
+		return _world.size() - 1;
+	}
 
-void ecs::world::destroyEntity(ecs::entityId id)
-{
+	void world::destroyEntity(entityId id) {
+	}
 }
