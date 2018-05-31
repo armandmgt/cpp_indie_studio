@@ -2,29 +2,21 @@
 ** EPITECH PROJECT, 2018
 ** Map
 ** File description:
-**        Map generation
+** Map generation
 */
 
-#include "Map.hpp"
+#include "map/Map.hpp"
 
-Map::Map()
-{
-}
+Map::Map() {}
 
-Map::Map(size_t length, size_t width) : _length(length), _width(width)
-{
-}
-
-Map::~Map()
-{
-}
+Map::Map(size_t length, size_t width) : _length(length), _width(width) {}
 
 void Map::setCellItem(pos_t *pos, item item)
 {
 	_map[pos->y][pos->x] = item;
 }
 
-bool Map::addWall(size_t x, size_t y)
+bool Map::_addWall(size_t x, size_t y)
 {
 	auto rand = std::rand() % 100;
 
@@ -48,44 +40,44 @@ bool Map::digPosition(size_t x, size_t y)
 	return true;
 }
 
-void Map::digBottomRightCorner()
+void Map::_digBottomRightCorner()
 {
 	_map[_map.size() - 2][_map[1].size() - 2] = ' ';
 	_map[_map.size() - 3][_map[1].size() - 2] = ' ';
 	_map[_map.size() - 2][_map[1].size() - 3] = ' ';
 }
 
-void Map::digBottomLeftCorner()
+void Map::_digBottomLeftCorner()
 {
 	_map[_map.size() - 2][1] = ' ';
 	_map[_map.size() - 3][1] = ' ';
 	_map[_map.size() - 2][2] = ' ';
 }
 
-void Map::digTopRightCorner()
+void Map::_digTopRightCorner()
 {
 	_map[1][_map[1].size() - 2] = ' ';
 	_map[1][_map[1].size() - 3] = ' ';
 	_map[2][_map[1].size() - 2] = ' ';
 }
 
-void Map::digTopLeftCorner()
+void Map::_digTopLeftCorner()
 {
 	_map[1][1] = ' ';
 	_map[2][1] = ' ';
 	_map[1][2] = ' ';
 }
 
-void Map::proceduralGen(size_t wallsToCreate)
+void Map::_proceduralGen(size_t wallsToCreate)
 {
 	for (size_t i = 0; i < wallsToCreate - 1; i++) {
 		size_t x = std::rand() % (_length);
 		size_t y = std::rand() % (_width);
-		addWall(x, y);
+		_addWall(x, y);
 	}
 }
 
-void Map::fillLine(std::string &line)
+void Map::_fillLine(std::string &line)
 {
 	auto xMod = _length % 2 ? 3 : 2;
 
@@ -96,7 +88,7 @@ void Map::fillLine(std::string &line)
 			line[j] = '*';
 }
 
-void Map::fillMap()
+void Map::_fillMap()
 {
 	auto yMod = _width % 2 ? 3 : 2;
 
@@ -104,7 +96,7 @@ void Map::fillMap()
 	for (size_t i = 1; i < _width; i++) {
 		std::string tmp(_length, '*');
 		if (i % yMod == 0) {
-			fillLine(tmp);
+			_fillLine(tmp);
 		}
 		tmp[0] = '#';
 		tmp[tmp.size() - 1] = '#';
@@ -118,12 +110,12 @@ void Map::initMap(size_t wallPct)
 	size_t totalCells = (_width - 1) * (_length - 1) / 2;
 	size_t wallsToCreate = (totalCells * wallPct) / 100;
 
-	fillMap();
-	proceduralGen(wallsToCreate);
-	digTopLeftCorner();
-	digTopRightCorner();
-	digBottomLeftCorner();
-	digBottomRightCorner();
+	_fillMap();
+	_proceduralGen(wallsToCreate);
+	_digTopLeftCorner();
+	_digTopRightCorner();
+	_digBottomLeftCorner();
+	_digBottomRightCorner();
 }
 
 std::vector<std::string> &Map::getMap()
@@ -138,11 +130,3 @@ void Map::printMap() const
 	}
 }
 
-// int	main(int argc, char *argv[])
-// {
-// 	std::srand(time(0));
-// 	Map map(21, 22);
-// 	map.initMap(30);
-// 	map.printMap();
-// 	return (0);
-// }
