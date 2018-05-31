@@ -26,6 +26,11 @@ namespace ecs {
 
 
 	private:
+		void createPlayer();
+		void createPowerUp();
+		void createBomb();
+		void createWall();
+		void createFlamme();
 		std::unordered_map<entityId, Entity> _world;
 
 	};
