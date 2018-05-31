@@ -19,19 +19,7 @@ gfx::Renderer::Renderer() : _id(0)
 		throw std::exception();
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
-	if (!driver || !smgr)
-		throw std::exception();
-	irr::SKeyMap keyMap[4];
-	keyMap[0].Action = irr::EKA_MOVE_FORWARD;
-	keyMap[0].KeyCode = irr::KEY_KEY_W;
-	keyMap[1].Action = irr::EKA_MOVE_BACKWARD;
-	keyMap[1].KeyCode = irr::KEY_KEY_S;
-	keyMap[2].Action = irr::EKA_STRAFE_LEFT;
-	keyMap[2].KeyCode = irr::KEY_KEY_A;
-	keyMap[3].Action = irr::EKA_STRAFE_RIGHT;
-	keyMap[3].KeyCode = irr::KEY_KEY_D;
-	smgr->addCameraSceneNodeFPS(nullptr, 100.f, 0.4f, -1, keyMap, 4);
-	device->getCursorControl()->setVisible(false);
+	smgr->addCameraSceneNodeFPS();
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
 	auto light = smgr->addLightSceneNode(nullptr,
@@ -181,8 +169,7 @@ bool gfx::Renderer::rotateMesh(gfx::idSprite id, vec3d<float> angle)
 
 vec3d<float> gfx::Renderer::getSizeMesh(gfx::idSprite id)
 {
-	irr::core::vector3df extent = animatedMeshs.at(id)
-		->getTransformedBoundingBox().getExtent();
+	irr::core::vector3df extent = animatedMeshs.at(id)->getTransformedBoundingBox().getExtent();
 	return {extent.X, extent.Y, extent.Z};
 }
 
@@ -198,7 +185,6 @@ gfx::idSprite gfx::Renderer::createb3dMesh(irr::core::stringw const &filename)
 	} else {
 		meshs.push_back(mesh);
 		animatedMeshs.push_back(aniMesh);
-		aniMesh->setAnimationSpeed(8.f);
 		aniMesh->getMaterial(0).NormalizeNormals = true;
 		aniMesh->getMaterial(0).Lighting = true;
 		aniMesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING,
@@ -206,3 +192,5 @@ gfx::idSprite gfx::Renderer::createb3dMesh(irr::core::stringw const &filename)
 		return animatedMeshs.size() - 1;
 	}
 }
+
+
