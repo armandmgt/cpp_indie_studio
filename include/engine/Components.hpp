@@ -8,6 +8,7 @@
 #pragma once
 
 #include <cstddef>
+#include <memory>
 
 namespace ecs {
 	enum ActionTarget {
@@ -67,5 +68,10 @@ namespace ecs {
 		bool goRight;
 		bool goUp;
 		bool goDown;
+	};
+
+	struct Destructible {
+		bool  destructible;
+		std::unique_ptr<Collectible> item;
 	};
 }

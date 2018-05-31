@@ -8,6 +8,7 @@
 #define CPP_INDIE_STUDIO_ENTITIES_HPP
 
 #include <bitset>
+#include "Components.hpp"
 
 namespace ecs {
 
@@ -22,6 +23,15 @@ namespace ecs {
 		{};
 		entityId id;
 		std::bitset<bitSize> bit;
+
+		Character cCharacter;
+		Explosion cExplosion;
+		Collectible cCollectible;
+		Velocity cVelocity;
+		Position cPosition;
+		Input cInput;
+		AiInput cAiInput;
+		Destructible cDestructible;
 	};
 }
 

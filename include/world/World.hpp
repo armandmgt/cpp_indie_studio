@@ -8,8 +8,6 @@
 #define CPP_INDIE_STUDIO_WORLD_HPP
 
 #include <unordered_map>
-#include <vector>
-#include <string>
 #include "engine/Entity.hpp"
 
 namespace ecs {
@@ -23,20 +21,24 @@ namespace ecs {
 		world() = default;
 		~world() = default;
 
-		entityId createEntity(entityType type);
-		void destroyEntity(entityId id);
+		template<typename ... Ts>
+		entityId world::createEntity(entityType type, Ts components) {
+			static std::unordered_map<entityType, std::bitset<Entity::bitSize>> map {
+				{PLAYER, COMP_POSITION | COMP_VELOCITY | COMP_CHARACTER | COMP_DESTRUCTIBLE},
+				{POWERUP, COMP_POSITION | COMP_COLLECTIBLE},
+				{BOMB, COMP_VELOCITY | COMP_EXPLOSION},
+				{WALL, COMP_POSITION | COMP_DESTRUCTIBLE},
+				{FLAMME, COMP_POSITION}
+			};
 
-	private:
-		void createPlayer();
-		void createPowerUp();
-		void createBomb();
-		void createWall();
-		void createFlamme();
-		std::unordered_map<entityId, Entity> _world;
-
-		void _spawnEntitiesFromMap(std::vector<std::string>&&);
-		void _spawnWall(size_t, size_t);
-	};
-}
-
-#endif //CPP_INDIE_STUDIO_WORLD_HPP
+			auto c_types = map[type];
+			Entity newEntity(c_types);
+			if ((c_types & COMP_CHARACTER) == COMP_CHARACTER) {
+				newEntity.cCharacter = components;
+				std::forward(components);
+			}
+			if ((c_types & COMP_EXPLOSION) == COMP_EXPLOSION) {
+				newEntity.cExplosion = components;
+				std::forward(components);
+			}
+²
