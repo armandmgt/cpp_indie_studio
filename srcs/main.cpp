@@ -12,6 +12,7 @@
 
 int main()
 {
+	/*
 	try {
 		std::unique_ptr<ids::GameContainer> gc(ids::GameContainer::create());
 
@@ -20,5 +21,7 @@ int main()
 		std::cerr << e.what() << std::endl;
 		return 84;
 	}
+	return 0;
+	*/
 	return 0;
 }
