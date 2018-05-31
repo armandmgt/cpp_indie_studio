@@ -13,7 +13,11 @@ set(SOURCE_FILES
 	        ../include/enum/Directions.hpp
 		../include/engine/Entity.hpp
 		world/World.cpp
-		../include/world/World.hpp)
+		../include/world/World.hpp
+
+		map/Map.cpp
+		../include/map/Map.hpp
+		)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4")
