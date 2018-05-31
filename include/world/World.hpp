@@ -8,6 +8,8 @@
 #define CPP_INDIE_STUDIO_WORLD_HPP
 
 #include <unordered_map>
+#include <vector>
+#include <string>
 #include "engine/Entity.hpp"
 
 namespace ecs {
@@ -24,10 +26,11 @@ namespace ecs {
 		entityId createEntity(entityType type);
 		void destroyEntity(entityId id);
 
-
 	private:
 		std::unordered_map<entityId, Entity> _world;
 
+		void _spawnEntitiesFromMap(std::vector<std::string>&&);
+		void _spawnWall(size_t, size_t);
 	};
 }
 

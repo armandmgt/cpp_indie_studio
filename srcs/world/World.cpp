@@ -5,6 +5,7 @@
 ** world
 */
 #include <engine/Components.hpp>
+#include "engine/Components.hpp"
 #include "world/World.hpp"
 
 namespace ecs {
@@ -20,5 +21,27 @@ namespace ecs {
 	}
 
 	void world::destroyEntity(entityId id) {
+	}
+
+	void world::_spawnEntitiesFromMap(std::vector<std::string> &&gameMap) {
+		for (auto itR = gameMap.begin(); itR != gameMap.end(); itR++) {
+			for (auto itC = itR->begin(); itC != itR->end(); itC++) {
+				switch (*itC) {
+					case '*':
+						this->_spawnWall(itC - itR->begin(), itR - gameMap.begin());
+						break;
+					default:
+						throw std::logic_error("Invalid entity in map");
+
+				}
+			}
+		}
+	}
+
+	void world::_spawnWall(size_t posX, size_t posY) {
+		Position pos = { static_cast<float>(posX), static_cast<float>(posY) };
+		Destructible des = { true, nullptr };
+
+		this->createEntity(WALL, pos, des);
 	}
 }
