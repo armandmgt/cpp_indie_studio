@@ -14,9 +14,9 @@ namespace ecs {
 	using entityId = long;
 
 	class Entity {
-		static std::size_t bitsize = 5;
-		entityId id;
-		std::bitset<bitsize> bit;
+		static std::size_t const _bitsize = 5;
+		entityId _id;
+		std::bitset<_bitsize> _bit;
 	};
 }
 
