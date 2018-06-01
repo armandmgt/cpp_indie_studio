@@ -16,7 +16,7 @@ namespace ecs {
 
 	class Entity {
 	public:
-		static std::size_t const bitSize = 5;
+		static std::size_t const bitSize = 8;
 
 		explicit Entity(std::bitset<bitSize> bitset) : id(0),
 							       bit(bitset)
@@ -24,14 +24,14 @@ namespace ecs {
 		entityId id;
 		std::bitset<bitSize> bit;
 
-		Character cCharacter;
-		Explosion cExplosion;
-		Collectible cCollectible;
-		Velocity cVelocity;
-		Position cPosition;
-		Input cInput;
-		AiInput cAiInput;
-		Destructible cDestructible;
+		Character cCharacter{};
+		Explosion cExplosion{};
+		Collectible cCollectible{};
+		Velocity cVelocity{};
+		Position cPosition{};
+		Input cInput{};
+		AiInput cAiInput{};
+		Destructible cDestructible{};
 	};
 }
 

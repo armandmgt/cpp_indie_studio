@@ -72,6 +72,6 @@ namespace ecs {
 
 	struct Destructible {
 		bool  destructible;
-		std::unique_ptr<Collectible> item;
+		Collectible *item;
 	};
 }

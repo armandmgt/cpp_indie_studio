@@ -19,19 +19,19 @@ enum direction {
 
 enum map_item {
 	BREAKABLE_WALL = '*',
-	BOMB = 'O',
+	UNBREAKABLE_WALL = '#',
 	KICK_POWERUP = '|',
 	SPEED_UP = 'S',
+	MAP_PLAYER = 'P',
 	BOMB_UP = 'B',
 	FIRE_UP = 'F',
-	EMPTY = ' '
+	EMPTY = ' ',
 };
 
 struct map_pos {
 	size_t x;
 	size_t y;
 };
-
 class Map
 {
 public:
@@ -58,7 +58,7 @@ private:
 	void _digBottomLeftCorner();
 	void _digBottomRightCorner();
 
-	std::map<int, map_item> _gamble = {
+	std::map<int, map_item> const _gamble = {
 		{40, BREAKABLE_WALL},
 		{70, KICK_POWERUP},
 		{80, SPEED_UP},

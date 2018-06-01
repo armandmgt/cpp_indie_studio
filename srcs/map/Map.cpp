@@ -20,12 +20,12 @@ bool Map::_addWall(size_t x, size_t y)
 {
 	auto rand = std::rand() % 100;
 
-	if (_map[y][x] == '*') {
-		for (auto it = _gamble.cbegin(); it != _gamble.cend(); it++)
-			if (rand > it->first)
+	if (_map[y][x] == BREAKABLE_WALL) {
+		for (auto &it : _gamble)
+			if (rand > it.first)
 				continue;
 			else {
-				_map[y][x] = it->second;
+				_map[y][x] = it.second;
 				break;
 			}
 		return true;
@@ -35,37 +35,37 @@ bool Map::_addWall(size_t x, size_t y)
 
 bool Map::digPosition(size_t x, size_t y)
 {
-	if (_map[y][x] != '#')
-		_map[y][x] = ' ';
+	if (_map[y][x] != UNBREAKABLE_WALL)
+		_map[y][x] = EMPTY;
 	return true;
 }
 
 void Map::_digBottomRightCorner()
 {
-	_map[_map.size() - 2][_map[1].size() - 2] = ' ';
-	_map[_map.size() - 3][_map[1].size() - 2] = ' ';
-	_map[_map.size() - 2][_map[1].size() - 3] = ' ';
+	_map[_map.size() - 2][_map[1].size() - 2] = MAP_PLAYER;
+	_map[_map.size() - 3][_map[1].size() - 2] = EMPTY;
+	_map[_map.size() - 2][_map[1].size() - 3] = EMPTY;
 }
 
 void Map::_digBottomLeftCorner()
 {
-	_map[_map.size() - 2][1] = ' ';
-	_map[_map.size() - 3][1] = ' ';
-	_map[_map.size() - 2][2] = ' ';
+	_map[_map.size() - 2][1] = MAP_PLAYER;
+	_map[_map.size() - 3][1] = EMPTY;
+	_map[_map.size() - 2][2] = EMPTY;
 }
 
 void Map::_digTopRightCorner()
 {
-	_map[1][_map[1].size() - 2] = ' ';
-	_map[1][_map[1].size() - 3] = ' ';
-	_map[2][_map[1].size() - 2] = ' ';
+	_map[1][_map[1].size() - 2] = MAP_PLAYER;
+	_map[1][_map[1].size() - 3] = EMPTY;
+	_map[2][_map[1].size() - 2] = EMPTY;
 }
 
 void Map::_digTopLeftCorner()
 {
-	_map[1][1] = ' ';
-	_map[2][1] = ' ';
-	_map[1][2] = ' ';
+	_map[1][1] = MAP_PLAYER;
+	_map[2][1] = EMPTY;
+	_map[1][2] = EMPTY;
 }
 
 void Map::_proceduralGen(size_t wallsToCreate)
@@ -83,26 +83,26 @@ void Map::_fillLine(std::string &line)
 
 	for (size_t j = 1; j < _length; j++)
 		if (j % xMod == 0)
-			line[j] = '#';
+			line[j] = UNBREAKABLE_WALL;
 		else
-			line[j] = '*';
+			line[j] = BREAKABLE_WALL;
 }
 
 void Map::_fillMap()
 {
 	auto yMod = _width % 2 ? 3 : 2;
 
-	_map.emplace_back(std::string(_length, '#'));
+	_map.emplace_back(std::string(_length, UNBREAKABLE_WALL));
 	for (size_t i = 1; i < _width; i++) {
-		std::string tmp(_length, '*');
+		std::string tmp(_length, BREAKABLE_WALL);
 		if (i % yMod == 0) {
 			_fillLine(tmp);
 		}
-		tmp[0] = '#';
-		tmp[tmp.size() - 1] = '#';
+		tmp[0] = UNBREAKABLE_WALL;
+		tmp[tmp.size() - 1] = UNBREAKABLE_WALL;
 		_map.push_back(tmp);
 	}
-	_map.emplace_back(std::string(_length, '#'));
+	_map.emplace_back(std::string(_length, UNBREAKABLE_WALL));
 }
 
 void Map::initMap(size_t wallPct)
@@ -120,8 +120,8 @@ void Map::initMap(size_t wallPct)
 
 void Map::printMap() const
 {
-	for (auto it = _map.cbegin(); it != _map.cend(); it++) {
-		std::cout << *it << std::endl;
+	for (auto const &it : _map) {
+		std::cout << it << std::endl;
 	}
 }
 
