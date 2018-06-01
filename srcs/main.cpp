@@ -9,19 +9,17 @@
 #include <iostream>
 #include <memory>
 #include "engine/GameContainer.hpp"
+#include "world/World.hpp"
+#include "map/Map.hpp"
 
 int main()
 {
-	/*
-	try {
-		std::unique_ptr<ids::GameContainer> gc(ids::GameContainer::create());
+	ecs::world ecs;
+	Map map(20, 20);
+	map.initMap(20);
 
-		gc->start();
-	} catch (std::exception const &e) {
-		std::cerr << e.what() << std::endl;
-		return 84;
-	}
-	return 0;
-	*/
+	map.printMap();
+	ecs._spawnEntitiesFromMap(std::move(map.getMap()));
+
 	return 0;
 }

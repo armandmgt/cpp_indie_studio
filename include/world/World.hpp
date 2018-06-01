@@ -4,41 +4,46 @@
 ** File description:
 ** world
 */
+
 #ifndef CPP_INDIE_STUDIO_WORLD_HPP
 #define CPP_INDIE_STUDIO_WORLD_HPP
 
 #include <unordered_map>
+#include <vector>
+#include <iostream>
+#include <functional>
 #include "engine/Entity.hpp"
 
 namespace ecs {
 
 	enum entityType {
-		PLAYER, POWERUP, BOMB, WALL, FLAMME,
+		PLAYER, POWERUP, BOMB, WALL, U_WALL, FLAMME,
 	};
 
 	class world {
 	public:
 		world() = default;
+
 		~world() = default;
 
-		template<typename ... Ts>
-		entityId world::createEntity(entityType type, Ts components) {
-			static std::unordered_map<entityType, std::bitset<Entity::bitSize>> map {
-				{PLAYER, COMP_POSITION | COMP_VELOCITY | COMP_CHARACTER | COMP_DESTRUCTIBLE},
-				{POWERUP, COMP_POSITION | COMP_COLLECTIBLE},
-				{BOMB, COMP_VELOCITY | COMP_EXPLOSION},
-				{WALL, COMP_POSITION | COMP_DESTRUCTIBLE},
-				{FLAMME, COMP_POSITION}
-			};
+		entityId createEntity(entityType type);
+		void destroyEntity(entityId);
+		void _spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
+		void _spawnWall(entityType type, size_t posX, size_t posY);
+		void _spawnPlayer(size_t posX, size_t posY);
+		bool addPosition(entityId id, Position pos);
+		bool addCharacter(entityId id, Character chara);
+		bool addExplosion(entityId id, Explosion exp);
+		bool addCollectible(entityId id, Collectible col);
+		bool addVelocity(entityId id, Velocity vel);
+		bool addInput(entityId id, Input in);
+		bool addAiInput(entityId id, AiInput in);
+		bool addDestructible(entityId id, Destructible des);
 
-			auto c_types = map[type];
-			Entity newEntity(c_types);
-			if ((c_types & COMP_CHARACTER) == COMP_CHARACTER) {
-				newEntity.cCharacter = components;
-				std::forward(components);
-			}
-			if ((c_types & COMP_EXPLOSION) == COMP_EXPLOSION) {
-				newEntity.cExplosion = components;
-				std::forward(components);
-			}
-²
+	private:
+		entityId curId = 0;
+		std::unordered_map<entityId, Entity> _world;
+	};
+}
+
+#endif //CPP_INDIE_STUDIO_WORLD_HPP
