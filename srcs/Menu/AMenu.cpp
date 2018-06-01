@@ -26,9 +26,7 @@ ids::menu::AMenu::AMenu(gfx::Renderer *rend) : _rend(rend), _posBackground(0,0),
 bool	ids::menu::AMenu::setWindow()
 {
 	_rend->load2D("/home/sandra/delivery/TEK2/cpp_indie_studio/srcs/Menu/assets/backgound/menu-background.png", _posBackground);
-	for (auto &button : _infoButtons) {
-		_rend->load2D(button.inactive, button.pos);
-	}
+
 	return true;
 }
 
@@ -58,7 +56,5 @@ bool ids::menu::AMenu::buttonEvent()
 void	ids::menu::AMenu::computeEvent(vec2d<int> &mousePos)
 {
 	_mousePos = mousePos;
-	std::cout << mousePos.x << " " << mousePos.y << std::endl;
-
 	buttonEvent();
 }

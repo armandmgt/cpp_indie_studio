@@ -55,6 +55,8 @@ void gfx::Renderer::render()
 				    {image.position.x, image.position.y}, image.size , 0, irr::video::SColor(255,255,255,255), true);
 	}
 	driver->enableMaterial2D(false);
+	//images.back().image->drop();
+	//images.pop_back();
 	driver->endScene();
 }
 

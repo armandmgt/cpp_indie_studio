@@ -23,21 +23,21 @@ int main()
 //	asset.setMesh(window.getScene(), settings.getValue("mesh"));
 //	asset.setPosition(vec3d<float>(-1300,-144,-1249));
 	ids::menu::Launch testmenu(&window);
-	while (window.isRun()) {
-		auto event = window.pollEvent();
-		if (event == ids::QUIT) {
-			break;
-		}
+	while (window.isRun() && window.pollEvent() != ids::QUIT) {
 		vec2d<int> mousePos = window.getMousePosition();
 		testmenu.computeEvent(mousePos);
-		window.render();
 		switch (testmenu.getSceneId()) {
 			case ids::IScene::QUIT:
-				delete &window;
+				//delete &window;
 				return 0;
 			default:
 				break;
 		}
+//		auto event = window.pollEvent();
+//		if (event == ids::QUIT) {
+//			break;
+//		}
+		window.render();
 	}
 	return 0;
 }
