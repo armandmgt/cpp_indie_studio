@@ -18,8 +18,8 @@ int main()
 	Map map(20, 20);
 	map.initMap(20);
 
-	map.printMap();
 	ecs._spawnEntitiesFromMap(std::move(map.getMap()));
+	ecs.drawEntities();
 
 	return 0;
 }

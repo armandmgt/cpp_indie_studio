@@ -31,14 +31,16 @@ namespace ecs {
 		void _spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
 		void _spawnWall(entityType type, size_t posX, size_t posY);
 		void _spawnPlayer(size_t posX, size_t posY);
-		bool addPosition(entityId id, Position pos);
-		bool addCharacter(entityId id, Character chara);
-		bool addExplosion(entityId id, Explosion exp);
-		bool addCollectible(entityId id, Collectible col);
-		bool addVelocity(entityId id, Velocity vel);
-		bool addInput(entityId id, Input in);
-		bool addAiInput(entityId id, AiInput in);
-		bool addDestructible(entityId id, Destructible des);
+		bool addComponent(entityId id, Position pos);
+		bool addComponent(entityId id, Character chara);
+		bool addComponent(entityId id, Explosion exp);
+		bool addComponent(entityId id, Collectible col);
+		bool addComponent(entityId id, Velocity vel);
+		bool addComponent(entityId id, Input in);
+		bool addComponent(entityId id, AiInput in);
+		bool addComponent(entityId id, Destructible des);
+		bool addComponent(entityId id, Graphic gfx);
+		void drawEntities();
 
 	private:
 		entityId curId = 0;

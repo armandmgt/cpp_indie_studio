@@ -16,7 +16,7 @@ namespace ecs {
 
 	class Entity {
 	public:
-		static std::size_t const bitSize = 8;
+		static std::size_t const bitSize = 9;
 
 		explicit Entity(std::bitset<bitSize> bitset) : id(0),
 							       bit(bitset)
@@ -32,6 +32,7 @@ namespace ecs {
 		Input cInput{};
 		AiInput cAiInput{};
 		Destructible cDestructible{};
+		Graphic cGfx{};
 	};
 }
 
