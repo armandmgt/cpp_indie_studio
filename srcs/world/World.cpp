@@ -296,6 +296,7 @@ namespace ecs {
 			const entityId newId = this->createEntity(POWERUP);
 			addComponent(newId, box.cCollectible);
 			addComponent(newId, box.cPosition);
+			destroyEntity(id);
 		}
 	}
 }
