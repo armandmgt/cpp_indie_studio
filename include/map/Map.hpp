@@ -17,10 +17,10 @@ enum direction {
 	UP
 };
 
-enum map_item {
+enum mapItem {
 	BREAKABLE_WALL = '*',
 	UNBREAKABLE_WALL = '#',
-	KICK_POWERUP = '|',
+	POWER_UP = '|',
 	SPEED_UP = 'S',
 	MAP_PLAYER = 'P',
 	BOMB_UP = 'B',
@@ -43,7 +43,7 @@ public:
 	std::vector<std::string> &getMap() { return this->_map; };
 	void printMap() const;
 	bool digPosition(size_t, size_t);
-	void setCellItem(map_pos *, map_item);
+	void setCellItem(map_pos *, mapItem);
 
 private:
 	std::vector<std::string> _map;
@@ -58,9 +58,9 @@ private:
 	void _digBottomLeftCorner();
 	void _digBottomRightCorner();
 
-	std::map<int, map_item> const _gamble = {
+	std::map<int, mapItem> const _gamble = {
 		{40, BREAKABLE_WALL},
-		{70, KICK_POWERUP},
+		{70, POWER_UP},
 		{80, SPEED_UP},
 		{90, BOMB_UP},
 		{100, FIRE_UP}

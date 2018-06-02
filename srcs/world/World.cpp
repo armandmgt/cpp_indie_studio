@@ -8,33 +8,9 @@
 #include <functional>
 #include <memory>
 #include "engine/Components.hpp"
-#include "map/Map.hpp"
 #include "world/World.hpp"
 
 namespace ecs {
-
-	void world::destroyEntity(entityId id) {
-		_world.erase(id);
-
-	}
-
-	void world::_spawnEntitiesFromMap(std::vector<std::string> &&gameMap) {
-		for (auto itR = gameMap.begin(); itR != gameMap.end(); itR++) {
-			for (auto itC = itR->begin(); itC != itR->end(); itC++) {
-				switch (*itC) {
-					case BREAKABLE_WALL:
-						_spawnWall(WALL, itC - itR->begin(), itR - gameMap.begin());
-						break;
-					case UNBREAKABLE_WALL:
-						_spawnWall(U_WALL, itC - itR->begin(), itR - gameMap.begin());
-						break;
-					case MAP_PLAYER:
-						_spawnPlayer(itC - itR->begin(), itR - gameMap.begin());
-
-				}
-			}
-		}
-	}
 
 	entityId world::createEntity(entityType type)
 	{
@@ -52,6 +28,83 @@ namespace ecs {
 		Entity newEntity(EntityBit);
 		_world.emplace(curId++, newEntity);
 		return _world.size() - 1;
+	}
+
+	void world::destroyEntity(entityId id) {
+		_world.erase(id);
+
+	}
+
+	void world::_spawnEntitiesFromMap(std::vector<std::string> &&gameMap) {
+		for (auto itR = gameMap.begin(); itR != gameMap.end(); itR++) {
+			for (auto itC = itR->begin(); itC != itR->end(); itC++) {
+				switch (*itC) {
+					case BREAKABLE_WALL:
+						_spawnBWall(itC - itR->begin(), itR - gameMap.begin());
+						break;
+					case UNBREAKABLE_WALL:
+						_spawnUWall( itC - itR->begin(), itR - gameMap.begin());
+						break;
+					case MAP_PLAYER:
+						_spawnPlayer(itC - itR->begin(), itR - gameMap.begin());
+					case FIRE_UP:
+						_spawnWall(FIRE_UP, itC - itR->begin(), itR - gameMap.begin());
+					case BOMB_UP:
+						_spawnWall(BOMB_UP, itC - itR->begin(), itR - gameMap.begin());
+					case SPEED_UP:
+						_spawnWall(SPEED_UP, itC - itR->begin(), itR - gameMap.begin());
+					case POWER_UP:
+						_spawnWall(POWER_UP,  itC - itR->begin(), itR - gameMap.begin());
+				}
+			}
+		}
+	}
+
+	void world::_spawnWall(mapItem type, long posX, long posY) {
+		static std::unordered_map<mapItem, ActionTarget> concordMap {{FIRE_UP, POWER}, {BOMB_UP, MAXBOMBS},
+									     {SPEED_UP, FOOTPOWERUP},
+									     {POWER_UP, INVINCIBILITY}
+		};
+
+		Collectible col {concordMap.at(type)};
+		Destructible des {true , &col};
+		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
+		entityId id(createEntity(WALL));
+		addComponent(id, pos);
+		std::cout << addComponent(id, des) << std::endl;
+	}
+
+	void world::_spawnUWall(long posX, long posY) {
+		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
+		Destructible des {true , nullptr};
+
+		entityId id(createEntity(U_WALL));
+		addComponent(id, pos);
+		addComponent(id, des);
+	}
+
+	void world::_spawnBWall(long posX, long posY)
+	{
+		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
+		Destructible des {true , nullptr};
+
+		entityId id(createEntity(U_WALL));
+		addComponent(id, pos);
+		addComponent(id, des);
+	}
+
+	void world::_spawnPlayer(long posX, long posY)
+	{
+		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
+		Velocity vel {0.f, 0.f};
+		Character chara {false, false, 1, 1};
+		Destructible des {true, nullptr};
+
+		entityId id(createEntity(PLAYER));
+		addComponent(id, pos);
+		addComponent(id, vel);
+		addComponent(id, chara);
+		addComponent(id, des);
 	}
 
 	bool world::addComponent(entityId id, Position pos)
@@ -134,31 +187,6 @@ namespace ecs {
 		}
 		return false;
 	}
-
-	void world::_spawnWall(entityType  type, size_t posX, size_t posY) {
-		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
-		Destructible des {(!(type == WALL)), nullptr};
-
-		entityId id = createEntity(type == WALL ? WALL : U_WALL);
-		addComponent(id, pos);
-		addComponent(id, des);
-	}
-
-	void world::_spawnPlayer(size_t posX, size_t posY)
-	{
-		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
-		Velocity vel {0.f, 0.f};
-		Character chara {false, false, 1, 1};
-		Destructible des {true, nullptr};
-
-		entityId id = createEntity(PLAYER);
-		addComponent(id, pos);
-		addComponent(id, vel);
-		addComponent(id, chara);
-		addComponent(id, des);
-	}
-
-
 
 	void world::drawEntities()
 	{
