@@ -32,7 +32,11 @@ namespace ecs {
 		void _spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
 		void _spawnWall(entityType type, size_t posX, size_t posY);
 		void _spawnPlayer(size_t posX, size_t posY);
-		void SystemSpawnBomb(entityId id);
+
+		void systemSpawnBomb(entityId);
+		void systemMove(entityId);
+		void systemSpawnCollectibleFromBox(entityId);
+
 		bool addComponent(entityId id, Position pos);
 		bool addComponent(entityId id, Character chara);
 		bool addComponent(entityId id, Explosion exp);
