@@ -10,7 +10,6 @@
 #include <memory>
 #include "engine/GameContainer.hpp"
 #include "world/World.hpp"
-#include "map/Map.hpp"
 
 int main()
 {

@@ -11,7 +11,7 @@ Map::Map() {}
 
 Map::Map(size_t length, size_t width) : _length(length), _width(width) {}
 
-void Map::setCellItem(map_pos *pos, map_item item)
+void Map::setCellItem(map_pos *pos, mapItem item)
 {
 	_map[pos->y][pos->x] = item;
 }
