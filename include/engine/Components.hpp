@@ -45,6 +45,9 @@ namespace ecs {
 	};
 
 	struct Collectible {
+		explicit Collectible(ActionTarget at) : action(at)
+		{};
+		Collectible() = default;
 		ActionTarget action;
 	};
 
@@ -74,7 +77,7 @@ namespace ecs {
 
 	struct Destructible {
 		bool  destructible;
-		Collectible *item;
+		std::unique_ptr<Collectible> item;
 	};
 
 	struct Graphic {
