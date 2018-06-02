@@ -176,46 +176,67 @@ namespace ecs {
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) {
 			return _world.at(id).cPosition;
 		}
+		return {};
+	}
+
+	Entity world::getEntity(entityId id) {
+		return this->_world[id];
 	}
 
 	Character world::getCharacter(entityId id)
 	{
-		return Character();
+		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER)
+			return this->_world.at(id).cCharacter;
+		return {};
 	}
 
 	Explosion world::getExplosion(entityId id)
 	{
-		return Explosion();
+		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_EXPLOSION)) == COMP_EXPLOSION)
+			return this->_world.at(id).cExplosion;
+		return {};
 	}
 
 	Collectible world::getCollectible(entityId id)
 	{
-		return Collectible();
+		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_COLLECTIBLE)) == COMP_COLLECTIBLE)
+			return this->_world.at(id).cCollectible;
+		return {};
 	}
 
 	Velocity world::getVelocity(entityId id)
 	{
-		return Velocity();
+		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY)
+			return this->_world.at(id).cVelocity;
+		return {};
 	}
 
 	Input world::getInput(entityId id)
 	{
-		return Input();
+		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_INPUT)) == COMP_INPUT)
+			return this->_world.at(id).cInput;
+		return {};
 	}
 
 	AiInput world::getAiInput(entityId id)
 	{
-		return AiInput();
+		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_AIINPUT)) == COMP_AIINPUT)
+			return this->_world.at(id).cAiInput;
+		return {};
 	}
 
 	Destructible world::getDestructible(entityId id)
 	{
-		return Destructible();
+		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE)
+			return this->_world.at(id).cDestructible;
+		return {};
 	}
 
 	Graphic world::getGraphic(entityId id)
 	{
-		return Graphic();
+		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC)
+			return this->_world.at(id).cGfx;
+		return {};
 	}
 
 }
