@@ -4,9 +4,10 @@
 ** File description:
 ** world
 */
-#include <engine/Components.hpp>
+
 #include <functional>
 #include <memory>
+#include "engine/Components.hpp"
 #include "map/Map.hpp"
 #include "world/World.hpp"
 
@@ -171,7 +172,7 @@ namespace ecs {
 		}
 	}
 
-	Position world::getPosition(entityId id)
+	Position world::getPosition(entityId id)  const
 	{
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) {
 			return _world.at(id).cPosition;
@@ -179,64 +180,78 @@ namespace ecs {
 		return {};
 	}
 
-	Entity world::getEntity(entityId id) {
-		return this->_world[id];
+	Entity world::getEntity(entityId id) const
+	{
+		return this->_world.at(id);
 	}
 
-	Character world::getCharacter(entityId id)
+	Character world::getCharacter(entityId id) const
 	{
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER)
 			return this->_world.at(id).cCharacter;
 		return {};
 	}
 
-	Explosion world::getExplosion(entityId id)
+	Explosion world::getExplosion(entityId id) const
 	{
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_EXPLOSION)) == COMP_EXPLOSION)
 			return this->_world.at(id).cExplosion;
 		return {};
 	}
 
-	Collectible world::getCollectible(entityId id)
+	Collectible world::getCollectible(entityId id) const
 	{
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_COLLECTIBLE)) == COMP_COLLECTIBLE)
 			return this->_world.at(id).cCollectible;
 		return {};
 	}
 
-	Velocity world::getVelocity(entityId id)
+	Velocity world::getVelocity(entityId id) const
 	{
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY)
 			return this->_world.at(id).cVelocity;
 		return {};
 	}
 
-	Input world::getInput(entityId id)
+	Input world::getInput(entityId id) const
 	{
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_INPUT)) == COMP_INPUT)
 			return this->_world.at(id).cInput;
 		return {};
 	}
 
-	AiInput world::getAiInput(entityId id)
+	AiInput world::getAiInput(entityId id) const
 	{
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_AIINPUT)) == COMP_AIINPUT)
 			return this->_world.at(id).cAiInput;
 		return {};
 	}
 
-	Destructible world::getDestructible(entityId id)
+	Destructible world::getDestructible(entityId id) const
 	{
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE)
 			return this->_world.at(id).cDestructible;
 		return {};
 	}
 
-	Graphic world::getGraphic(entityId id)
+	Graphic world::getGraphic(entityId id) const
 	{
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC)
 			return this->_world.at(id).cGfx;
 		return {};
+	}
+
+	void world::SystemSpawnBomb(entityId id)
+	{
+		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER) {
+			entityId idBomb(createEntity(BOMB));
+			Velocity vel = {0, 0};
+			Explosion exp = {1, 5};
+
+			addComponent(idBomb, getPosition(id));
+			addComponent(idBomb, vel);
+			addComponent(idBomb, exp);
+		}
 	}
 
 }
