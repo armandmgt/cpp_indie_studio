@@ -41,6 +41,7 @@ namespace ecs {
 		bool addComponent(entityId id, AiInput in);
 		bool addComponent(entityId id, Destructible des);
 		bool addComponent(entityId id, Graphic gfx);
+		Entity getEntity(entityId);
 		Position getPosition(entityId id);
 		Character getCharacter(entityId id);
 		Explosion getExplosion(entityId id);
