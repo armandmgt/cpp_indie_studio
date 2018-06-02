@@ -157,6 +157,8 @@ namespace ecs {
 		addComponent(id, des);
 	}
 
+
+
 	void world::drawEntities()
 	{
 		for (auto &it : _world) {
@@ -167,6 +169,53 @@ namespace ecs {
 				std::cout << "Velocity : [" << it.second.cVelocity.x << ", " << it.second.cVelocity.y << "]" << std::endl;
 
 		}
+	}
+
+	Position world::getPosition(entityId id)
+	{
+		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) {
+			return _world.at(id).cPosition;
+		}
+	}
+
+	Character world::getCharacter(entityId id)
+	{
+		return Character();
+	}
+
+	Explosion world::getExplosion(entityId id)
+	{
+		return Explosion();
+	}
+
+	Collectible world::getCollectible(entityId id)
+	{
+		return Collectible();
+	}
+
+	Velocity world::getVelocity(entityId id)
+	{
+		return Velocity();
+	}
+
+	Input world::getInput(entityId id)
+	{
+		return Input();
+	}
+
+	AiInput world::getAiInput(entityId id)
+	{
+		return AiInput();
+	}
+
+	Destructible world::getDestructible(entityId id)
+	{
+		return Destructible();
+	}
+
+	Graphic world::getGraphic(entityId id)
+	{
+		return Graphic();
 	}
 
 }
