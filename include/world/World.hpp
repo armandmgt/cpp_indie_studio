@@ -32,6 +32,7 @@ namespace ecs {
 		void _spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
 		void _spawnWall(entityType type, size_t posX, size_t posY);
 		void _spawnPlayer(size_t posX, size_t posY);
+		void SystemSpawnBomb(entityId id);
 		bool addComponent(entityId id, Position pos);
 		bool addComponent(entityId id, Character chara);
 		bool addComponent(entityId id, Explosion exp);
@@ -41,16 +42,17 @@ namespace ecs {
 		bool addComponent(entityId id, AiInput in);
 		bool addComponent(entityId id, Destructible des);
 		bool addComponent(entityId id, Graphic gfx);
-		Entity getEntity(entityId);
-		Position getPosition(entityId id);
-		Character getCharacter(entityId id);
-		Explosion getExplosion(entityId id);
-		Collectible getCollectible(entityId id);
-		Velocity getVelocity(entityId id);
-		Input getInput(entityId id);
-		AiInput getAiInput(entityId id);
-		Destructible getDestructible(entityId id);
-		Graphic getGraphic(entityId id);
+
+		Entity getEntity(entityId) const;
+		Position getPosition(entityId id) const;
+		Character getCharacter(entityId id) const;
+		Explosion getExplosion(entityId id) const;
+		Collectible getCollectible(entityId id) const;
+		Velocity getVelocity(entityId id) const;
+		Input getInput(entityId id) const;
+		AiInput getAiInput(entityId id) const;
+		Destructible getDestructible(entityId id) const;
+		Graphic getGraphic(entityId id) const;
 		void drawEntities();
 
 	private:

@@ -78,7 +78,7 @@ namespace ecs {
 	};
 
 	struct Graphic {
-		irr::scene::IAnimatedMesh *mesh;
+		irr::scene::ISceneNode *sceneNode;
 		irr::video::ITexture *text;
 	};
 }
