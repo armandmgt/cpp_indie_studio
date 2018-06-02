@@ -12,6 +12,7 @@
 #include <vector>
 #include <iostream>
 #include <functional>
+#include <glob.h>
 #include "engine/Entity.hpp"
 
 namespace ecs {
@@ -40,6 +41,15 @@ namespace ecs {
 		bool addComponent(entityId id, AiInput in);
 		bool addComponent(entityId id, Destructible des);
 		bool addComponent(entityId id, Graphic gfx);
+		Position getPosition(entityId id);
+		Character getCharacter(entityId id);
+		Explosion getExplosion(entityId id);
+		Collectible getCollectible(entityId id);
+		Velocity getVelocity(entityId id);
+		Input getInput(entityId id);
+		AiInput getAiInput(entityId id);
+		Destructible getDestructible(entityId id);
+		Graphic getGraphic(entityId id);
 		void drawEntities();
 
 	private:
