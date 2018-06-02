@@ -36,6 +36,13 @@ namespace ecs {
 		void _spawnBWall(long posX, long posY);
 		void _spawnPlayer(long posX, long posY);
 		void SystemSpawnBomb(entityId id);
+		void _spawnWall(entityType type, size_t posX, size_t posY);
+		void _spawnPlayer(size_t posX, size_t posY);
+
+		void systemSpawnBomb(entityId);
+		void systemMove(entityId);
+		void systemSpawnCollectibleFromBox(entityId);
+
 		bool addComponent(entityId id, Position pos);
 		bool addComponent(entityId id, Character chara);
 		bool addComponent(entityId id, Explosion exp);
@@ -56,6 +63,7 @@ namespace ecs {
 		AiInput getAiInput(entityId id) const;
 		Destructible getDestructible(entityId id) const;
 		Graphic getGraphic(entityId id) const;
+
 		void drawEntities();
 
 	private:
