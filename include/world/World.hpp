@@ -57,6 +57,7 @@ namespace ecs {
 		AiInput getAiInput(entityId id) const;
 		Destructible getDestructible(entityId id) const;
 		Graphic getGraphic(entityId id) const;
+
 		void drawEntities();
 
 	private:
