@@ -14,7 +14,6 @@
 #include <functional>
 #include <glob.h>
 #include "engine/Entity.hpp"
-#include "map/Map.hpp"
 
 namespace ecs {
 
@@ -31,11 +30,13 @@ namespace ecs {
 		entityId createEntity(entityType type);
 		void destroyEntity(entityId);
 		void _spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
-		void _spawnUWall(long posX, long posY);
-		void _spawnWall(mapItem type, long posX, long posY);
-		void _spawnBWall(long posX, long posY);
-		void _spawnPlayer(long posX, long posY);
-		void SystemSpawnBomb(entityId id);
+		void _spawnWall(entityType type, size_t posX, size_t posY);
+		void _spawnPlayer(size_t posX, size_t posY);
+
+		void systemSpawnBomb(entityId);
+		void systemMove(entityId);
+		void systemSpawnCollectibleFromBox(entityId);
+
 		bool addComponent(entityId id, Position pos);
 		bool addComponent(entityId id, Character chara);
 		bool addComponent(entityId id, Explosion exp);

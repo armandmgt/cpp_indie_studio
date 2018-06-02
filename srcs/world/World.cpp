@@ -269,7 +269,7 @@ namespace ecs {
 		return {};
 	}
 
-	void world::SystemSpawnBomb(entityId id)
+	void world::systemSpawnBomb(entityId id)
 	{
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER) {
 			entityId idBomb(createEntity(BOMB));
@@ -282,4 +282,20 @@ namespace ecs {
 		}
 	}
 
+	void world::systemMove(entityId id) {
+		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY) {
+			auto entity = this->_world.at(id);
+			entity.cPosition.x += entity.cVelocity.x;
+			entity.cPosition.y += entity.cVelocity.y;
+		}
+	}
+
+	void world::systemSpawnCollectibleFromBox(entityId id) {
+		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE) {
+			Entity box = this->_world.at(id);
+			const entityId newId = this->createEntity(POWERUP);
+			addComponent(newId, box.cCollectible);
+			addComponent(newId, box.cPosition);
+		}
+	}
 }
