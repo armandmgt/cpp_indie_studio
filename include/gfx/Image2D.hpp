@@ -14,14 +14,13 @@
 namespace gfx {
 	class image2D {
 	public:
-		image2D(irr::video::ITexture *im, vec2d<int> &pos,
-		irr::core::rect<irr::s32> sz) : image(im),
-						 position(pos),
-						 size(std::move(sz))
+		image2D(irr::video::ITexture *im, vec2d<int> pos, irr::core::rect<irr::s32> sz) : texture(im),
+			position(pos), size(std::move(sz))
 		{
 		}
 		~image2D() = default;
-		irr::video::ITexture *image;
+
+		irr::video::ITexture *texture;
 		vec2d<int> position;
 		irr::core::rect<irr::s32> size;
 	};

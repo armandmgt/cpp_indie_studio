@@ -15,22 +15,46 @@ static void createGround(size_t xSize, size_t zSize,
 
 int main()
 {
-	irr::core::stringw assetPath("../../assets/meshs/ground.obj");
+	irr::core::stringw groundFile("../../assets/meshs/ground.obj");
+	irr::core::stringw characterFile("../../assets/meshs/ninja.b3d");
 	gfx::Renderer window;
-	vec3d<float> position(10.f, 100.f, 0.f);
-	vec3d<float> positionlego(10, 0, 10);
-	vec3d<float> size(0.f, 0.f, 0.f);
-	vec3d<float> rotation(45.f, 0.f, 0.f);
+	vec3d<float> ninjaPos{10, 8, 10};
+	irr::EKEY_CODE key;
 
-	gfx::idSprite id;
-	position = {0,0,0};
-	createGround(21, 20, assetPath, window);
+	createGround(21, 20, groundFile, window);
+	irr::scene::IAnimatedMeshSceneNode *ninjaNode;
+	if (ninjaNode = window.createAnimatedElem(characterFile); ninjaNode != nullptr) {
+		window.setScale(ninjaNode, 2.f);
+		window.setPosition(ninjaNode, ninjaPos);
+		window.rotate(ninjaNode, {0, 90, 0});
+		window.addAnimation(ninjaNode, "walk", vec2d<int>{1, 12});
+		window.setAnimationSpeed(ninjaNode, 14);
+		window.setAnimation(ninjaNode, "walk");
+	}
 	while (window.isRun()) {
-		auto event = window.pollEvent();
-		if (event == ids::QUIT) {
+		window.render();
+		if (!window.getKeyPressed(key)) {
+			window.setAnimationSpeed(ninjaNode, 0);
+			continue;
+		}
+		switch (key) {
+		case irr::KEY_ESCAPE:
+			window.close();
+			break;
+		case irr::KEY_KEY_A:
+			ninjaPos.x -= 1;
+			window.rotate(ninjaNode, {0, -90, 0});
+			window.setAnimationSpeed(ninjaNode, 14);
+			break;
+		case irr::KEY_KEY_D:
+			ninjaPos.x += 1;
+			window.rotate(ninjaNode, {0, 90, 0});
+			window.setAnimationSpeed(ninjaNode, 14);
+			break;
+		default:
 			break;
 		}
-		window.render();
+		window.setPosition(ninjaNode, ninjaPos);
 	}
 	return 0;
 }
@@ -43,12 +67,12 @@ static void createGround(size_t xSize, size_t zSize,
 	for (size_t x = 0; x < xSize; x++) {
 		vec3d<float> size(0,0,0);
 		for (size_t z = 0; z < zSize; z++) {
-			gfx::idSprite id;
-			if (id = renderer.createMesh(assetPath); id == -1) {
+			irr::scene::ISceneNode *node;
+			if (node = renderer.createElem(assetPath); !node) {
 				return;
 			}
-			renderer.setPosition(id, pos);
-			size = renderer.getSizeMesh(id);
+			renderer.setPosition(node, pos);
+			size = renderer.getSize(node);
 			pos.z += size.z;
 		}
 		pos.z = 0;
