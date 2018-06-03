@@ -24,40 +24,56 @@ namespace gfx {
 	public:
 		Renderer();
 		~Renderer();
+
 		void render();
 		bool isRun() const;
 		void clearScene();
 
-		vec2d<int> getMousePosition();
-		ids::eventKey pollEvent();
-		idSprite createMesh(irr::core::stringw const &filename);
-		idSprite createb3dMesh(irr::core::stringw const &filename);
-		bool addTexture(idSprite id, std::string filename);
-		bool setAnimationSpeed(idSprite, float speed);
-		bool setPosition(idSprite id, vec3d<float> position);
-		bool rotateMesh(idSprite id, vec3d<float> angle);
-		vec3d<float> getSizeMesh(idSprite id);
+		void close();
+
+		vec2d<int> getMousePosition() const;
+
+		bool getKeyPressed(irr::EKEY_CODE &keyCode) const;
+
+		irr::scene::ISceneNode *createElem(irr::core::stringw const &filename);
+
+		irr::scene::IAnimatedMeshSceneNode *createAnimatedElem(irr::core::stringw const &filename);
+
+		bool addTexture(irr::scene::ISceneNode *node, const irr::core::stringw &filename);
+
+		void addAnimation(irr::scene::IAnimatedMeshSceneNode *node, const std::string &identifier,
+			const vec2d<int> &range
+		);
+
+		void setAnimation(irr::scene::IAnimatedMeshSceneNode *node, const std::string &identifier);
+
+		bool setAnimationSpeed(irr::scene::IAnimatedMeshSceneNode *node, float speed);
+
+		bool setPosition(irr::scene::ISceneNode *node, const vec3d<float> &pos);
+
+		bool setScale(irr::scene::ISceneNode *node, float scale);
+
+		bool rotate(irr::scene::ISceneNode *node, const vec3d<float> &angle);
+
+		vec3d<float> getSize(irr::scene::ISceneNode *node);
+
+		void load2D(irr::core::stringw const &filename, const vec2d<int> &pos,
+			const irr::core::rect<irr::s32> &rect
+		);
+
+		void load2D(irr::core::stringw const &filename, const vec2d<int> &pos);
 
 		void addArchive(irr::core::stringw const &filename);
-		void load2D(irr::core::stringw const &filename, vec2d<int> &positon,
-			    irr::core::rect<irr::s32> &size);
-		void load2D(irr::core::stringw const &filename, vec2d<int> &positon);
 
 	private:
-
 		irr::IrrlichtDevice *device;
 		irr::video::IVideoDriver *driver;
 		irr::scene::ISceneManager *smgr;
 		irr::gui::IGUIEnvironment *guienv;
-
 		std::vector<gfx::image2D> images;
-
-		idSprite _id;
-		std::vector<irr::scene::IAnimatedMeshSceneNode *> animatedMeshs;
-		std::vector<irr::scene::IAnimatedMesh *> meshs;
-		std::vector<irr::scene::ISceneNode *> node;
-
-		MyEventReceiver Event;
+		MyEventReceiver eventReceiver;
+		using animationMap = std::unordered_map<std::string, vec2d<int>>;
+		std::unordered_map<irr::scene::ISceneNode *, animationMap> animations;
 	};
 };
 
