@@ -370,10 +370,15 @@ namespace ecs {
 		for (auto &entity : _world) {
 			if (((entity.second.bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) &&
 				(entity.second.bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC) {
-				vec3d<float> pos {entity.second.cPosition.x * sizeGround.x, 0, entity.second.cPosition
+				vec3d<float> pos {entity.second.cPosition.x * sizeGround.x, 0, entity.second
+													  .cPosition
 												      .y *
 										sizeGround.z};
-				renderer.setPosition(entity.second.cGfx.sceneNode, pos);
+				std::cout << "Entity pos : [" << entity.second.cPosition.x << ", " << entity.second
+					.cPosition.y << "]" << std::endl;
+				std::cout << "Pos : [" << pos.x << ", " << pos.y << ", " << pos.z << "]" << std::endl;
+				std::cout << std::boolalpha << "Set Position : "<< renderer.setPosition(entity.second
+				   .cGfx.sceneNode, pos) << std::endl;
 			}
 		}
 	}
