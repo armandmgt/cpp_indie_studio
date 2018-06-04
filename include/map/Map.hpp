@@ -51,7 +51,6 @@ private:
 	size_t _height;
 	bool _addWall(size_t, size_t);
 	void _fillMap();
-	void _fillLine(std::string &);
 	void _proceduralGen(size_t);
 	void _digTopLeftCorner();
 	void _digTopRightCorner();

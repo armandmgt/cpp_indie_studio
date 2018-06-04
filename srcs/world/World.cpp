@@ -20,11 +20,11 @@ namespace ecs {
 	entityId world::createEntity(entityType type)
 	{
 		static std::unordered_map<entityType, std::bitset<Entity::bitSize>> const concordMap = {
-			{PLAYER,  COMP_POSITION | COMP_VELOCITY |
-				  COMP_CHARACTER | COMP_ORIENTATION | COMP_DESTRUCTIBLE | COMP_GRAPHIC},
-			{POWERUP, COMP_POSITION | COMP_COLLECTIBLE | COMP_GRAPHIC},
-			{BOMB,    COMP_POSITION | COMP_VELOCITY | COMP_EXPLOSION | COMP_GRAPHIC},
-			{U_WALL, COMP_POSITION | COMP_COLLECTIBLE | COMP_GRAPHIC},
+			{PLAYER,  COMP_POSITION | COMP_VELOCITY | COMP_CHARACTER | COMP_ORIENTATION |
+				COMP_DESTRUCTIBLE | COMP_GRAPHIC},
+			{POWERUP, COMP_POSITION | COMP_COLLECTIBLE},
+			{BOMB, COMP_POSITION | COMP_VELOCITY | COMP_EXPLOSION},
+			{U_WALL, COMP_POSITION | COMP_GRAPHIC},
 			{WALL, COMP_POSITION | COMP_COLLECTIBLE | COMP_GRAPHIC},
 			{FLAMME,  COMP_POSITION},
 		};
@@ -53,30 +53,26 @@ namespace ecs {
 						_spawnPlayer(itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case FIRE_UP:
-						_spawnWall(FIRE_UP, itC - itR->begin(), itR - gameMap.begin());
+						_spawnWall(POWER, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case BOMB_UP:
-						_spawnWall(BOMB_UP, itC - itR->begin(), itR - gameMap.begin());
+						_spawnWall(MAXBOMBS, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case SPEED_UP:
-						_spawnWall(SPEED_UP, itC - itR->begin(), itR - gameMap.begin());
+						_spawnWall(FOOTPOWERUP, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case POWER_UP:
-						_spawnWall(POWER_UP,  itC - itR->begin(), itR - gameMap.begin());
+						_spawnWall(INVINCIBILITY,  itC - itR->begin(), itR - gameMap.begin());
+						break;
+					default:
 						break;
 				}
 			}
 		}
 	}
 
-	void world::_spawnWall(mapItem type, long posX, long posY) {
-		static std::unordered_map<mapItem, ActionTarget> const concordMap {{FIRE_UP, POWER},
-										   {BOMB_UP, MAXBOMBS},
-										   {SPEED_UP, FOOTPOWERUP},
-										   {POWER_UP, INVINCIBILITY}
-		};
-
-		Destructible des {true , std::make_unique<Collectible>(concordMap.at(type))};
+	void world::_spawnWall(ActionTarget type, long posX, long posY) {
+		Destructible des {true , std::make_unique<Collectible>(type)};
 		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
 		entityId id(createEntity(WALL));
 		addComponent(id, pos);
@@ -85,8 +81,10 @@ namespace ecs {
 
 	void world::_spawnUWall(long posX, long posY) {
 		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
-		Graphic gfx {renderer.createAnimatedElem("../../assets/meshs/ground.obj")};
+		Graphic gfx {renderer.createElem("../../assets/meshs/ground.obj")};
 
+		if (gfx.sceneNode == nullptr)
+			throw std::runtime_error("Could not load wall asset");
 		entityId id(createEntity(U_WALL));
 		addComponent(id, pos);
 		addComponent(id, gfx);
@@ -96,10 +94,15 @@ namespace ecs {
 	{
 		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
 		Destructible des {true, nullptr};
+		Graphic gfx {renderer.createElem("../../assets/meshs/box.obj")};
 
+		if (gfx.sceneNode == nullptr)
+			throw std::runtime_error("Wall not load");
+		renderer.addTexture(gfx.sceneNode, "../../assets/textures/box.jpg");
 		entityId id(createEntity(U_WALL));
-		addComponent(id, pos);
+  		addComponent(id, pos);
 		addComponent(id, std::move(des));
+		addComponent(id, gfx);
 	}
 
 	void world::_spawnPlayer(long posX, long posY)
@@ -291,7 +294,7 @@ namespace ecs {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER) {
 			entityId idBomb(createEntity(BOMB));
 			Velocity vel {0, 0};
-			Explosion exp {1, 5};
+			Explosion exp {1, 5}; //TODO use character's power
 
 			addComponent(idBomb, getPosition(id));
 			addComponent(idBomb, vel);
@@ -320,47 +323,54 @@ namespace ecs {
 	}
 
 	// ../../assets/meshs/ninja.b3d
+	//TODO remove breaks
 	std::string world::queryMeshFromActionTarget(const ActionTarget act) const {
 		switch (act) {
 		case INVINCIBILITY:
 			return "../../assets/meshs/ninja.b3d";
-			break;
 		case MAXBOMBS:
 			return "../../assets/meshs/ninja.b3d";
-			break;
 		case FOOTPOWERUP:
 			return "../../assets/meshs/ninja.b3d";
-			break;
 		case POWER:
 			return "../../assets/meshs/ninja.b3d";
-			break;
 		default:
-			throw std::logic_error("Unkmown mesh");
+			throw std::logic_error("Unknown Action Target");
 		}
 	}
 
 	void world::createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath)
 	{
-		vec3d<float> pos{0, -10, 0};
+		vec3d<float> pos{0, -7, 0};
 
 		for (size_t x = 0; x < xSize; x++) {
-			vec3d<float> size(0,0,0);
 			for (size_t z = 0; z < zSize; z++) {
 				irr::scene::ISceneNode *node;
 				if (!(node = renderer.createElem(assetPath))) {
 					return;
 				}
 				renderer.setPosition(node, pos);
-				size = renderer.getSize(node);
-				pos.z += size.z;
+				if (x == 0)
+					sizeGround = renderer.getSize(node);
+				pos.z += sizeGround.z;
 			}
 			pos.z = 0;
-			pos.x += size.x;
+			pos.x += sizeGround.x;
 		}
 	}
 
-	void world::drawEntities()
-	{
-
+	void world::drawEntities() {
+		for (auto &elem : _world) {
+			auto &entity = elem.second;
+			if (((entity.bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) &&
+				(entity.bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC) {
+				vec3d<float> pos {
+					entity.cPosition.x * sizeGround.x,
+					0,
+					entity.cPosition.y * sizeGround.z
+				};
+				renderer.setPosition(entity.cGfx.sceneNode, pos);
+			}
+		}
 	}
 }

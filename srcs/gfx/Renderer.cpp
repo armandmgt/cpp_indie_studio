@@ -8,13 +8,8 @@
 #include <iostream>
 #include "gfx/Renderer.hpp"
 
-struct Graphic {
-	irr::scene::ISceneNode *node;
-	float scale;
-	float rotation;
-};
-
 gfx::Renderer::Renderer()
+
 {
 	irr::core::stringw tittleWindow = "Bomberman";
 
@@ -26,7 +21,7 @@ gfx::Renderer::Renderer()
 	smgr->addCameraSceneNodeFPS();
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
-	auto light = smgr->addLightSceneNode(nullptr, irr::core::vector3df{0, 300, -190},
+	auto light = smgr->addLightSceneNode(nullptr, irr::core::vector3df{100, 300, -190},
 		irr::video::SColorf{1, 1, 1, 0}, 500.f);
 	irr::scene::IBillboardSceneNode* bill = smgr->addBillboardSceneNode(
 		light, irr::core::dimension2d<irr::f32>(10, 10));
@@ -47,8 +42,9 @@ void gfx::Renderer::render()
 	smgr->drawAll();
 	guienv->drawAll();
 	driver->enableMaterial2D();
-	for (auto &image : images)
+	for (auto &image : images) {
 		driver->draw2DImage(image.texture, {image.position.x, image.position.y}, image.size);
+	}
 	driver->enableMaterial2D(false);
 	driver->endScene();
 }
@@ -86,7 +82,7 @@ bool gfx::Renderer::getKeyPressed(irr::EKEY_CODE &keyCode) const
 	return false;
 }
 
-irr::scene::ISceneNode *gfx::Renderer::createElem(irr::core::stringw const &filename) noexcept
+irr::scene::ISceneNode *gfx::Renderer::createElem(irr::core::stringw const &filename)
 {
 	irr::scene::IMesh *mesh = smgr->getMesh(filename);
 	irr::scene::IMeshSceneNode *aniMesh;
@@ -101,7 +97,7 @@ irr::scene::ISceneNode *gfx::Renderer::createElem(irr::core::stringw const &file
 	}
 }
 
-irr::scene::IAnimatedMeshSceneNode *gfx::Renderer::createAnimatedElem(irr::core::stringw const &filename) noexcept
+irr::scene::IAnimatedMeshSceneNode *gfx::Renderer::createAnimatedElem(irr::core::stringw const &filename)
 {
 	irr::scene::IAnimatedMesh *mesh;
 	irr::scene::IAnimatedMeshSceneNode *aniMesh;
@@ -127,6 +123,7 @@ bool gfx::Renderer::addTexture(irr::scene::ISceneNode *node, const irr::core::st
 	if (!(texture = driver->getTexture(filename)))
 		return false;
 	node->setMaterialTexture(0, texture);
+	node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	return true;
 }
 

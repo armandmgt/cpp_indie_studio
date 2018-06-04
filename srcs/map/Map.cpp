@@ -7,7 +7,10 @@
 
 #include "map/Map.hpp"
 
-Map::Map(size_t width, size_t height) : _width(width), _height(height) {}
+Map::Map(size_t width, size_t height) : _width(width), _height(height)
+{
+	std::srand(static_cast<unsigned int>(time(nullptr)));
+}
 
 void Map::setCellItem(map_pos *pos, mapItem item)
 {
@@ -72,7 +75,7 @@ void Map::_proceduralGen(size_t wallsToCreate)
 	for (size_t i = 0; i < wallsToCreate - 1; i++) {
 		size_t x = std::rand() % (_height);
 		size_t y = std::rand() % (_width);
-		if (y > 0 && y < _height && x > 0 && x < _width)
+		if (y > 0 && y < _height - 1 && x > 0 && x < _width)
 			_addWall(x, y);
 	}
 }
