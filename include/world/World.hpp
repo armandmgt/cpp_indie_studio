@@ -14,6 +14,7 @@
 #include <functional>
 #include <glob.h>
 #include "engine/Entity.hpp"
+#include "gfx/Renderer.hpp"
 #include "map/Map.hpp"
 
 namespace ecs {
@@ -24,8 +25,7 @@ namespace ecs {
 
 	class world {
 	public:
-		world() = default;
-
+		world(gfx::Renderer &renderer);
 		~world() = default;
 
 		entityId createEntity(entityType type);
@@ -40,17 +40,19 @@ namespace ecs {
 		void systemMove(entityId);
 		void systemSpawnCollectibleFromBox(entityId);
 
-		bool addComponent(entityId id, Position pos);
-		bool addComponent(entityId id, Character chara);
-		bool addComponent(entityId id, Explosion exp);
-		bool addComponent(entityId id, Collectible col);
-		bool addComponent(entityId id, Velocity vel);
-		bool addComponent(entityId id, Input in);
-		bool addComponent(entityId id, AiInput in);
-		bool addComponent(entityId id, Destructible des);
-		bool addComponent(entityId id, Graphic gfx);
+		bool addComponent(entityId id, Position pos) noexcept;
+		bool addComponent(entityId id, Character chara) noexcept;
+		bool addComponent(entityId id, Explosion exp) noexcept;
+		bool addComponent(entityId id, Collectible col) noexcept;
+		bool addComponent(entityId id, Velocity vel) noexcept;
+		bool addComponent(entityId id, Input in) noexcept;
+		bool addComponent(entityId id, AiInput in) noexcept;
+		bool addComponent(entityId id, Destructible des) noexcept;
+		bool addComponent(entityId id, Graphic gfx) noexcept;
+		bool addComponent(entityId id, Orientation orientation) noexcept;
 
-		Entity &getEntity(const entityId);
+		Entity &getEntity(const entityId id);
+		Orientation &getOrientation(const entityId id);
 		Position &getPosition(const entityId id);
 		Character &getCharacter(const entityId id);
 		Explosion &getExplosion(const entityId id);
@@ -60,10 +62,14 @@ namespace ecs {
 		AiInput &getAiInput(const entityId id);
 		Destructible &getDestructible(const entityId id);
 		Graphic &getGraphic(const entityId id);
+		void debug();
 		void drawEntities();
 
+		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);
+
 	private:
-		entityId curId = 0;
+		entityId curId;
+		gfx::Renderer &renderer;
 		std::unordered_map<entityId, Entity> _world;
 	};
 }

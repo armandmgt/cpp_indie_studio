@@ -15,7 +15,6 @@ struct Graphic {
 };
 
 gfx::Renderer::Renderer()
-
 {
 	irr::core::stringw tittleWindow = "Bomberman";
 
@@ -48,14 +47,13 @@ void gfx::Renderer::render()
 	smgr->drawAll();
 	guienv->drawAll();
 	driver->enableMaterial2D();
-	for (auto &image : images) {
+	for (auto &image : images)
 		driver->draw2DImage(image.texture, {image.position.x, image.position.y}, image.size);
-	}
 	driver->enableMaterial2D(false);
 	driver->endScene();
 }
 
-bool gfx::Renderer::isRun() const
+bool gfx::Renderer::isRunning() const
 {
 	return device->run();
 }
@@ -88,7 +86,7 @@ bool gfx::Renderer::getKeyPressed(irr::EKEY_CODE &keyCode) const
 	return false;
 }
 
-irr::scene::ISceneNode *gfx::Renderer::createElem(irr::core::stringw const &filename)
+irr::scene::ISceneNode *gfx::Renderer::createElem(irr::core::stringw const &filename) noexcept
 {
 	irr::scene::IMesh *mesh = smgr->getMesh(filename);
 	irr::scene::IMeshSceneNode *aniMesh;
@@ -103,7 +101,7 @@ irr::scene::ISceneNode *gfx::Renderer::createElem(irr::core::stringw const &file
 	}
 }
 
-irr::scene::IAnimatedMeshSceneNode *gfx::Renderer::createAnimatedElem(irr::core::stringw const &filename)
+irr::scene::IAnimatedMeshSceneNode *gfx::Renderer::createAnimatedElem(irr::core::stringw const &filename) noexcept
 {
 	irr::scene::IAnimatedMesh *mesh;
 	irr::scene::IAnimatedMeshSceneNode *aniMesh;
