@@ -66,6 +66,7 @@ namespace ecs {
 		void drawEntities();
 
 		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);
+		std::string queryMeshFromActionTarget(const ActionTarget) const;
 
 	private:
 		entityId curId;
