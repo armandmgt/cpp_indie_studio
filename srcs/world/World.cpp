@@ -317,6 +317,26 @@ namespace ecs {
 		}
 	}
 
+	// ../../assets/meshs/ninja.b3d
+	std::string world::queryMeshFromActionTarget(const ActionTarget act) const {
+		switch (act) {
+		case INVINCIBILITY:
+			return "../../assets/meshs/ninja.b3d";
+			break;
+		case MAXBOMBS:
+			return "../../assets/meshs/ninja.b3d";
+			break;
+		case FOOTPOWERUP:
+			return "../../assets/meshs/ninja.b3d";
+			break;
+		case POWER:
+			return "../../assets/meshs/ninja.b3d";
+			break;
+		default:
+			throw std::logic_error("Unkmown mesh");
+		}
+	}
+
 	void world::createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath)
 	{
 		vec3d<float> pos{0, -10, 0};
