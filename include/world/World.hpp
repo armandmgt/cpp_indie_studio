@@ -25,14 +25,14 @@ namespace ecs {
 
 	class world {
 	public:
-		world(gfx::Renderer &renderer);
+		explicit world(gfx::Renderer &renderer);
 		~world() = default;
 
 		entityId createEntity(entityType type);
 		void destroyEntity(entityId);
 		void _spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
 		void _spawnUWall(long posX, long posY);
-		void _spawnWall(mapItem type, long posX, long posY);
+		void _spawnWall(ActionTarget type, long posX, long posY);
 		void _spawnBWall(long posX, long posY);
 		void _spawnPlayer(long posX, long posY);
 
@@ -47,17 +47,17 @@ namespace ecs {
 		bool addComponent(entityId id, Graphic gfx) noexcept;
 		bool addComponent(entityId id, Orientation orientation) noexcept;
 
-		Entity &getEntity(const entityId id);
-		Orientation &getOrientation(const entityId id);
-		Position &getPosition(const entityId id);
-		Character &getCharacter(const entityId id);
-		Explosion &getExplosion(const entityId id);
-		Collectible &getCollectible(const entityId id);
-		Velocity &getVelocity(const entityId id);
-		Input &getInput(const entityId id);
-		AiInput &getAiInput(const entityId id);
-		Destructible &getDestructible(const entityId id);
-		Graphic &getGraphic(const entityId id);
+		Entity &getEntity(entityId id);
+		Orientation &getOrientation(entityId id);
+		Position &getPosition(entityId id);
+		Character &getCharacter(entityId id);
+		Explosion &getExplosion(entityId id);
+		Collectible &getCollectible(entityId id);
+		Velocity &getVelocity(entityId id);
+		Input &getInput(entityId id);
+		AiInput &getAiInput(entityId id);
+		Destructible &getDestructible(entityId id);
+		Graphic &getGraphic(entityId id);
 		void debug();
 
 		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);
