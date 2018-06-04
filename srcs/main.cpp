@@ -10,7 +10,6 @@
 #include <memory>
 #include "settingManager/settingManager.hpp"
 #include "gfx/Renderer.hpp"
-#include "engine/GameContainer.hpp"
 #include "world/World.hpp"
 
 int main()
