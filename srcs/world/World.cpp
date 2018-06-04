@@ -311,8 +311,10 @@ namespace ecs {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE) {
 			auto &box(this->_world.at(id));
 			const entityId newId(this->createEntity(POWERUP));
+			const Graphic nGfx { renderer.createAnimatedElem(queryMeshFromActionTarget(box.cCollectible.action).c_str())};
 			addComponent(newId, box.cCollectible);
 			addComponent(newId, box.cPosition);
+			addComponent(newId, nGfx);
 			destroyEntity(id);
 		}
 	}
