@@ -24,7 +24,7 @@ namespace ecs {
 				  COMP_CHARACTER | COMP_ORIENTATION | COMP_DESTRUCTIBLE | COMP_GRAPHIC},
 			{POWERUP, COMP_POSITION | COMP_COLLECTIBLE | COMP_GRAPHIC},
 			{BOMB,    COMP_POSITION | COMP_VELOCITY | COMP_EXPLOSION | COMP_GRAPHIC},
-			{U_WALL, COMP_POSITION | COMP_COLLECTIBLE | COMP_GRAPHIC},
+			{U_WALL, COMP_POSITION | COMP_GRAPHIC},
 			{WALL, COMP_POSITION | COMP_COLLECTIBLE | COMP_GRAPHIC},
 			{FLAMME,  COMP_POSITION | COMP_GRAPHIC},
 		};
@@ -87,6 +87,8 @@ namespace ecs {
 		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
 		Graphic gfx {renderer.createElem("../../assets/meshs/ground.obj")};
 
+		if (gfx.sceneNode == nullptr)
+			throw std::runtime_error("Ground not load");
 		entityId id(createEntity(U_WALL));
 		addComponent(id, pos);
 		addComponent(id, gfx);
@@ -96,9 +98,14 @@ namespace ecs {
 	{
 		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
 		Destructible des {true, nullptr};
+		Graphic gfx {renderer.createElem("../../assets/meshs/box.obj")};
 
+		if (gfx.sceneNode == nullptr)
+			throw std::runtime_error("Ground not load");
+		renderer.addTexture(gfx.sceneNode, "../../assets/textures/box_diffuse.jpg",
+				  "../../assets/textures/box_normal.jpg");
 		entityId id(createEntity(U_WALL));
-		addComponent(id, pos);
+  		addComponent(id, pos);
 		addComponent(id, std::move(des));
 	}
 
@@ -335,7 +342,7 @@ namespace ecs {
 			return "../../assets/meshs/ninja.b3d";
 			break;
 		default:
-			throw std::logic_error("Unkmown mesh");
+			throw std::logic_error("Unknown Action Target");
 		}
 	}
 

@@ -28,14 +28,17 @@ namespace gfx {
 		void render();
 		bool isRunning() const;
 		void clearScene();
-
 		void close();
 
 		vec2d<int> getMousePosition() const;
 		bool getKeyPressed(irr::EKEY_CODE &keyCode) const;
-		irr::scene::ISceneNode *createElem(irr::core::stringw const &filename) noexcept;
-		irr::scene::IAnimatedMeshSceneNode *createAnimatedElem(irr::core::stringw const &filename) noexcept;
-		bool addTexture(irr::scene::ISceneNode *node, const irr::core::stringw &filename);
+
+		irr::scene::ISceneNode *createElem(irr::core::stringw const &filename);
+		irr::scene::IAnimatedMeshSceneNode *createAnimatedElem(irr::core::stringw const &filename);
+
+		bool addTexture(irr::scene::ISceneNode *node, const irr::core::stringw &filename,
+			const irr::core::stringw &normal
+		);
 		void addAnimation(irr::scene::IAnimatedMeshSceneNode *node, const std::string &identifier,
 			const vec2d<int> &range
 		);
@@ -51,7 +54,6 @@ namespace gfx {
 		void load2D(irr::core::stringw const &filename, const vec2d<int> &pos,
 			const irr::core::rect<irr::s32> &rect
 		);
-
 		void load2D(irr::core::stringw const &filename, const vec2d<int> &pos);
 		void addArchive(irr::core::stringw const &filename);
 
@@ -66,6 +68,5 @@ namespace gfx {
 		std::unordered_map<irr::scene::ISceneNode *, animationMap> animations;
 	};
 };
-
 
 #endif //CPP_INDIE_STUDIO_RENDERER_HPP
