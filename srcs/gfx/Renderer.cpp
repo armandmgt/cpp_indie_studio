@@ -21,8 +21,7 @@ gfx::Renderer::Renderer()
 	smgr->addCameraSceneNodeFPS();
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
-	smgr->addSphereSceneNode(1.f, 16, nullptr, -1, {0, 0, 0});
-	auto light = smgr->addLightSceneNode(nullptr, irr::core::vector3df{0, 300, -190},
+	auto light = smgr->addLightSceneNode(nullptr, irr::core::vector3df{100, 300, -190},
 		irr::video::SColorf{1, 1, 1, 0}, 500.f);
 	irr::scene::IBillboardSceneNode* bill = smgr->addBillboardSceneNode(
 		light, irr::core::dimension2d<irr::f32>(10, 10));
@@ -115,19 +114,15 @@ irr::scene::IAnimatedMeshSceneNode *gfx::Renderer::createAnimatedElem(irr::core:
 	}
 }
 
-bool gfx::Renderer::addTexture(irr::scene::ISceneNode *node, const irr::core::stringw &filename,
-	const irr::core::stringw &normal
-)
+bool gfx::Renderer::addTexture(irr::scene::ISceneNode *node, const irr::core::stringw &filename)
 {
 	irr::video::ITexture *texture;
-	irr::video::ITexture *normalTex;
 
 	if (!node)
 		return false;
-	if (!(texture = driver->getTexture(filename)) || !(normalTex = driver->getTexture(filename)))
+	if (!(texture = driver->getTexture(filename)))
 		return false;
-	node->setMaterialTexture(0, normalTex);
-	node->setMaterialTexture(1, texture);
+	node->setMaterialTexture(0, texture);
 	node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	return true;
 }
