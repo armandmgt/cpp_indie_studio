@@ -1,7 +1,6 @@
 set(SOURCE_FILES
         main.cpp
-		../include/engine/GameContainer.hpp
-		../include/engine/Components.hpp
+        ../include/engine/Components.hpp
 
 		../include/interfaces/IPlayer.hpp
 		../include/interfaces/IObject.hpp
