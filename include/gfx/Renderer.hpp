@@ -36,9 +36,7 @@ namespace gfx {
 		irr::scene::ISceneNode *createElem(irr::core::stringw const &filename);
 		irr::scene::IAnimatedMeshSceneNode *createAnimatedElem(irr::core::stringw const &filename);
 
-		bool addTexture(irr::scene::ISceneNode *node, const irr::core::stringw &filename,
-			const irr::core::stringw &normal
-		);
+		bool addTexture(irr::scene::ISceneNode *node, const irr::core::stringw &filename);
 		void addAnimation(irr::scene::IAnimatedMeshSceneNode *node, const std::string &identifier,
 			const vec2d<int> &range
 		);
