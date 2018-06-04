@@ -26,7 +26,7 @@ namespace ecs {
 			{BOMB,    COMP_POSITION | COMP_VELOCITY | COMP_EXPLOSION | COMP_GRAPHIC},
 			{U_WALL, COMP_POSITION | COMP_COLLECTIBLE | COMP_GRAPHIC},
 			{WALL, COMP_POSITION | COMP_COLLECTIBLE | COMP_GRAPHIC},
-			{FLAMME,  COMP_POSITION},
+			{FLAMME,  COMP_POSITION | COMP_GRAPHIC},
 		};
 
 		std::bitset<Entity::bitSize> EntityBit(concordMap.at(type));
@@ -85,7 +85,7 @@ namespace ecs {
 
 	void world::_spawnUWall(long posX, long posY) {
 		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
-		Graphic gfx {renderer.createAnimatedElem("../../assets/meshs/ground.obj")};
+		Graphic gfx {renderer.createElem("../../assets/meshs/ground.obj")};
 
 		entityId id(createEntity(U_WALL));
 		addComponent(id, pos);
@@ -341,26 +341,33 @@ namespace ecs {
 
 	void world::createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath)
 	{
-		vec3d<float> pos{0, -10, 0};
+		vec3d<float> pos{0, -7, 0};
 
 		for (size_t x = 0; x < xSize; x++) {
-			vec3d<float> size(0,0,0);
 			for (size_t z = 0; z < zSize; z++) {
 				irr::scene::ISceneNode *node;
 				if (!(node = renderer.createElem(assetPath))) {
 					return;
 				}
 				renderer.setPosition(node, pos);
-				size = renderer.getSize(node);
-				pos.z += size.z;
+				if (x == 0)
+					sizeGround = renderer.getSize(node);
+				pos.z += sizeGround.z;
 			}
 			pos.z = 0;
-			pos.x += size.x;
+			pos.x += sizeGround.x;
 		}
 	}
 
-	void world::drawEntities()
-	{
-
+	void world::drawEntities() {
+		for (auto &entity : _world) {
+			if (((entity.second.bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) &&
+				(entity.second.bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC) {
+				vec3d<float> pos {entity.second.cPosition.x * sizeGround.x, 0, entity.second.cPosition
+												      .y *
+										sizeGround.z};
+				renderer.setPosition(entity.second.cGfx.sceneNode, pos);
+			}
+		}
 	}
 }

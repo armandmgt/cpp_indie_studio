@@ -15,20 +15,21 @@
 
 int main()
 {
-	Map map(20, 20);
+	Map map(22, 20);
 	map.initMap(20);
+	map.printMap();
 	gfx::Renderer renderer;
 	ecs::world ecs(renderer);
-	ecs.createGround(20,20, "../../assets/meshs/ground.obj");
+	ecs.createGround(22, 20, "../../assets/meshs/ground.obj");
 	irr::EKEY_CODE key;
+	ecs._spawnEntitiesFromMap(std::move(map.getMap()));
+	ecs.drawEntities();
 	while (renderer.isRunning()) {
 		if (renderer.getKeyPressed(key) && key == irr::KEY_ESCAPE)
 			renderer.close();
 		renderer.render();
 	}
-	ecs._spawnEntitiesFromMap(std::move(map.getMap()));
-	ecs.debug();
-
+	// ecs.debug();
 	return 0;
 }
 /*

@@ -36,10 +36,6 @@ namespace ecs {
 		void _spawnBWall(long posX, long posY);
 		void _spawnPlayer(long posX, long posY);
 
-		void systemSpawnBomb(entityId);
-		void systemMove(entityId);
-		void systemSpawnCollectibleFromBox(entityId);
-
 		bool addComponent(entityId id, Position pos) noexcept;
 		bool addComponent(entityId id, Character chara) noexcept;
 		bool addComponent(entityId id, Explosion exp) noexcept;
@@ -63,14 +59,18 @@ namespace ecs {
 		Destructible &getDestructible(const entityId id);
 		Graphic &getGraphic(const entityId id);
 		void debug();
-		void drawEntities();
 
 		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);
-		std::string queryMeshFromActionTarget(const ActionTarget) const;
+		void drawEntities();
+		void systemSpawnBomb(entityId);
+		void systemMove(entityId);
+		void systemSpawnCollectibleFromBox(entityId);
+		std::string queryMeshFromActionTarget(ActionTarget) const;
 
 	private:
 		entityId curId;
 		gfx::Renderer &renderer;
+		vec3d<float> sizeGround;
 		std::unordered_map<entityId, Entity> _world;
 	};
 }
