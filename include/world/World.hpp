@@ -50,16 +50,16 @@ namespace ecs {
 		bool addComponent(entityId id, Destructible des);
 		bool addComponent(entityId id, Graphic gfx);
 
-		Entity & getEntity(entityId);
-		Position &getPosition(entityId id);
-		Character &getCharacter(entityId id);
-		Explosion &getExplosion(entityId id);
-		Collectible &getCollectible(entityId id);
-		Velocity &getVelocity(entityId id);
-		Input &getInput(entityId id);
-		AiInput &getAiInput(entityId id);
-		Destructible &getDestructible(entityId id);
-		Graphic &getGraphic(entityId id);
+		Entity &getEntity(const entityId);
+		Position &getPosition(const entityId id);
+		Character &getCharacter(const entityId id);
+		Explosion &getExplosion(const entityId id);
+		Collectible &getCollectible(const entityId id);
+		Velocity &getVelocity(const entityId id);
+		Input &getInput(const entityId id);
+		AiInput &getAiInput(const entityId id);
+		Destructible &getDestructible(const entityId id);
+		Graphic &getGraphic(const entityId id);
 		void drawEntities();
 
 	private:

@@ -203,77 +203,66 @@ namespace ecs {
 		}
 	}
 
-	Position &world::getPosition(entityId id)
-	{
+	Position &world::getPosition(const entityId id) {
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) {
 			return _world.at(id).cPosition;
 		}
 		throw std::logic_error("No position component");
 	}
 
-	Entity &world::getEntity(entityId id)
-	{
+	Entity &world::getEntity(const entityId id) {
 		return this->_world.at(id);
 	}
 
-	Character &world::getCharacter(entityId id)
-	{
+	Character &world::getCharacter(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER)
 			return this->_world.at(id).cCharacter;
 		throw std::logic_error("No character component");
 	}
 
-	Explosion &world::getExplosion(entityId id)
-	{
+	Explosion &world::getExplosion(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_EXPLOSION)) == COMP_EXPLOSION)
 			return this->_world.at(id).cExplosion;
 		throw std::logic_error("No Explosion component");
 	}
 
-	Collectible &world::getCollectible(entityId id)
-	{
+	Collectible &world::getCollectible(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_COLLECTIBLE)) == COMP_COLLECTIBLE)
 			return this->_world.at(id).cCollectible;
 		throw std::logic_error("No collectible component");
 	}
 
-	Velocity &world::getVelocity(entityId id)
-	{
+	Velocity &world::getVelocity(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY)
 			return this->_world.at(id).cVelocity;
 		throw std::logic_error("No velocity component");
 	}
 
-	Input &world::getInput(entityId id)
-	{
+	Input &world::getInput(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_INPUT)) == COMP_INPUT)
 			return this->_world.at(id).cInput;
 		throw std::logic_error("No input component");
 	}
 
-	AiInput &world::getAiInput(entityId id)
-	{
+	AiInput &world::getAiInput(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_AIINPUT)) == COMP_AIINPUT)
 			return this->_world.at(id).cAiInput;
 		throw std::logic_error("No AiInput component");
 	}
 
-	Destructible &world::getDestructible(entityId id)
-	{
+	Destructible &world::getDestructible(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE)
 			return this->_world.at(id).cDestructible;
 		throw std::logic_error("No Destructible component");
 	}
 
-	Graphic &world::getGraphic(entityId id)
-	{
+	Graphic &world::getGraphic(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC)
 			return this->_world.at(id).cGfx;
 		throw std::logic_error("No Graphic component");
 	}
 
-	void world::systemSpawnBomb(entityId id)
-	{
+	void world::systemSpawnBomb(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER) {
 			entityId idBomb(createEntity(BOMB));
 			Velocity vel = {0, 0};
@@ -285,7 +274,7 @@ namespace ecs {
 		}
 	}
 
-	void world::systemMove(entityId id) {
+	void world::systemMove(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY) {
 			auto &entity = this->_world.at(id);
 			entity.cPosition.x += entity.cVelocity.x;
@@ -293,7 +282,7 @@ namespace ecs {
 		}
 	}
 
-	void world::systemSpawnCollectibleFromBox(entityId id) {
+	void world::systemSpawnCollectibleFromBox(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE) {
 			auto &box = this->_world.at(id);
 			const entityId newId(this->createEntity(POWERUP));
