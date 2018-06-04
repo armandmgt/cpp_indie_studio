@@ -101,12 +101,13 @@ namespace ecs {
 		Graphic gfx {renderer.createElem("../../assets/meshs/box.obj")};
 
 		if (gfx.sceneNode == nullptr)
-			throw std::runtime_error("Ground not load");
+			throw std::runtime_error("Wall not load");
 		renderer.addTexture(gfx.sceneNode, "../../assets/textures/box_diffuse.jpg",
 				  "../../assets/textures/box_normal.jpg");
 		entityId id(createEntity(U_WALL));
   		addComponent(id, pos);
 		addComponent(id, std::move(des));
+		addComponent(id, gfx);
 	}
 
 	void world::_spawnPlayer(long posX, long posY)
@@ -374,11 +375,6 @@ namespace ecs {
 													  .cPosition
 												      .y *
 										sizeGround.z};
-				std::cout << "Entity pos : [" << entity.second.cPosition.x << ", " << entity.second
-					.cPosition.y << "]" << std::endl;
-				std::cout << "Pos : [" << pos.x << ", " << pos.y << ", " << pos.z << "]" << std::endl;
-				std::cout << std::boolalpha << "Set Position : "<< renderer.setPosition(entity.second
-				   .cGfx.sceneNode, pos) << std::endl;
 			}
 		}
 	}
