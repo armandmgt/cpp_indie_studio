@@ -19,8 +19,8 @@ gfx::Renderer::Renderer()
 {
 	irr::core::stringw tittleWindow = "Bomberman";
 
-	if (device = irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1920, 1080), 1024, true,
-			true, false, &eventReceiver); !device)
+	if (!(device = irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1920, 1080), 1024,
+		true, true, false, &eventReceiver)))
 		throw std::runtime_error("Cannot get device");
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
@@ -90,12 +90,12 @@ bool gfx::Renderer::getKeyPressed(irr::EKEY_CODE &keyCode) const
 
 irr::scene::ISceneNode *gfx::Renderer::createElem(irr::core::stringw const &filename)
 {
-	irr::scene::IMesh *mesh;
+	irr::scene::IMesh *mesh = smgr->getMesh(filename);
 	irr::scene::IMeshSceneNode *aniMesh;
 
-	if (mesh = smgr->getMesh(filename); !mesh) {
+	if (!mesh) {
 		return nullptr;
-	} else if (aniMesh = smgr->addMeshSceneNode(mesh); !aniMesh) {
+	} else if (!(aniMesh = smgr->addMeshSceneNode(mesh))) {
 		return nullptr;
 	} else {
 		aniMesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
@@ -108,9 +108,9 @@ irr::scene::IAnimatedMeshSceneNode *gfx::Renderer::createAnimatedElem(irr::core:
 	irr::scene::IAnimatedMesh *mesh;
 	irr::scene::IAnimatedMeshSceneNode *aniMesh;
 
-	if (mesh = smgr->getMesh(filename.c_str()); !mesh) {
+	if (!(mesh = smgr->getMesh(filename.c_str()))) {
 		return nullptr;
-	} else if (aniMesh = smgr->addAnimatedMeshSceneNode(mesh); !aniMesh) {
+	} else if (!(aniMesh = smgr->addAnimatedMeshSceneNode(mesh))) {
 		return nullptr;
 	} else {
 		aniMesh->getMaterial(0).NormalizeNormals = true;
@@ -122,10 +122,11 @@ irr::scene::IAnimatedMeshSceneNode *gfx::Renderer::createAnimatedElem(irr::core:
 
 bool gfx::Renderer::addTexture(irr::scene::ISceneNode *node, const irr::core::stringw &filename)
 {
+	irr::video::ITexture *texture;
+
 	if (!node)
 		return false;
-	irr::video::ITexture *texture;
-	if (texture = driver->getTexture(filename); !texture)
+	if (!(texture = driver->getTexture(filename)))
 		return false;
 	node->setMaterialTexture(0, texture);
 	return true;
@@ -136,7 +137,6 @@ void gfx::Renderer::addAnimation(irr::scene::IAnimatedMeshSceneNode *node, const
 )
 {
 	auto &nodeAnimations = animations[node];
-
 	nodeAnimations[identifier] = range;
 }
 
@@ -191,7 +191,7 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, const vec2d<int> 
 {
 	irr::video::ITexture *texture;
 
-	if (texture = driver->getTexture(filename); !texture)
+	if (!(texture = driver->getTexture(filename)))
 		throw std::runtime_error("Cannot load texture");
 	images.emplace_back(texture, pos, rect);
 }
@@ -199,7 +199,7 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, const vec2d<int> 
 void gfx::Renderer::load2D(irr::core::stringw const &filename, const vec2d<int> &pos)
 {
 	irr::video::ITexture *texture;
-	if (texture = driver->getTexture(filename); !texture)
+	if (!(texture = driver->getTexture(filename)))
 		throw std::runtime_error("Cannot load texture");
 	const irr::core::dimension2d<irr::u32> &texSize = texture->getOriginalSize();
 	irr::core::rect<irr::s32> size{{0, 0},

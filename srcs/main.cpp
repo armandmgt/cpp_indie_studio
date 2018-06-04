@@ -22,8 +22,8 @@ int main()
 	irr::EKEY_CODE key;
 
 	createGround(21, 20, groundFile, window);
-	irr::scene::IAnimatedMeshSceneNode *ninjaNode;
-	if (ninjaNode = window.createAnimatedElem(characterFile); ninjaNode != nullptr) {
+	auto ninjaNode = window.createAnimatedElem(characterFile);
+	if (ninjaNode != nullptr) {
 		window.setScale(ninjaNode, 2.f);
 		window.setPosition(ninjaNode, ninjaPos);
 		window.rotate(ninjaNode, {0, 90, 0});
@@ -68,7 +68,7 @@ static void createGround(size_t xSize, size_t zSize,
 		vec3d<float> size(0,0,0);
 		for (size_t z = 0; z < zSize; z++) {
 			irr::scene::ISceneNode *node;
-			if (node = renderer.createElem(assetPath); !node) {
+			if (!(node = renderer.createElem(assetPath))) {
 				return;
 			}
 			renderer.setPosition(node, pos);
