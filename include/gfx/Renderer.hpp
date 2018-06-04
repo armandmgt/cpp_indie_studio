@@ -28,31 +28,23 @@ namespace gfx {
 		void render();
 		bool isRun() const;
 		void clearScene();
-
 		void close();
 
 		vec2d<int> getMousePosition() const;
-
 		bool getKeyPressed(irr::EKEY_CODE &keyCode) const;
 
 		irr::scene::ISceneNode *createElem(irr::core::stringw const &filename);
-
 		irr::scene::IAnimatedMeshSceneNode *createAnimatedElem(irr::core::stringw const &filename);
 
 		bool addTexture(irr::scene::ISceneNode *node, const irr::core::stringw &filename);
-
 		void addAnimation(irr::scene::IAnimatedMeshSceneNode *node, const std::string &identifier,
 			const vec2d<int> &range
 		);
 
 		void setAnimation(irr::scene::IAnimatedMeshSceneNode *node, const std::string &identifier);
-
 		bool setAnimationSpeed(irr::scene::IAnimatedMeshSceneNode *node, float speed);
-
 		bool setPosition(irr::scene::ISceneNode *node, const vec3d<float> &pos);
-
 		bool setScale(irr::scene::ISceneNode *node, float scale);
-
 		bool rotate(irr::scene::ISceneNode *node, const vec3d<float> &angle);
 
 		vec3d<float> getSize(irr::scene::ISceneNode *node);
@@ -60,9 +52,7 @@ namespace gfx {
 		void load2D(irr::core::stringw const &filename, const vec2d<int> &pos,
 			const irr::core::rect<irr::s32> &rect
 		);
-
 		void load2D(irr::core::stringw const &filename, const vec2d<int> &pos);
-
 		void addArchive(irr::core::stringw const &filename);
 
 	private:
