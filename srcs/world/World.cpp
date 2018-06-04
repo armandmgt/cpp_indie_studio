@@ -98,7 +98,7 @@ namespace ecs {
 
 		if (gfx.sceneNode == nullptr)
 			throw std::runtime_error("Wall not load");
-		renderer.addTexture(gfx.sceneNode, "../../assets/textures/box_diffuse.jpg");
+		renderer.addTexture(gfx.sceneNode, "../../assets/textures/box.jpg");
 		entityId id(createEntity(U_WALL));
   		addComponent(id, pos);
 		addComponent(id, std::move(des));
