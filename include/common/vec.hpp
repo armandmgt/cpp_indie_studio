@@ -11,6 +11,7 @@
 	template<typename T>
 	class vec3d {
 	public:
+		vec3d() = default;
 		vec3d(T value1, T value2 , T value3) : x(value1),
 						       y(value2),
 						       z(value3)
@@ -46,6 +47,7 @@
 	template<typename T>
 	class vec2d {
 	public:
+		vec2d() = default;
 		vec2d(T value1, T value2) : x(value1), y(value2)
 		{}
 		~vec2d() = default;
