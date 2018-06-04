@@ -35,7 +35,7 @@ struct map_pos {
 class Map
 {
 public:
-	Map();
+	Map() = default;
 	Map(size_t l, size_t w);
 	~Map() noexcept = default;
 
@@ -47,8 +47,8 @@ public:
 
 private:
 	std::vector<std::string> _map;
-	size_t _length;
 	size_t _width;
+	size_t _height;
 	bool _addWall(size_t, size_t);
 	void _fillMap();
 	void _fillLine(std::string &);
@@ -59,7 +59,7 @@ private:
 	void _digBottomRightCorner();
 
 	std::map<int, mapItem> const _gamble = {
-		{40, BREAKABLE_WALL},
+		{50, UNBREAKABLE_WALL},
 		{70, POWER_UP},
 		{80, SPEED_UP},
 		{90, BOMB_UP},

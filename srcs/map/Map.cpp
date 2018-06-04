@@ -7,9 +7,7 @@
 
 #include "map/Map.hpp"
 
-Map::Map() {}
-
-Map::Map(size_t length, size_t width) : _length(length), _width(width) {}
+Map::Map(size_t width, size_t height) : _width(width), _height(height) {}
 
 void Map::setCellItem(map_pos *pos, mapItem item)
 {
@@ -20,7 +18,7 @@ bool Map::_addWall(size_t x, size_t y)
 {
 	auto rand = std::rand() % 100;
 
-	if (_map[y][x] == BREAKABLE_WALL) {
+	if (!_map[y].empty()) {
 		for (auto &it : _gamble)
 			if (rand > it.first)
 				continue;
@@ -35,7 +33,8 @@ bool Map::_addWall(size_t x, size_t y)
 
 bool Map::digPosition(size_t x, size_t y)
 {
-	if (_map[y][x] != UNBREAKABLE_WALL)
+	if (!_map[y].empty() && _map[y][x + 1] &&
+		_map[y][x] != UNBREAKABLE_WALL)
 		_map[y][x] = EMPTY;
 	return true;
 }
@@ -71,43 +70,28 @@ void Map::_digTopLeftCorner()
 void Map::_proceduralGen(size_t wallsToCreate)
 {
 	for (size_t i = 0; i < wallsToCreate - 1; i++) {
-		size_t x = std::rand() % (_length);
+		size_t x = std::rand() % (_height);
 		size_t y = std::rand() % (_width);
-		_addWall(x, y);
+		if (y > 0 && y < _height && x > 0 && x < _width)
+			_addWall(x, y);
 	}
-}
-
-void Map::_fillLine(std::string &line)
-{
-	auto xMod = _length % 2 ? 3 : 2;
-
-	for (size_t j = 1; j < _length; j++)
-		if (j % xMod == 0)
-			line[j] = UNBREAKABLE_WALL;
-		else
-			line[j] = BREAKABLE_WALL;
 }
 
 void Map::_fillMap()
 {
-	auto yMod = _width % 2 ? 3 : 2;
-
-	_map.emplace_back(std::string(_length, UNBREAKABLE_WALL));
-	for (size_t i = 1; i < _width; i++) {
-		std::string tmp(_length, BREAKABLE_WALL);
-		if (i % yMod == 0) {
-			_fillLine(tmp);
-		}
+	_map.emplace_back(std::string(_width, UNBREAKABLE_WALL));
+	for (size_t i = 1; i < _height - 1; i++) {
+		std::string tmp(_width, BREAKABLE_WALL);
 		tmp[0] = UNBREAKABLE_WALL;
-		tmp[tmp.size() - 1] = UNBREAKABLE_WALL;
+		tmp[_width - 1] = UNBREAKABLE_WALL;
 		_map.push_back(tmp);
 	}
-	_map.emplace_back(std::string(_length, UNBREAKABLE_WALL));
+	_map.emplace_back(std::string(_width, UNBREAKABLE_WALL));
 }
 
 void Map::initMap(size_t wallPct)
 {
-	size_t totalCells = (_width - 1) * (_length - 1) / 2;
+	size_t totalCells = (_width - 1) * (_height - 1) / 2;
 	size_t wallsToCreate = (totalCells * wallPct) / 100;
 
 	_fillMap();
