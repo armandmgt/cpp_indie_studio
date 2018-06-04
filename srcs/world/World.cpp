@@ -12,13 +12,18 @@
 
 namespace ecs {
 
+	world::world(gfx::Renderer &render) : curId(0), renderer(render)
+	{
+
+	}
+
 	entityId world::createEntity(entityType type)
 	{
 		static std::unordered_map<entityType, std::bitset<Entity::bitSize>> const concordMap = {
 			{PLAYER,  COMP_POSITION | COMP_VELOCITY |
-				  COMP_CHARACTER | COMP_DESTRUCTIBLE | COMP_GRAPHIC},
+				  COMP_CHARACTER | COMP_ORIENTATION | COMP_DESTRUCTIBLE | COMP_GRAPHIC},
 			{POWERUP, COMP_POSITION | COMP_COLLECTIBLE | COMP_GRAPHIC},
-			{BOMB,    COMP_VELOCITY | COMP_EXPLOSION | COMP_GRAPHIC | COMP_POSITION},
+			{BOMB,    COMP_POSITION | COMP_VELOCITY | COMP_EXPLOSION | COMP_GRAPHIC},
 			{U_WALL, COMP_POSITION | COMP_COLLECTIBLE | COMP_GRAPHIC},
 			{WALL, COMP_POSITION | COMP_COLLECTIBLE | COMP_GRAPHIC},
 			{FLAMME,  COMP_POSITION},
@@ -32,7 +37,6 @@ namespace ecs {
 
 	void world::destroyEntity(entityId id) {
 		_world.erase(id);
-
 	}
 
 	void world::_spawnEntitiesFromMap(std::vector<std::string> &&gameMap) {
@@ -81,9 +85,11 @@ namespace ecs {
 
 	void world::_spawnUWall(long posX, long posY) {
 		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
+		Graphic gfx {renderer.createAnimatedElem("../../assets/meshs/ground.obj")};
 
 		entityId id(createEntity(U_WALL));
 		addComponent(id, pos);
+		addComponent(id, gfx);
 	}
 
 	void world::_spawnBWall(long posX, long posY)
@@ -102,15 +108,19 @@ namespace ecs {
 		Velocity vel {0.f, 0.f};
 		Character chara {false, false, 1, 1};
 		Destructible des {true, nullptr};
+		Orientation ori {0};
+		Graphic gfx {renderer.createAnimatedElem("../../assets/meshs/ninja.b3d")};
 
 		entityId id(createEntity(PLAYER));
 		addComponent(id, pos);
 		addComponent(id, vel);
 		addComponent(id, chara);
+		addComponent(id, ori);
+		addComponent(id, gfx);
 		addComponent(id, std::move(des));
 	}
 
-	bool world::addComponent(entityId id, Position pos)
+	bool world::addComponent(entityId id, Position pos) noexcept
 	{
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) {
 			_world.at(id).cPosition = pos;
@@ -119,7 +129,7 @@ namespace ecs {
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Character chara)
+	bool world::addComponent(entityId id, Character chara) noexcept
 	{
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER) {
 			_world.at(id).cCharacter = chara;
@@ -128,7 +138,7 @@ namespace ecs {
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Explosion exp)
+	bool world::addComponent(entityId id, Explosion exp) noexcept
 	{
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_EXPLOSION)) == COMP_EXPLOSION) {
 			_world.at(id).cExplosion = exp;
@@ -137,7 +147,7 @@ namespace ecs {
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Collectible col)
+	bool world::addComponent(entityId id, Collectible col) noexcept
 	{
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_COLLECTIBLE)) == COMP_COLLECTIBLE) {
 			_world.at(id).cCollectible = col;
@@ -146,7 +156,7 @@ namespace ecs {
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Velocity vel)
+	bool world::addComponent(entityId id, Velocity vel) noexcept
 	{
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY) {
 			_world.at(id).cVelocity = vel;
@@ -155,7 +165,7 @@ namespace ecs {
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Input in)
+	bool world::addComponent(entityId id, Input in) noexcept
 	{
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_INPUT)) == COMP_INPUT) {
 			_world.at(id).cInput = in;
@@ -164,7 +174,7 @@ namespace ecs {
 		return false;
 	}
 
-	bool world::addComponent(entityId id, AiInput in)
+	bool world::addComponent(entityId id, AiInput in) noexcept
 	{
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_AIINPUT)) == COMP_AIINPUT) {
 			_world.at(id).cAiInput = in;
@@ -173,7 +183,7 @@ namespace ecs {
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Destructible des)
+	bool world::addComponent(entityId id, Destructible des) noexcept
 	{
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE) {
 			_world.at(id).cDestructible = std::move(des);
@@ -182,7 +192,7 @@ namespace ecs {
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Graphic gfx)
+	bool world::addComponent(entityId id, Graphic gfx) noexcept
 	{
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC) {
 			_world.at(id).cGfx = gfx;
@@ -191,7 +201,16 @@ namespace ecs {
 		return false;
 	}
 
-	void world::drawEntities()
+	bool world::addComponent(entityId id, Orientation orientation) noexcept
+	{
+		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_ORIENTATION)) == COMP_ORIENTATION) {
+			_world.at(id).cOrientation = orientation;
+			return true;
+		}
+		return false;
+	}
+
+	void world::debug()
 	{
 		for (auto &it : _world) {
 			std::cout << "Type : [" << it.first << "]" << std::endl;
@@ -199,7 +218,6 @@ namespace ecs {
 				std::cout << "Position : [" << it.second.cPosition.x << ", " << it.second.cPosition.y << "]" << std::endl;
 			if ((it.second.bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY)
 				std::cout << "Velocity : [" << it.second.cVelocity.x << ", " << it.second.cVelocity.y << "]" << std::endl;
-
 		}
 	}
 
@@ -244,6 +262,13 @@ namespace ecs {
 		throw std::logic_error("No input component");
 	}
 
+	Orientation &world::getOrientation(const entityId id)
+	{
+		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_ORIENTATION)) == COMP_ORIENTATION)
+			return this->_world.at(id).cOrientation;
+		throw std::logic_error("No orientation component");
+	}
+
 	AiInput &world::getAiInput(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_AIINPUT)) == COMP_AIINPUT)
 			return this->_world.at(id).cAiInput;
@@ -265,8 +290,8 @@ namespace ecs {
 	void world::systemSpawnBomb(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER) {
 			entityId idBomb(createEntity(BOMB));
-			Velocity vel = {0, 0};
-			Explosion exp = {1, 5};
+			Velocity vel {0, 0};
+			Explosion exp {1, 5};
 
 			addComponent(idBomb, getPosition(id));
 			addComponent(idBomb, vel);
@@ -276,7 +301,7 @@ namespace ecs {
 
 	void world::systemMove(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY) {
-			auto &entity = this->_world.at(id);
+			auto &entity(this->_world.at(id));
 			entity.cPosition.x += entity.cVelocity.x;
 			entity.cPosition.y += entity.cVelocity.y;
 		}
@@ -284,11 +309,36 @@ namespace ecs {
 
 	void world::systemSpawnCollectibleFromBox(const entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE) {
-			auto &box = this->_world.at(id);
+			auto &box(this->_world.at(id));
 			const entityId newId(this->createEntity(POWERUP));
 			addComponent(newId, box.cCollectible);
 			addComponent(newId, box.cPosition);
 			destroyEntity(id);
 		}
+	}
+
+	void world::createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath)
+	{
+		vec3d<float> pos{0, -10, 0};
+
+		for (size_t x = 0; x < xSize; x++) {
+			vec3d<float> size(0,0,0);
+			for (size_t z = 0; z < zSize; z++) {
+				irr::scene::ISceneNode *node;
+				if (!(node = renderer.createElem(assetPath))) {
+					return;
+				}
+				renderer.setPosition(node, pos);
+				size = renderer.getSize(node);
+				pos.z += size.z;
+			}
+			pos.z = 0;
+			pos.x += size.x;
+		}
+	}
+
+	void world::drawEntities()
+	{
+
 	}
 }

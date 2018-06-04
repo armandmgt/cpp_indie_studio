@@ -40,7 +40,7 @@ public:
 	~Map() noexcept = default;
 
 	void initMap(size_t);
-	std::vector<std::string> &getMap() { return this->_map; };
+	std::vector<std::string> getMap() { return this->_map; };
 	void printMap() const;
 	bool digPosition(size_t, size_t);
 	void setCellItem(map_pos *, mapItem);

@@ -30,6 +30,7 @@ namespace ecs {
 		COMP_AIINPUT = 1U << 6,
 		COMP_DESTRUCTIBLE = 1U << 7,
 		COMP_GRAPHIC = 1U << 8,
+		COMP_ORIENTATION = 1U << 9,
 	};
 
 	struct Character {
@@ -54,6 +55,10 @@ namespace ecs {
 	struct Velocity {
 		float x;
 		float y;
+	};
+
+	struct Orientation {
+		float orientation;
 	};
 
 	struct Position {
@@ -82,6 +87,5 @@ namespace ecs {
 
 	struct Graphic {
 		irr::scene::ISceneNode *sceneNode;
-		irr::video::ITexture *text;
 	};
 }
