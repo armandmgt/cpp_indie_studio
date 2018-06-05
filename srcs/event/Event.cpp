@@ -21,8 +21,8 @@ ids::Event::~Event()
 
 bool ids::Event::getAction(event_t event)
 {
-	event_t tmp;
-	static const std::unordered_map<eventKey, eventAction> _eventType = {
+	event_t tmp{};
+	static std::unordered_map<eventKey, eventAction> const eventType = {
 		{NONE, NOTHING}, {UP, MOVEUP}, {DOWN, MOVEDOWN},
 		{RIGHT, MOVERIGHT}, {LEFT, MOVELEFT}, {A, PUTBOMB},
 		{B, NOTHING}, {C, NOTHING}, {D, MOVERIGHT}, {E, PUTITEM},
@@ -34,7 +34,7 @@ bool ids::Event::getAction(event_t event)
 		{Z, MOVEUP}, {SPACE, PAUSE}, {SUPPR, RESTART}, {ESCAPE, MENU},
 		{MOUSE, CLICK}
 	};
-	for (auto it = _eventType.begin(); it != _eventType.end(); it++) {
+	for (auto it = eventType.begin(); it != eventType.end(); it++) {
 		if (it->first == event.value.key) {
 			tmp.value.action = it->second;
 			tmp.type = ACTION;
@@ -45,10 +45,10 @@ bool ids::Event::getAction(event_t event)
 	return false;
 }
 
-bool ids::Event::getKey(irr::EKEY_CODE &keyCode, event_t &event)
+bool ids::Event::getKey(irr::EKEY_CODE &keyCode)
 {
-	event_t tmp;
-	static const std::unordered_map<irr::EKEY_CODE, eventKey> key = {
+	event_t tmp{};
+	static std::unordered_map<irr::EKEY_CODE, eventKey> const key = {
 		{irr::KEY_UP, UP}, {irr::KEY_DOWN, DOWN},
 		{irr::KEY_RIGHT, RIGHT}, {irr::KEY_LEFT, LEFT},
 		{irr::KEY_KEY_A, A}, {irr::KEY_KEY_B, B}, {irr::KEY_KEY_C, C},
@@ -80,9 +80,8 @@ bool ids::Event::pollEvent(irr::EKEY_CODE &keyCode, event_t &event)
 {
 	event_t tmp{};
 
-	if (renderer.getKeyPressed(keyCode)) {
-		getKey(keyCode, tmp);
-	}
+	if (renderer.getKeyPressed(keyCode))
+		getKey(keyCode);
 	if (buffer.empty())
 		return false;
 	tmp = buffer.front();

@@ -38,13 +38,11 @@
 		public:
 			explicit Event(gfx::Renderer &window);
 			~Event();
-
-			bool getKey(irr::EKEY_CODE &keyCode, event_t &event);
-			bool getAction(event_t event);
-
-			// Event *registerTimeoutItm(unsigned int time, eventAction type);
 			bool pollEvent(irr::EKEY_CODE &keyCode, event_t &event);
+
 		private:
+			bool getKey(irr::EKEY_CODE &keyCode);
+			bool getAction(event_t event);
 			gfx::Renderer &renderer;
 			std::queue<event_t> buffer;
 		};
