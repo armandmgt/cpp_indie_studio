@@ -13,7 +13,7 @@
 
 namespace ecs {
 	enum ActionTarget {
-		INVINCIBILITY,
+		KICK,
 		MAXBOMBS,
 		FOOTPOWERUP,
 		POWER,

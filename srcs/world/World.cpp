@@ -63,7 +63,7 @@ namespace ecs {
 						_spawnWall(FOOTPOWERUP, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case POWER_UP:
-						_spawnWall(INVINCIBILITY,  itC - itR->begin(), itR - gameMap.begin());
+						_spawnWall(KICK,  itC - itR->begin(), itR - gameMap.begin());
 						break;
 					default:
 						break;
@@ -338,7 +338,7 @@ namespace ecs {
 		auto &player(_world.at(pId));
 
 		//TODO: event to end invincibility
-		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(INVINCIBILITY)) == INVINCIBILITY)
+		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(KICK)) == KICK)
 			player.cCharacter.invincibility = true;
 		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(MAXBOMBS)) == MAXBOMBS)
 			player.cCharacter.maxBombs++;
@@ -352,7 +352,7 @@ namespace ecs {
 	//TODO remove breaks
 	std::string world::_queryMeshFromActionTarget(const ActionTarget act) const {
 		switch (act) {
-		case INVINCIBILITY:
+		case KICK:
 			return "../../assets/meshs/speedup.obj";
 		case MAXBOMBS:
 			return "../../assets/meshs/speedup.obj";
