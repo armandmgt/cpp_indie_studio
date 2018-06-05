@@ -137,8 +137,8 @@ namespace ecs {
 		if (_world.at(id).hasComponent<Character>()) {
 			auto &ent = createEntity();
 
-			ent.addComponent<Velocity>(0, 0);
-			ent.addComponent<Explosion>(_world.at(id).getComponent<Character>().power, 5);
+			ent.addComponent<Velocity>(0.f, 0.f);
+			ent.addComponent<Explosion>(_world.at(id).getComponent<Character>().power, 5LU);
 			ent.addComponent<Graphic>(renderer.createAnimatedElem("../../assets/meshs/bomb.obj"));
 
 			auto &gfx = ent.getComponent<Graphic>();

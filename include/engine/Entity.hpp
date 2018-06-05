@@ -18,15 +18,17 @@ namespace ecs {
 	class Entity {
 	public:
 		template<class T>
-		T &getComponent() { return componentArray[T::getType()]; }
+		T &getComponent() { return static_cast<T&>(componentArray.at(T::getType())); }
 
 		template<class T>
 		bool hasComponent() { return bit[T::getType()]; }
 
 		template <typename T, typename... Args>
 		void addComponent(Args&&... args) {
+			std::cout << "adding component " << T::getType() << std::endl;
 			bit[T::getType()] = true;
 			componentArray[T::getType()] = T{std::forward<Args>(args)...};
+			std::cout << "size is now " << componentArray.size() << std::endl;
 		}
 
 		entityId id;
