@@ -296,7 +296,7 @@ namespace ecs {
 		throw std::logic_error("No Graphic component");
 	}
 
-	void world::systemSpawnBomb(const entityId id) {
+	void world::systemSpawnBomb(const entityId id) noexcept {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER) {
 			entityId idBomb(createEntity(BOMB));
 			Velocity vel {0, 0};
@@ -308,7 +308,7 @@ namespace ecs {
 		}
 	}
 
-	void world::systemMove(const entityId id) {
+	void world::systemMove(const entityId id) noexcept {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY) {
 			auto &entity(this->_world.at(id));
 			entity.cPosition.x += entity.cVelocity.x;
@@ -316,11 +316,11 @@ namespace ecs {
 		}
 	}
 
-	void world::systemSpawnCollectibleFromBox(entityId id) {
+	void world::systemSpawnCollectibleFromBox(const entityId id) noexcept {
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE) {
 			auto &box(this->_world.at(id));
 			entityId newId(this->createEntity(POWERUP));
-			Graphic nGfx { renderer.createAnimatedElem(queryMeshFromActionTarget(box.cCollectible.action).c_str())};
+			Graphic nGfx { renderer.createAnimatedElem(_queryMeshFromActionTarget(box.cCollectible.action).c_str())};
 			addComponent(newId, box.cCollectible);
 			addComponent(newId, box.cPosition);
 			addComponent(newId, nGfx);
@@ -330,9 +330,25 @@ namespace ecs {
 		}
 	}
 
+	//TODO: Check the collision between the item and the player
+	void world::systemPickupItem(const entityId iId, const entityId pId) noexcept {
+		// ...collision check ?
+		auto &player(_world.at(pId));
+
+		//TODO: event to end invincibility
+		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(INVINCIBILITY)) == INVINCIBILITY)
+			player.cCharacter.invincibility = true;
+		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(MAXBOMBS)) == MAXBOMBS)
+			player.cCharacter.maxBombs++;
+		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(FOOTPOWERUP)) == FOOTPOWERUP)
+			player.cCharacter.footPowerUp = true;
+		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(POWER)) == POWER)
+			player.cCharacter.power++;
+	}
+
 	// ../../assets/meshs/ninja.b3d
 	//TODO remove breaks
-	std::string world::queryMeshFromActionTarget(const ActionTarget act) const {
+	std::string world::_queryMeshFromActionTarget(const ActionTarget act) const {
 		switch (act) {
 		case INVINCIBILITY:
 			return "../../assets/meshs/ninja.b3d";

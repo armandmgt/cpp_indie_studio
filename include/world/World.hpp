@@ -62,16 +62,18 @@ namespace ecs {
 
 		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);
 		void drawEntities();
-		void systemSpawnBomb(entityId);
-		void systemMove(entityId);
-		void systemSpawnCollectibleFromBox(entityId);
-		std::string queryMeshFromActionTarget(ActionTarget) const;
+		void systemSpawnBomb(const entityId) noexcept;
+		void systemMove(const entityId) noexcept;
+		void systemSpawnCollectibleFromBox(const entityId) noexcept;
+		void systemPickupItem(const entityId, const entityId) noexcept;
 
 	private:
 		entityId curId;
 		gfx::Renderer &renderer;
 		vec3d<float> sizeGround;
 		std::unordered_map<entityId, Entity> _world;
+
+		std::string _queryMeshFromActionTarget(const ActionTarget) const;
 	};
 }
 
