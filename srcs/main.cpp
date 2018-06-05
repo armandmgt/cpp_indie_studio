@@ -23,7 +23,7 @@ int main()
 	ecs.createGround(22, 20, "../../assets/meshs/ground.obj");
 	ids::Event event(renderer);
 	irr::EKEY_CODE key;
-	ids::event_t ev;
+	ids::event_t ev{};
 
 	ecs._spawnEntitiesFromMap(std::move(map.getMap()));
 	ecs.drawEntities();
@@ -31,6 +31,14 @@ int main()
 		if (event.pollEvent(key, ev)) {
 			if (ev.value.key == ids::ESCAPE)
 			renderer.close();
+		}
+		size_t i = 0;
+		for (auto &entity : ecs._world) {
+			if (entity.hasComponent<ecs::Character>()) {
+				std::cout << "Character at index " << i << std::endl;
+				ecs.systemSpawnBomb(i);
+			}
+			i++;
 		}
 		renderer.render();
 	}

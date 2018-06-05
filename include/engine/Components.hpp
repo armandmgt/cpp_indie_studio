@@ -14,8 +14,8 @@
 namespace ecs {
 	enum ActionTarget {
 		KICK,
-		MAXBOMBS,
-		FOOTPOWERUP,
+		MAX_BOMBS,
+		SPEEDUP,
 		POWER,
 	};
 
@@ -26,10 +26,11 @@ namespace ecs {
 		COMP_VELOCITY,
 		COMP_POSITION,
 		COMP_INPUT,
-		COMP_AIINPUT,
+		COMP_AI_INPUT,
 		COMP_DESTRUCTIBLE,
 		COMP_GRAPHIC,
 		COMP_ORIENTATION,
+		MAX_COMPONENTS
 	};
 
 	struct Component {
@@ -37,16 +38,14 @@ namespace ecs {
 	};
 
 	struct Character : public Component {
-		static comp getType() { return COMP_CHARACTER; };
-		Character(bool i, bool f, std::size_t p , std::size_t m) : invincibility(i),
-									   footPowerUp(f),
-									   power(p),
-									   maxBombs(m)
+		Character(bool footPowerUp, size_t power, size_t speed, size_t maxBombs)
+			: footPowerUp(footPowerUp), power(power), speed(speed), maxBombs(maxBombs)
 		{};
 		~Character() = default;
-		bool invincibility;
+		static comp getType() { return COMP_CHARACTER; };
 		bool footPowerUp;
 		std::size_t power;
+		std::size_t speed;
 		std::size_t maxBombs;
 	};
 
@@ -62,9 +61,8 @@ namespace ecs {
 	struct Collectible : public Component {
 		explicit Collectible(ActionTarget at) : action(at)
 		{};
-		static comp getType() { return COMP_COLLECTIBLE; };
-		Collectible() = default;
 		~Collectible() = default;
+		static comp getType() { return COMP_COLLECTIBLE; };
 		ActionTarget action;
 	};
 
@@ -78,55 +76,61 @@ namespace ecs {
 	};
 
 	struct Orientation : public Component{
-		static comp getType() { return COMP_ORIENTATION; };
 		explicit Orientation(float ori) : orientation(ori)
 		{};
 		~Orientation() = default;
+		static comp getType() { return COMP_ORIENTATION; };
 		float orientation;
 	};
 
 	struct Position : public Component {
-		static comp getType() { return COMP_POSITION; };
 		Position(float d, float v) : x(d), y(v)
 		{};
 		~Position() = default;
+		static comp getType() { return COMP_POSITION; };
 		float x;
 		float y;
 	};
 
 	struct Input : public Component {
-		static comp getType() { return COMP_INPUT; };
 		Input(bool l, bool r, bool u, bool d) : goLeft(l), goRight(r), goUp(u), goDown(d)
 		{};
 		~Input() = default;
+		static comp getType() { return COMP_INPUT; };
 		bool goLeft;
 		bool goRight;
 		bool goUp;
 		bool goDown;
+		bool putBomb;
 	};
 
 	struct AiInput : public Component {
-		static comp getType() { return COMP_AIINPUT; };
 		AiInput(bool l, bool r, bool u, bool d) : goLeft(l), goRight(r), goUp(u), goDown(d)
 		{};
 		~AiInput() = default;
+		static comp getType() { return COMP_AI_INPUT; };
 		bool goLeft;
 		bool goRight;
 		bool goUp;
 		bool goDown;
+		bool putBomb;
 	};
 
 	struct Destructible : public Component {
+		Destructible(bool destructible, std::unique_ptr<Collectible> item)
+			: destructible(destructible), item(std::move(item))
+		{};
+		~Destructible() = default;
 		static comp getType() { return COMP_DESTRUCTIBLE; };
 		bool  destructible;
 		std::unique_ptr<Collectible> item;
 	};
 
 	struct Graphic : public Component {
-		static comp getType() { return COMP_GRAPHIC; };
 		explicit Graphic(irr::scene::ISceneNode *s) : sceneNode(s)
 		{};
 		~Graphic() = default;
+		static comp getType() { return COMP_GRAPHIC; };
 		irr::scene::ISceneNode *sceneNode;
 	};
 }

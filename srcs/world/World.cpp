@@ -17,21 +17,19 @@ namespace ecs {
 
 	}
 
-	Entity &world::createEntity(entityType type)
+	Entity &world::createEntity()
 	{
-		static std::unordered_map<entityType, std::vector<int>> const concordMap = {
-			{PLAYER,  {COMP_POSITION , COMP_VELOCITY , COMP_CHARACTER , COMP_ORIENTATION ,
-				COMP_DESTRUCTIBLE , COMP_GRAPHIC }},
-			{POWERUP, {COMP_POSITION , COMP_COLLECTIBLE , COMP_GRAPHIC}},
-			{BOMB, {COMP_POSITION , COMP_VELOCITY , COMP_EXPLOSION , COMP_GRAPHIC}},
-			{U_WALL, {COMP_POSITION , COMP_GRAPHIC}},
-			{WALL, {COMP_POSITION , COMP_DESTRUCTIBLE , COMP_GRAPHIC}},
-			{FLAMME,  {COMP_POSITION}},
-		};
-
-		std::vector<int> EntityBit(concordMap.at(type));
-		Entity newEntity(EntityBit);
-		_world.emplace_back(std::move(newEntity));
+//		static std::unordered_map<entityType, std::vector<int>> const concordMap = {
+//			{PLAYER,  {COMP_POSITION , COMP_VELOCITY , COMP_CHARACTER , COMP_ORIENTATION ,
+//				COMP_DESTRUCTIBLE , COMP_GRAPHIC }},
+//			{POWERUP, {COMP_POSITION , COMP_COLLECTIBLE , COMP_GRAPHIC}},
+//			{BOMB, {COMP_POSITION , COMP_VELOCITY , COMP_EXPLOSION , COMP_GRAPHIC}},
+//			{U_WALL, {COMP_POSITION , COMP_GRAPHIC}},
+//			{WALL, {COMP_POSITION , COMP_DESTRUCTIBLE , COMP_GRAPHIC}},
+//			{FLAMME,  {COMP_POSITION}},
+//		};
+//
+		_world.emplace_back();
 		return _world.back();
 	}
 
@@ -57,10 +55,10 @@ namespace ecs {
 						_spawnWall(POWER, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case BOMB_UP:
-						_spawnWall(MAXBOMBS, itC - itR->begin(), itR - gameMap.begin());
+						_spawnWall(MAX_BOMBS, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case SPEED_UP:
-						_spawnWall(FOOTPOWERUP, itC - itR->begin(), itR - gameMap.begin());
+						_spawnWall(SPEEDUP, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case POWER_UP:
 						_spawnWall(KICK,  itC - itR->begin(), itR - gameMap.begin());
@@ -73,97 +71,105 @@ namespace ecs {
 	}
 
 	void world::_spawnWall(ActionTarget type, long posX, long posY) {
-		Destructible des {true , std::make_unique<Collectible>(type)};
-		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
-		Graphic gfx {renderer.createElem("../../assets/meshs/box.obj")};
+		auto &ent = createEntity();
 
+		ent.addComponent<Destructible>(true, std::make_unique<Collectible>(type));
+		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
+		ent.addComponent<Graphic>(renderer.createElem("../../assets/meshs/box.obj"));
+
+		auto &gfx = ent.getComponent<Graphic>();
 		if (gfx.sceneNode == nullptr)
-			throw std::runtime_error("Wall not load");
+			throw std::runtime_error("Cannot load box asset");
 		renderer.addTexture(gfx.sceneNode, "../../assets/textures/box.jpg");
-		auto &ent = createEntity(WALL);
-		ent.addComponent(pos, std::move(des), gfx);
 	}
 
 	void world::_spawnUWall(long posX, long posY) {
-		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
-		Graphic gfx {renderer.createElem("../../assets/meshs/ground.obj")};
+		auto &ent = createEntity();
 
+		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
+		ent.addComponent<Graphic>(renderer.createElem("../../assets/meshs/ground.obj"));
+
+		auto &gfx = ent.getComponent<Graphic>();
 		if (gfx.sceneNode == nullptr)
 			throw std::runtime_error("Could not load wall asset");
-		auto &ent = createEntity(U_WALL);
-		ent.addComponent(pos, gfx);
 	}
 
 	void world::_spawnBWall(long posX, long posY)
 	{
-		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
-		Destructible des {true, nullptr};
-		Graphic gfx {renderer.createElem("../../assets/meshs/box.obj")};
+		auto &ent = createEntity();
 
+		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
+		ent.addComponent<Destructible>(true, nullptr);
+		ent.addComponent<Graphic>(renderer.createElem("../../assets/meshs/box.obj"));
+
+		auto &gfx = ent.getComponent<Graphic>();
 		if (gfx.sceneNode == nullptr)
-			throw std::runtime_error("Wall not load");
+			throw std::runtime_error("Cannot load wall asset");
 		renderer.addTexture(gfx.sceneNode, "../../assets/textures/box.jpg");
-		auto &ent = createEntity(U_WALL);
-  		ent.addComponent(pos, std::move(des), gfx);
 	}
 
 	void world::_spawnPlayer(long posX, long posY)
 	{
-		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
-		Velocity vel {0.f, 0.f};
-		Character chara {false, false, 1, 1};
-		Destructible des {true, nullptr};
-		Orientation ori {0};
-		Graphic gfx { renderer.createAnimatedElem("../../assets/meshs/ninja.b3d") };
+		auto &ent = createEntity();
 
-		auto &ent = createEntity(PLAYER);
-		ent.addComponent(pos, vel, chara, ori, gfx, std::move(des));
+		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
+		ent.addComponent<Velocity>(0.f, 0.f);
+		ent.addComponent<Character>(false, 1LU, 1LU, 1LU);
+		ent.addComponent<Destructible>(true, nullptr);
+		ent.addComponent<Orientation>(0.f);
+		ent.addComponent<Graphic>(renderer.createAnimatedElem("../../assets/meshs/ninja.b3d"));
 	}
 
 	void world::debug()
 	{
 		for (auto &it : _world) {
 			std::cout << "Type : [" << it.id << "]" << std::endl;
-			if ((it.bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION)
+			if (it.hasComponent<Position>())
 				std::cout << "Position : [" << it.getComponent<Position>().x << ", " << it.getComponent<Position>().y << "]"
 										     << std::endl;
-			if ((it.bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY)
+			if (it.hasComponent<Velocity>())
 				std::cout << "Velocity : [" << it.getComponent<Velocity>().x << ", " << it
 					.getComponent<Velocity>().y << "]" << std::endl;
 		}
 	}
 
-	void world::systemSpawnBomb(entityId id) noexcept {
-		if (_world.at(id).bit[COMP_CHARACTER]) {
-			auto &ent = createEntity(BOMB);
-			Velocity vel {0, 0};
-			Explosion exp {_world.at(id).getComponent<Character>().power, 5};
-			Graphic gfx {renderer.createAnimatedElem("../../assets/meshs/bomb.obj")};
+	void world::systemSpawnBomb(entityId id) {
+		if (_world.at(id).hasComponent<Character>()) {
+			auto &ent = createEntity();
 
+			ent.addComponent<Velocity>(0, 0);
+			ent.addComponent<Explosion>(_world.at(id).getComponent<Character>().power, 5);
+			ent.addComponent<Graphic>(renderer.createAnimatedElem("../../assets/meshs/bomb.obj"));
+
+			auto &gfx = ent.getComponent<Graphic>();
 			if (gfx.sceneNode == nullptr)
-				throw std::runtime_error("Wall not load");
-			ent.addComponent(_world.at(id).getComponent<Position>(), vel, exp, gfx);
+				throw std::runtime_error("Cannot load bomb asset");
 		}
 	}
 
 	void world::systemMove(entityId id) noexcept {
-		if (_world.at(id).bit[COMP_VELOCITY]) {
-			auto &entity(this->_world.at(id));
-			entity.getComponent<Position>().x += entity.getComponent<Velocity>().x;
-			entity.getComponent<Position>().y += entity.getComponent<Velocity>().y;
+		if (_world.at(id).hasComponent<Velocity>()) {
+			auto &entity = this->_world.at(id);
+
+			auto &position = entity.getComponent<Position>();
+			auto &velocity = entity.getComponent<Velocity>();
+			position.x += velocity.x;
+			position.y += velocity.y;
 		}
 	}
 
 	void world::systemSpawnCollectibleFromBox(entityId id) noexcept {
-		if (_world.at(id).bit[COMP_DESTRUCTIBLE]) {
-			auto &box= this->_world.at(id);
-			auto &ent = createEntity(POWERUP);
-			Graphic nGfx { renderer.createAnimatedElem(_queryMeshFromActionTarget(box.cCollectible.action).c_str())};
+		if (_world.at(id).hasComponent<Destructible>()) {
+			auto &box = this->_world.at(id);
+			auto &ent = createEntity();
 
-			auto &pos = box.getComponent<Position>();
-			renderer.setPosition(nGfx.sceneNode, {pos.x * sizeGround.x, 0 , pos.y * sizeGround.z});
-			ent.addComponent(box.getComponent<Collectible>(), box.getComponent<Position>(), nGfx);
-			_world.at(id).getComponent<Graphic>().sceneNode->remove();
+			ent.addComponent<Collectible>(box.getComponent<Collectible>());
+			ent.addComponent<Position>(box.getComponent<Position>());
+			ent.addComponent<Graphic>(renderer.createElem(
+				_queryMeshFromActionTarget(box.getComponent<Collectible>().action)
+			));
+
+			box.getComponent<Graphic>().sceneNode->remove();
 			destroyEntity(id);
 		}
 	}
@@ -171,28 +177,32 @@ namespace ecs {
 	//TODO: Check the collision between the item and the player
 	void world::systemPickupItem(entityId iId, entityId pId) noexcept {
 		// ...collision check ?
-		auto &player(_world.at(pId));
+		auto &player = _world.at(pId);
 
 		//TODO: event to end invincibility
 //		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(KICK)) == KICK)
 //			player.cCharacter.invincibility = true;
-//		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(MAXBOMBS)) == MAXBOMBS)
+//		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(MAX_BOMBS)) == MAX_BOMBS)
 //			player.cCharacter.maxBombs++;
-//		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(FOOTPOWERUP)) == FOOTPOWERUP)
+//		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(SPEEDUP)) == SPEEDUP)
 //			player.cCharacter.footPowerUp = true;
 //		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(POWER)) == POWER)
 //			player.cCharacter.power++;
 	}
 
+	void world::systemParseInput(const entityId id) noexcept {
+		auto &player = _world.at(id);
+	}
+
 	// ../../assets/meshs/ninja.b3d
 	//TODO remove breaks
-	std::string world::_queryMeshFromActionTarget(const ActionTarget act) const {
+	irr::core::stringw world::_queryMeshFromActionTarget(const ActionTarget act) const {
 		switch (act) {
 		case KICK:
 			return "../../assets/meshs/foot.obj";
-		case MAXBOMBS:
+		case MAX_BOMBS:
 			return "../../assets/meshs/max-bomb.obj";
-		case FOOTPOWERUP:
+		case SPEEDUP:
 			return "../../assets/meshs/speedup.obj";
 		case POWER:
 			return "../../assets/meshs/powerup.obj";
@@ -222,9 +232,8 @@ namespace ecs {
 	}
 
 	void world::drawEntities() {
-		for (auto &elem : _world)
-		{
-			if (elem.bit[COMP_POSITION] && elem.bit[COMP_GRAPHIC]) {
+		for (auto &elem : _world) {
+			if (elem.hasComponent<Position>() && elem.hasComponent<Graphic>()) {
 				vec3d<float> pos {
 					elem.getComponent<Position>().x * sizeGround.x,
 					0,

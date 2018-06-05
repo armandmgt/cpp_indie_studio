@@ -28,7 +28,7 @@ namespace ecs {
 		explicit world(gfx::Renderer &renderer);
 		~world() = default;
 
-		Entity &createEntity(entityType type);
+		Entity &createEntity();
 		void destroyEntity(entityId);
 		void _spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
 		void _spawnUWall(long posX, long posY);
@@ -41,17 +41,20 @@ namespace ecs {
 
 		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);
 		void drawEntities();
-		void systemSpawnBomb(const entityId) noexcept;
-		void systemMove(const entityId) noexcept;
-		void systemSpawnCollectibleFromBox(const entityId) noexcept;
-		void systemPickupItem(const entityId, const entityId) noexcept;
+		void systemSpawnBomb(entityId);
+		void systemMove(entityId) noexcept;
+		void systemSpawnCollectibleFromBox(entityId) noexcept;
+		void systemPickupItem(entityId, entityId) noexcept;
+		void systemParseInput(const entityId pId) noexcept;
+
+	public:
+		std::vector<Entity> _world;
 
 	private:
 		entityId curId;
 		gfx::Renderer &renderer;
 		vec3d<float> sizeGround;
-		std::string _queryMeshFromActionTarget(const ActionTarget) const;
-		std::vector<Entity> _world;
+		irr::core::stringw _queryMeshFromActionTarget(ActionTarget) const;
 	};
 }
 

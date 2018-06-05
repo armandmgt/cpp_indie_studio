@@ -17,21 +17,22 @@ namespace ecs {
 
 	class Entity {
 	public:
-		static std::size_t const bitSize = 10;
-
-		explicit Entity(std::vector<int> &bitset) : id(0)
-		{
-			for (auto &b : bitset) {
-				bit[b] = true;
-			}
-		};
 		template<class T>
 		T &getComponent() { return componentArray[T::getType()]; }
-		template <typename T, typename... Args> void addComponent(Args&&... args) {
+
+		template<class T>
+		bool hasComponent() { return bit[T::getType()]; }
+
+		template <typename T, typename... Args>
+		void addComponent(Args&&... args) {
+			bit[T::getType()] = true;
 			componentArray[T::getType()] = T{std::forward<Args>(args)...};
 		}
+
 		entityId id;
-		std::bitset<bitSize> bit;
+
+	private:
+		std::bitset<MAX_COMPONENTS> bit;
 		std::vector<Component> componentArray;
 	};
 }

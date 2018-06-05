@@ -31,7 +31,7 @@ bool ids::Event::getAction(event_t event)
 		{N, NOTHING}, {O, NOTHING}, {P, NOTHING}, {Q, MOVELEFT},
 		{R, NOTHING}, {S, MOVEDOWN}, {T, NOTHING}, {U, NOTHING},
 		{V, NOTHING}, {W, NOTHING}, {X, NOTHING}, {Y, NOTHING},
-		{Z, MOVEUP}, {SPACE, PAUSE}, {SUPPR, RESTART}, {ESCAPE, MENU},
+		{Z, MOVEUP}, {SPACE, PAUSE}, {DELE, RESTART}, {ESCAPE, MENU},
 		{MOUSE, CLICK}
 	};
 	for (auto it = eventType.begin(); it != eventType.end(); it++) {
@@ -60,7 +60,7 @@ bool ids::Event::getKey(irr::EKEY_CODE &keyCode)
 		{irr::KEY_KEY_S, S}, {irr::KEY_KEY_T, T}, {irr::KEY_KEY_U, U},
 		{irr::KEY_KEY_V, V}, {irr::KEY_KEY_W, W}, {irr::KEY_KEY_X, X},
 		{irr::KEY_KEY_Y, Y}, {irr::KEY_KEY_Z, Z},
-		{irr::KEY_SPACE, SPACE}, {irr::KEY_DELETE, SUPPR},
+		{irr::KEY_SPACE, SPACE}, {irr::KEY_DELETE, DELE},
 		{irr::KEY_ESCAPE, ESCAPE}, {irr::KEY_LBUTTON, MOUSE}
 	};
 
