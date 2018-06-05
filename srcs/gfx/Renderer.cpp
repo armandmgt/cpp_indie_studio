@@ -84,32 +84,33 @@ bool gfx::Renderer::getKeyPressed(irr::EKEY_CODE &keyCode) const
 irr::scene::ISceneNode *gfx::Renderer::createElem(irr::core::stringw const &filename)
 {
 	irr::scene::IMesh *mesh = smgr->getMesh(filename);
-	irr::scene::IMeshSceneNode *aniMesh;
+	irr::scene::IMeshSceneNode *sceneNode;
 
 	if (!mesh) {
 		return nullptr;
-	} else if (!(aniMesh = smgr->addMeshSceneNode(mesh))) {
+	} else if (!(sceneNode = smgr->addMeshSceneNode(mesh))) {
 		return nullptr;
 	} else {
-		aniMesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
-		return aniMesh;
+		sceneNode->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
+//		sceneNode->setDebugDataVisible(irr::scene::EDS_NORMALS);
+		return sceneNode;
 	}
 }
 
 irr::scene::IAnimatedMeshSceneNode *gfx::Renderer::createAnimatedElem(irr::core::stringw const &filename)
 {
 	irr::scene::IAnimatedMesh *mesh;
-	irr::scene::IAnimatedMeshSceneNode *aniMesh;
+	irr::scene::IAnimatedMeshSceneNode *sceneNode;
 
 	if (!(mesh = smgr->getMesh(filename.c_str()))) {
 		return nullptr;
-	} else if (!(aniMesh = smgr->addAnimatedMeshSceneNode(mesh))) {
+	} else if (!(sceneNode = smgr->addAnimatedMeshSceneNode(mesh))) {
 		return nullptr;
 	} else {
-		aniMesh->getMaterial(0).NormalizeNormals = true;
-		aniMesh->getMaterial(0).Lighting = true;
-		aniMesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
-		return aniMesh;
+		sceneNode->getMaterial(0).NormalizeNormals = true;
+		sceneNode->getMaterial(0).Lighting = true;
+		sceneNode->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
+		return sceneNode;
 	}
 }
 

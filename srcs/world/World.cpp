@@ -323,9 +323,10 @@ namespace ecs {
 			Graphic nGfx { renderer.createAnimatedElem(_queryMeshFromActionTarget(box.cCollectible.action).c_str())};
 			addComponent(newId, box.cCollectible);
 			addComponent(newId, box.cPosition);
-			addComponent(newId, nGfx);
 			_world.at(id).cGfx.sceneNode->remove();
-			renderer.setPosition(nGfx.sceneNode, {_world.at(id).cPosition.x * sizeGround.x, 0 , _world.at(id).cPosition.y * sizeGround.z});
+			renderer.setPosition(nGfx.sceneNode, {_world.at(id).cPosition.x * sizeGround.x, 0 , _world.at
+					(id).cPosition.y * sizeGround.z});
+			addComponent(newId, nGfx);
 			destroyEntity(id);
 		}
 	}
@@ -351,13 +352,13 @@ namespace ecs {
 	std::string world::_queryMeshFromActionTarget(const ActionTarget act) const {
 		switch (act) {
 		case INVINCIBILITY:
-			return "../../assets/meshs/ninja.b3d";
+			return "../../assets/meshs/speedup.obj";
 		case MAXBOMBS:
-			return "../../assets/meshs/ninja.b3d";
+			return "../../assets/meshs/speedup.obj";
 		case FOOTPOWERUP:
-			return "../../assets/meshs/ninja.b3d";
+			return "../../assets/meshs/speedup.obj";
 		case POWER:
-			return "../../assets/meshs/ninja.b3d";
+			return "../../assets/meshs/speedup.obj";
 		default:
 			throw std::logic_error("Unknown Action Target");
 		}
@@ -397,5 +398,13 @@ namespace ecs {
 				renderer.setPosition(entity.cGfx.sceneNode, pos);
 			}
 		}
+		for (auto &elem : _world) {
+			if ((elem.second.bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE
+			    && elem.second.cDestructible.item != nullptr) {
+				std::cout << "Pos : " << elem.first << std::endl;
+				systemSpawnCollectibleFromBox(elem.first);
+			}
+		}
+
 	}
 }

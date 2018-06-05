@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include <memory>
+#include <event/Event.hpp>
 #include "settingManager/settingManager.hpp"
 #include "gfx/Renderer.hpp"
 #include "world/World.hpp"
@@ -19,13 +20,20 @@ int main()
 	map.printMap();
 	gfx::Renderer renderer;
 	ecs::world ecs(renderer);
+	auto node = renderer.createElem("../../assets/meshs/bomb.obj");
+	renderer.setPosition(node, {10, 0, 10});
 	ecs.createGround(22, 20, "../../assets/meshs/ground.obj");
+	ids::Event event(renderer);
 	irr::EKEY_CODE key;
+	ids::event_t ev;
+
 	ecs._spawnEntitiesFromMap(std::move(map.getMap()));
 	ecs.drawEntities();
 	while (renderer.isRunning()) {
-		if (renderer.getKeyPressed(key) && key == irr::KEY_ESCAPE)
+		if (event.pollEvent(key, ev)) {
+			if (ev.value.key == ids::ESCAPE)
 			renderer.close();
+		}
 		renderer.render();
 	}
 	// ecs.debug();
