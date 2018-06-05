@@ -42,9 +42,8 @@ void gfx::Renderer::render()
 	smgr->drawAll();
 	guienv->drawAll();
 	driver->enableMaterial2D();
-	for (auto &image : images) {
+	for (auto &image : images)
 		driver->draw2DImage(image.texture, {image.position.x, image.position.y}, image.size);
-	}
 	driver->enableMaterial2D(false);
 	driver->endScene();
 }

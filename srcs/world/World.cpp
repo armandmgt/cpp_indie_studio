@@ -22,10 +22,10 @@ namespace ecs {
 		static std::unordered_map<entityType, std::bitset<Entity::bitSize>> const concordMap = {
 			{PLAYER,  COMP_POSITION | COMP_VELOCITY | COMP_CHARACTER | COMP_ORIENTATION |
 				COMP_DESTRUCTIBLE | COMP_GRAPHIC},
-			{POWERUP, COMP_POSITION | COMP_COLLECTIBLE},
-			{BOMB, COMP_POSITION | COMP_VELOCITY | COMP_EXPLOSION},
+			{POWERUP, COMP_POSITION | COMP_COLLECTIBLE | COMP_GRAPHIC},
+			{BOMB, COMP_POSITION | COMP_VELOCITY | COMP_EXPLOSION | COMP_GRAPHIC},
 			{U_WALL, COMP_POSITION | COMP_GRAPHIC},
-			{WALL, COMP_POSITION | COMP_COLLECTIBLE | COMP_GRAPHIC},
+			{WALL, COMP_POSITION | COMP_DESTRUCTIBLE | COMP_GRAPHIC},
 			{FLAMME,  COMP_POSITION},
 		};
 
@@ -74,9 +74,15 @@ namespace ecs {
 	void world::_spawnWall(ActionTarget type, long posX, long posY) {
 		Destructible des {true , std::make_unique<Collectible>(type)};
 		Position pos { static_cast<float>(posX), static_cast<float>(posY) };
+		Graphic gfx {renderer.createElem("../../assets/meshs/box.obj")};
+
+		if (gfx.sceneNode == nullptr)
+			throw std::runtime_error("Wall not load");
+		renderer.addTexture(gfx.sceneNode, "../../assets/textures/box.jpg");
 		entityId id(createEntity(WALL));
 		addComponent(id, pos);
 		addComponent(id, std::move(des));
+		addComponent(id, gfx);
 	}
 
 	void world::_spawnUWall(long posX, long posY) {
@@ -310,14 +316,17 @@ namespace ecs {
 		}
 	}
 
-	void world::systemSpawnCollectibleFromBox(const entityId id) {
-		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE) {
+	void world::systemSpawnCollectibleFromBox(entityId id) {
+		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE) {
 			auto &box(this->_world.at(id));
-			const entityId newId(this->createEntity(POWERUP));
-			const Graphic nGfx { renderer.createAnimatedElem(queryMeshFromActionTarget(box.cCollectible.action).c_str())};
+			entityId newId(this->createEntity(POWERUP));
+			Graphic nGfx { renderer.createAnimatedElem(queryMeshFromActionTarget(box.cCollectible.action).c_str())};
 			addComponent(newId, box.cCollectible);
 			addComponent(newId, box.cPosition);
 			addComponent(newId, nGfx);
+			_world.at(id).cGfx.sceneNode->remove();
+			renderer.setPosition(nGfx.sceneNode, {_world.at(id).cPosition.x * sizeGround.x, 0 , _world.at
+					(id).cPosition.y * sizeGround.z});
 			destroyEntity(id);
 		}
 	}
@@ -360,7 +369,8 @@ namespace ecs {
 	}
 
 	void world::drawEntities() {
-		for (auto &elem : _world) {
+		for (auto &elem : _world)
+		{
 			auto &entity = elem.second;
 			if (((entity.bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) &&
 				(entity.bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC) {
