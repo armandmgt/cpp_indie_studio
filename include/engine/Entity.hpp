@@ -12,7 +12,7 @@
 
 namespace ecs {
 
-	using entityId = long;
+	using entityId = unsigned long;
 
 	class Entity {
 	public:

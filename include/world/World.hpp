@@ -71,7 +71,7 @@ namespace ecs {
 		entityId curId;
 		gfx::Renderer &renderer;
 		vec3d<float> sizeGround;
-		std::unordered_map<entityId, Entity> _world;
+		std::vector<Entity> _world;
 	};
 }
 
