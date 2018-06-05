@@ -325,8 +325,7 @@ namespace ecs {
 			addComponent(newId, box.cPosition);
 			addComponent(newId, nGfx);
 			_world.at(id).cGfx.sceneNode->remove();
-			renderer.setPosition(nGfx.sceneNode, {_world.at(id).cPosition.x * sizeGround.x, 0 , _world.at
-					(id).cPosition.y * sizeGround.z});
+			renderer.setPosition(nGfx.sceneNode, {_world.at(id).cPosition.x * sizeGround.x, 0 , _world.at(id).cPosition.y * sizeGround.z});
 			destroyEntity(id);
 		}
 	}
