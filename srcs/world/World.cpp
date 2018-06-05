@@ -119,7 +119,7 @@ namespace ecs {
 		Character chara {false, false, 1, 1};
 		Destructible des {true, nullptr};
 		Orientation ori {0};
-		Graphic gfx {renderer.createAnimatedElem("../../assets/meshs/ninja.b3d")};
+		Graphic gfx { renderer.createAnimatedElem("../../assets/meshs/ninja.b3d") };
 
 		entityId id(createEntity(PLAYER));
 		addComponent(id, pos);
@@ -301,11 +301,15 @@ namespace ecs {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER) {
 			entityId idBomb(createEntity(BOMB));
 			Velocity vel {0, 0};
-			Explosion exp {1, 5}; //TODO use character's power
+			Explosion exp {this->_world.at(id).cCharacter.power, 5};
+			Graphic gfx {renderer.createAnimatedElem("../../assets/meshs/bomb.obj")};
 
+			if (gfx.sceneNode == nullptr)
+				throw std::runtime_error("Wall not load");
 			addComponent(idBomb, getPosition(id));
 			addComponent(idBomb, vel);
 			addComponent(idBomb, exp);
+			addComponent(idBomb, gfx);
 		}
 	}
 
@@ -322,6 +326,7 @@ namespace ecs {
 			auto &box(this->_world.at(id));
 			entityId newId(this->createEntity(POWERUP));
 			Graphic nGfx { renderer.createAnimatedElem(_queryMeshFromActionTarget(box.cCollectible.action).c_str())};
+
 			addComponent(newId, box.cCollectible);
 			addComponent(newId, box.cPosition);
 			auto &pos = getPosition(id);
@@ -353,13 +358,13 @@ namespace ecs {
 	std::string world::_queryMeshFromActionTarget(const ActionTarget act) const {
 		switch (act) {
 		case KICK:
-			return "../../assets/meshs/speedup.obj";
+			return "../../assets/meshs/foot.obj";
 		case MAXBOMBS:
-			return "../../assets/meshs/speedup.obj";
+			return "../../assets/meshs/max-bomb.obj";
 		case FOOTPOWERUP:
 			return "../../assets/meshs/speedup.obj";
 		case POWER:
-			return "../../assets/meshs/speedup.obj";
+			return "../../assets/meshs/powerup.obj";
 		default:
 			throw std::logic_error("Unknown Action Target");
 		}
