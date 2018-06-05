@@ -134,7 +134,7 @@ namespace ecs {
 	}
 
 	void world::systemSpawnBomb(entityId id) noexcept {
-		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER) {
+		if (_world.at(id).bit[COMP_CHARACTER]) {
 			auto &ent = createEntity(BOMB);
 			Velocity vel {0, 0};
 			Explosion exp {_world.at(id).getComponent<Character>().power, 5};
@@ -147,7 +147,7 @@ namespace ecs {
 	}
 
 	void world::systemMove(entityId id) noexcept {
-		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY) {
+		if (_world.at(id).bit[COMP_VELOCITY]) {
 			auto &entity(this->_world.at(id));
 			entity.getComponent<Position>().x += entity.getComponent<Velocity>().x;
 			entity.getComponent<Position>().y += entity.getComponent<Velocity>().y;
@@ -155,7 +155,7 @@ namespace ecs {
 	}
 
 	void world::systemSpawnCollectibleFromBox(entityId id) noexcept {
-		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE) {
+		if (_world.at(id).bit[COMP_DESTRUCTIBLE]) {
 			auto &box= this->_world.at(id);
 			auto &ent = createEntity(POWERUP);
 			Graphic nGfx { renderer.createAnimatedElem(_queryMeshFromActionTarget(box.cCollectible.action).c_str())};
@@ -224,8 +224,7 @@ namespace ecs {
 	void world::drawEntities() {
 		for (auto &elem : _world)
 		{
-			if (((elem.bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) &&
-				(elem.bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC) {
+			if (elem.bit[COMP_POSITION] && elem.bit[COMP_GRAPHIC]) {
 				vec3d<float> pos {
 					elem.getComponent<Position>().x * sizeGround.x,
 					0,

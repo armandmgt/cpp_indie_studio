@@ -36,7 +36,7 @@ namespace ecs {
 
 	};
 
-	struct Character : public Component{
+	struct Character : public Component {
 		static comp getType() { return COMP_CHARACTER; };
 		bool invincibility;
 		bool footPowerUp;
