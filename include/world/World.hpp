@@ -36,28 +36,7 @@ namespace ecs {
 		void _spawnBWall(long posX, long posY);
 		void _spawnPlayer(long posX, long posY);
 
-		bool addComponent(Entity &ent, Position pos) noexcept;
-		bool addComponent(Entity &ent, Character chara) noexcept;
-		bool addComponent(Entity &ent, Explosion exp) noexcept;
-		bool addComponent(Entity &ent, Collectible col) noexcept;
-		bool addComponent(Entity &ent, Velocity vel) noexcept;
-		bool addComponent(Entity &ent, Input in) noexcept;
-		bool addComponent(Entity &ent, AiInput in) noexcept;
-		bool addComponent(Entity &ent, Destructible des) noexcept;
-		bool addComponent(Entity &ent, Graphic gfx) noexcept;
-		bool addComponent(Entity &ent, Orientation orientation) noexcept;
-
 		Entity &getEntity(entityId id);
-		Orientation &getOrientation(entityId id);
-		Position &getPosition(entityId id);
-		Character &getCharacter(entityId id);
-		Explosion &getExplosion(entityId id);
-		Collectible &getCollectible(entityId id);
-		Velocity &getVelocity(entityId id);
-		Input &getInput(entityId id);
-		AiInput &getAiInput(entityId id);
-		Destructible &getDestructible(entityId id);
-		Graphic &getGraphic(entityId id);
 		void debug();
 
 		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);

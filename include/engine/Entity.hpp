@@ -8,6 +8,7 @@
 #define CPP_INDIE_STUDIO_ENTITIES_HPP
 
 #include <bitset>
+#include <vector>
 #include "Components.hpp"
 
 namespace ecs {
@@ -18,22 +19,20 @@ namespace ecs {
 	public:
 		static std::size_t const bitSize = 10;
 
-		explicit Entity(std::bitset<bitSize> bitset) : id(0),
-							       bit(bitset)
-		{};
+		explicit Entity(std::vector<int> &bitset) : id(0)
+		{
+			for (auto &b : bitset) {
+				bit[b] = true;
+			}
+		};
+		template<class T>
+		T &getComponent() { return componentArray[T::getType()]; }
+		template <typename T, typename... Args> void addComponent(Args&&... args) {
+			componentArray[T::getType()] = T{std::forward<Args>(args)...};
+		}
 		entityId id;
 		std::bitset<bitSize> bit;
-
-		Character cCharacter{};
-		Explosion cExplosion{};
-		Collectible cCollectible{};
-		Velocity cVelocity{};
-		Position cPosition{};
-		Input cInput{};
-		AiInput cAiInput{};
-		Destructible cDestructible{};
-		Graphic cGfx{};
-		Orientation cOrientation{};
+		std::vector<Component> componentArray;
 	};
 }
 
