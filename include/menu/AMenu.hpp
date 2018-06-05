@@ -23,7 +23,8 @@
 				bool hovered;
 			};
 		public:
-			explicit AMenu(gfx::Renderer *rend);
+			explicit AMenu(gfx::Renderer *rend, SceneId id);
+			AMenu() = default;
 			~AMenu() = default;
 			void computeEvent(vec2d<int> &mousePos);
 			SceneId getSceneId();
@@ -32,6 +33,7 @@
 			bool buttonEvent();
 			gfx::Renderer *_rend;
 			vec2d<int> _posBackground;
+			irr::core::stringw _backgroundImg;
 			std::vector<struct button> _infoButtons;
 			SceneId		_id;
 			vec2d<int>	_mousePos;

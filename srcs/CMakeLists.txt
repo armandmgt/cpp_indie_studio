@@ -9,7 +9,7 @@ set(SOURCE_FILES
         ../include/settingManager/settingManager.hpp ../include/gfx/Image2D.hpp
         Menu/AMenu.cpp
         ../include/menu/AMenu.hpp ../include/IScene.hpp ../include/menu/Launch.hpp
-        Menu/Launch.cpp)
+        Menu/Launch.cpp ../include/menu/Settings.hpp Menu/Settings.cpp)
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4 -lIrrlicht")
 else()

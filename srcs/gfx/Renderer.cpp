@@ -5,6 +5,7 @@
 ** Renderable
 */
 
+#include <irrlicht/ITimer.h>
 #include <iostream>
 #include "gfx/Renderer.hpp"
 #include "irrlicht/driverChoice.h"
@@ -100,6 +101,23 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, vec2d<int> &posit
 	irr::video::ITexture *text = driver->getTexture(filename);
 	images.emplace_back(text, positon, size);
 }
+
+void gfx::Renderer::remove2DImage(vec2d<int> &position)
+{
+	auto it = images.begin();
+	while ( it != images.end()) {
+		if (position.x == it->position.x && position.y == it->position.y) {
+			it->image->drop();
+			images.erase(it);
+			return;
+		}
+		it++;
+	}
+}
+
+//Timer
+//irr::ITimer *timer = device->getTimer();
+//std::cout << timer->getTime() << std::endl;
 
 void gfx::Renderer::load2D(irr::core::stringw const &filename, vec2d<int> &positon)
 {

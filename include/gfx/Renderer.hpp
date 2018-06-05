@@ -42,6 +42,7 @@ namespace gfx {
 		void load2D(irr::core::stringw const &filename, vec2d<int> &positon,
 			    irr::core::rect<irr::s32> &size);
 		void load2D(irr::core::stringw const &filename, vec2d<int> &positon);
+		void remove2DImage(vec2d<int> &position);
 
 	private:
 

@@ -11,7 +11,6 @@
 #include "menu/AMenu.hpp"
 
 namespace ids { namespace menu {
-
 	class Launch : public AMenu {
 	public:
 		struct items {
@@ -22,7 +21,7 @@ namespace ids { namespace menu {
 		};
 
 		explicit Launch(gfx::Renderer *rend);
-		~Launch() = default;
+		~Launch();
 	private:
 		void decorateScene();
 		std::vector<struct items> _items;

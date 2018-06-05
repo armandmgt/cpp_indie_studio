@@ -18,5 +18,4 @@ namespace ids {
 			virtual SceneId getSceneId() = 0;
 		};
 }
-
 #endif //SCENE_HPP
