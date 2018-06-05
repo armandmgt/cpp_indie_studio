@@ -17,7 +17,7 @@ namespace ecs {
 
 	}
 
-	entityId world::createEntity(entityType type)
+	Entity &world::createEntity(entityType type)
 	{
 		static std::unordered_map<entityType, std::bitset<Entity::bitSize>> const concordMap = {
 			{PLAYER,  COMP_POSITION | COMP_VELOCITY | COMP_CHARACTER | COMP_ORIENTATION |
@@ -32,7 +32,7 @@ namespace ecs {
 		std::bitset<Entity::bitSize> EntityBit(concordMap.at(type));
 		Entity newEntity(EntityBit);
 		_world.emplace_back(std::move(newEntity));
-		return _world.size() - 1;
+		return _world.back();
 	}
 
 	void world::destroyEntity(entityId id) {
@@ -80,10 +80,10 @@ namespace ecs {
 		if (gfx.sceneNode == nullptr)
 			throw std::runtime_error("Wall not load");
 		renderer.addTexture(gfx.sceneNode, "../../assets/textures/box.jpg");
-		entityId id(createEntity(WALL));
-		addComponent(id, pos);
-		addComponent(id, std::move(des));
-		addComponent(id, gfx);
+		auto &ent = createEntity(WALL);
+		addComponent(ent, pos);
+		addComponent(ent, std::move(des));
+		addComponent(ent, gfx);
 	}
 
 	void world::_spawnUWall(long posX, long posY) {
@@ -92,9 +92,9 @@ namespace ecs {
 
 		if (gfx.sceneNode == nullptr)
 			throw std::runtime_error("Could not load wall asset");
-		entityId id(createEntity(U_WALL));
-		addComponent(id, pos);
-		addComponent(id, gfx);
+		auto &ent = createEntity(U_WALL);
+		addComponent(ent, pos);
+		addComponent(ent, gfx);
 	}
 
 	void world::_spawnBWall(long posX, long posY)
@@ -106,10 +106,10 @@ namespace ecs {
 		if (gfx.sceneNode == nullptr)
 			throw std::runtime_error("Wall not load");
 		renderer.addTexture(gfx.sceneNode, "../../assets/textures/box.jpg");
-		entityId id(createEntity(U_WALL));
-  		addComponent(id, pos);
-		addComponent(id, std::move(des));
-		addComponent(id, gfx);
+		auto &ent = createEntity(U_WALL);
+  		addComponent(ent, pos);
+		addComponent(ent, std::move(des));
+		addComponent(ent, gfx);
 	}
 
 	void world::_spawnPlayer(long posX, long posY)
@@ -121,100 +121,100 @@ namespace ecs {
 		Orientation ori {0};
 		Graphic gfx { renderer.createAnimatedElem("../../assets/meshs/ninja.b3d") };
 
-		entityId id(createEntity(PLAYER));
-		addComponent(id, pos);
-		addComponent(id, vel);
-		addComponent(id, chara);
-		addComponent(id, ori);
-		addComponent(id, gfx);
-		addComponent(id, std::move(des));
+		auto &ent = createEntity(PLAYER);
+		addComponent(ent, pos);
+		addComponent(ent, vel);
+		addComponent(ent, chara);
+		addComponent(ent, ori);
+		addComponent(ent, gfx);
+		addComponent(ent, std::move(des));
 	}
 
-	bool world::addComponent(entityId id, Position pos) noexcept
+	bool world::addComponent(Entity &ent, Position pos) noexcept
 	{
-		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) {
-			_world.at(id).cPosition = pos;
+		if ((ent.bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) {
+			ent.cPosition = pos;
 			return true;
 		}
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Character chara) noexcept
+	bool world::addComponent(Entity &ent, Character chara) noexcept
 	{
-		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER) {
-			_world.at(id).cCharacter = chara;
+		if ((ent.bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER) {
+			ent.cCharacter = chara;
 			return true;
 		}
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Explosion exp) noexcept
+	bool world::addComponent(Entity &ent, Explosion exp) noexcept
 	{
-		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_EXPLOSION)) == COMP_EXPLOSION) {
-			_world.at(id).cExplosion = exp;
+		if ((ent.bit & std::bitset<Entity::bitSize>(COMP_EXPLOSION)) == COMP_EXPLOSION) {
+			ent.cExplosion = exp;
 			return true;
 		}
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Collectible col) noexcept
+	bool world::addComponent(Entity &ent, Collectible col) noexcept
 	{
-		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_COLLECTIBLE)) == COMP_COLLECTIBLE) {
-			_world.at(id).cCollectible = col;
+		if ((ent.bit & std::bitset<Entity::bitSize>(COMP_COLLECTIBLE)) == COMP_COLLECTIBLE) {
+			ent.cCollectible = col;
 			return true;
 		}
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Velocity vel) noexcept
+	bool world::addComponent(Entity &ent, Velocity vel) noexcept
 	{
-		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY) {
-			_world.at(id).cVelocity = vel;
+		if ((ent.bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY) {
+			ent.cVelocity = vel;
 			return true;
 		}
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Input in) noexcept
+	bool world::addComponent(Entity &ent, Input in) noexcept
 	{
-		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_INPUT)) == COMP_INPUT) {
-			_world.at(id).cInput = in;
+		if ((ent.bit & std::bitset<Entity::bitSize>(COMP_INPUT)) == COMP_INPUT) {
+			ent.cInput = in;
 			return true;
 		}
 		return false;
 	}
 
-	bool world::addComponent(entityId id, AiInput in) noexcept
+	bool world::addComponent(Entity &ent, AiInput in) noexcept
 	{
-		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_AIINPUT)) == COMP_AIINPUT) {
-			_world.at(id).cAiInput = in;
+		if ((ent.bit & std::bitset<Entity::bitSize>(COMP_AIINPUT)) == COMP_AIINPUT) {
+			ent.cAiInput = in;
 			return true;
 		}
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Destructible des) noexcept
+	bool world::addComponent(Entity &ent, Destructible des) noexcept
 	{
-		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE) {
-			_world.at(id).cDestructible = std::move(des);
+		if ((ent.bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE) {
+			ent.cDestructible = std::move(des);
 			return true;
 		}
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Graphic gfx) noexcept
+	bool world::addComponent(Entity &ent, Graphic gfx) noexcept
 	{
-		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC) {
-			_world.at(id).cGfx = gfx;
+		if ((ent.bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC) {
+			ent.cGfx = gfx;
 			return true;
 		}
 		return false;
 	}
 
-	bool world::addComponent(entityId id, Orientation orientation) noexcept
+	bool world::addComponent(Entity &ent, Orientation orientation) noexcept
 	{
-		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_ORIENTATION)) == COMP_ORIENTATION) {
-			_world.at(id).cOrientation = orientation;
+		if ((ent.bit & std::bitset<Entity::bitSize>(COMP_ORIENTATION)) == COMP_ORIENTATION) {
+			ent.cOrientation = orientation;
 			return true;
 		}
 		return false;
@@ -231,89 +231,89 @@ namespace ecs {
 		}
 	}
 
-	Position &world::getPosition(const entityId id) {
+	Position &world::getPosition(entityId id) {
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) {
 			return _world.at(id).cPosition;
 		}
 		throw std::logic_error("No position component");
 	}
 
-	Entity &world::getEntity(const entityId id) {
+	Entity &world::getEntity(entityId id) {
 		return this->_world.at(id);
 	}
 
-	Character &world::getCharacter(const entityId id) {
+	Character &world::getCharacter(entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER)
 			return this->_world.at(id).cCharacter;
 		throw std::logic_error("No character component");
 	}
 
-	Explosion &world::getExplosion(const entityId id) {
+	Explosion &world::getExplosion(entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_EXPLOSION)) == COMP_EXPLOSION)
 			return this->_world.at(id).cExplosion;
 		throw std::logic_error("No Explosion component");
 	}
 
-	Collectible &world::getCollectible(const entityId id) {
+	Collectible &world::getCollectible(entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_COLLECTIBLE)) == COMP_COLLECTIBLE)
 			return this->_world.at(id).cCollectible;
 		throw std::logic_error("No collectible component");
 	}
 
-	Velocity &world::getVelocity(const entityId id) {
+	Velocity &world::getVelocity(entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY)
 			return this->_world.at(id).cVelocity;
 		throw std::logic_error("No velocity component");
 	}
 
-	Input &world::getInput(const entityId id) {
+	Input &world::getInput(entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_INPUT)) == COMP_INPUT)
 			return this->_world.at(id).cInput;
 		throw std::logic_error("No input component");
 	}
 
-	Orientation &world::getOrientation(const entityId id)
+	Orientation &world::getOrientation(entityId id)
 	{
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_ORIENTATION)) == COMP_ORIENTATION)
 			return this->_world.at(id).cOrientation;
 		throw std::logic_error("No orientation component");
 	}
 
-	AiInput &world::getAiInput(const entityId id) {
+	AiInput &world::getAiInput(entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_AIINPUT)) == COMP_AIINPUT)
 			return this->_world.at(id).cAiInput;
 		throw std::logic_error("No AiInput component");
 	}
 
-	Destructible &world::getDestructible(const entityId id) {
+	Destructible &world::getDestructible(entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE)
 			return this->_world.at(id).cDestructible;
 		throw std::logic_error("No Destructible component");
 	}
 
-	Graphic &world::getGraphic(const entityId id) {
+	Graphic &world::getGraphic(entityId id) {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC)
 			return this->_world.at(id).cGfx;
 		throw std::logic_error("No Graphic component");
 	}
 
-	void world::systemSpawnBomb(const entityId id) noexcept {
+	void world::systemSpawnBomb(entityId id) noexcept {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER) {
-			entityId idBomb(createEntity(BOMB));
+			auto &ent = createEntity(BOMB);
 			Velocity vel {0, 0};
 			Explosion exp {this->_world.at(id).cCharacter.power, 5};
 			Graphic gfx {renderer.createAnimatedElem("../../assets/meshs/bomb.obj")};
 
 			if (gfx.sceneNode == nullptr)
 				throw std::runtime_error("Wall not load");
-			addComponent(idBomb, getPosition(id));
-			addComponent(idBomb, vel);
-			addComponent(idBomb, exp);
-			addComponent(idBomb, gfx);
+			addComponent(ent, getPosition(id));
+			addComponent(ent, vel);
+			addComponent(ent, exp);
+			addComponent(ent, gfx);
 		}
 	}
 
-	void world::systemMove(const entityId id) noexcept {
+	void world::systemMove(entityId id) noexcept {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY) {
 			auto &entity(this->_world.at(id));
 			entity.cPosition.x += entity.cVelocity.x;
@@ -321,24 +321,24 @@ namespace ecs {
 		}
 	}
 
-	void world::systemSpawnCollectibleFromBox(const entityId id) noexcept {
+	void world::systemSpawnCollectibleFromBox(entityId id) noexcept {
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE) {
 			auto &box(this->_world.at(id));
-			entityId newId(this->createEntity(POWERUP));
+			auto &ent = createEntity(POWERUP);
 			Graphic nGfx { renderer.createAnimatedElem(_queryMeshFromActionTarget(box.cCollectible.action).c_str())};
 
-			addComponent(newId, box.cCollectible);
-			addComponent(newId, box.cPosition);
+			addComponent(ent, box.cCollectible);
+			addComponent(ent, box.cPosition);
 			auto &pos = getPosition(id);
 			renderer.setPosition(nGfx.sceneNode, {pos.x * sizeGround.x, 0 , pos.y * sizeGround.z});
-			addComponent(newId, nGfx);
+			addComponent(ent, nGfx);
 			_world.at(id).cGfx.sceneNode->remove();
 			destroyEntity(id);
 		}
 	}
 
 	//TODO: Check the collision between the item and the player
-	void world::systemPickupItem(const entityId iId, const entityId pId) noexcept {
+	void world::systemPickupItem(entityId iId, entityId pId) noexcept {
 		// ...collision check ?
 		auto &player(_world.at(pId));
 

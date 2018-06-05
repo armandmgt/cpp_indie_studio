@@ -28,7 +28,7 @@ namespace ecs {
 		explicit world(gfx::Renderer &renderer);
 		~world() = default;
 
-		entityId createEntity(entityType type);
+		Entity &createEntity(entityType type);
 		void destroyEntity(entityId);
 		void _spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
 		void _spawnUWall(long posX, long posY);
@@ -36,16 +36,16 @@ namespace ecs {
 		void _spawnBWall(long posX, long posY);
 		void _spawnPlayer(long posX, long posY);
 
-		bool addComponent(entityId id, Position pos) noexcept;
-		bool addComponent(entityId id, Character chara) noexcept;
-		bool addComponent(entityId id, Explosion exp) noexcept;
-		bool addComponent(entityId id, Collectible col) noexcept;
-		bool addComponent(entityId id, Velocity vel) noexcept;
-		bool addComponent(entityId id, Input in) noexcept;
-		bool addComponent(entityId id, AiInput in) noexcept;
-		bool addComponent(entityId id, Destructible des) noexcept;
-		bool addComponent(entityId id, Graphic gfx) noexcept;
-		bool addComponent(entityId id, Orientation orientation) noexcept;
+		bool addComponent(Entity &ent, Position pos) noexcept;
+		bool addComponent(Entity &ent, Character chara) noexcept;
+		bool addComponent(Entity &ent, Explosion exp) noexcept;
+		bool addComponent(Entity &ent, Collectible col) noexcept;
+		bool addComponent(Entity &ent, Velocity vel) noexcept;
+		bool addComponent(Entity &ent, Input in) noexcept;
+		bool addComponent(Entity &ent, AiInput in) noexcept;
+		bool addComponent(Entity &ent, Destructible des) noexcept;
+		bool addComponent(Entity &ent, Graphic gfx) noexcept;
+		bool addComponent(Entity &ent, Orientation orientation) noexcept;
 
 		Entity &getEntity(entityId id);
 		Orientation &getOrientation(entityId id);
