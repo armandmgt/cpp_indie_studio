@@ -31,12 +31,13 @@ namespace ecs {
 
 		std::bitset<Entity::bitSize> EntityBit(concordMap.at(type));
 		Entity newEntity(EntityBit);
-		_world.emplace(curId++, std::move(newEntity));
+		_world.emplace_back(std::move(newEntity));
 		return _world.size() - 1;
 	}
 
 	void world::destroyEntity(entityId id) {
-		_world.erase(id);
+		auto pos = _world.begin() + id;
+		_world.erase(pos);
 	}
 
 	void world::_spawnEntitiesFromMap(std::vector<std::string> &&gameMap) {
@@ -222,11 +223,11 @@ namespace ecs {
 	void world::debug()
 	{
 		for (auto &it : _world) {
-			std::cout << "Type : [" << it.first << "]" << std::endl;
-			if ((it.second.bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION)
-				std::cout << "Position : [" << it.second.cPosition.x << ", " << it.second.cPosition.y << "]" << std::endl;
-			if ((it.second.bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY)
-				std::cout << "Velocity : [" << it.second.cVelocity.x << ", " << it.second.cVelocity.y << "]" << std::endl;
+			std::cout << "Type : [" << it.id << "]" << std::endl;
+			if ((it.bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION)
+				std::cout << "Position : [" << it.cPosition.x << ", " << it.cPosition.y << "]" << std::endl;
+			if ((it.bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY)
+				std::cout << "Velocity : [" << it.cVelocity.x << ", " << it.cVelocity.y << "]" << std::endl;
 		}
 	}
 
@@ -296,7 +297,7 @@ namespace ecs {
 		throw std::logic_error("No Graphic component");
 	}
 
-	void world::systemSpawnBomb(const entityId id) {
+	void world::systemSpawnBomb(const entityId id) noexcept {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_CHARACTER)) == COMP_CHARACTER) {
 			entityId idBomb(createEntity(BOMB));
 			Velocity vel {0, 0};
@@ -308,7 +309,7 @@ namespace ecs {
 		}
 	}
 
-	void world::systemMove(const entityId id) {
+	void world::systemMove(const entityId id) noexcept {
 		if ((this->_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_VELOCITY)) == COMP_VELOCITY) {
 			auto &entity(this->_world.at(id));
 			entity.cPosition.x += entity.cVelocity.x;
@@ -316,23 +317,40 @@ namespace ecs {
 		}
 	}
 
-	void world::systemSpawnCollectibleFromBox(entityId id) {
+	void world::systemSpawnCollectibleFromBox(const entityId id) noexcept {
 		if ((_world.at(id).bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE) {
 			auto &box(this->_world.at(id));
 			entityId newId(this->createEntity(POWERUP));
-			Graphic nGfx { renderer.createAnimatedElem(queryMeshFromActionTarget(box.cCollectible.action).c_str())};
+			Graphic nGfx { renderer.createAnimatedElem(_queryMeshFromActionTarget(box.cCollectible.action).c_str())};
 			addComponent(newId, box.cCollectible);
 			addComponent(newId, box.cPosition);
-			_world.at(id).cGfx.sceneNode->remove();
-			renderer.setPosition(nGfx.sceneNode, {_world.at(id).cPosition.x * sizeGround.x, 0 , _world.at
-					(id).cPosition.y * sizeGround.z});
+			auto &pos = getPosition(id);
+			renderer.setPosition(nGfx.sceneNode, {pos.x * sizeGround.x, 0 , pos.y * sizeGround.z});
 			addComponent(newId, nGfx);
+			_world.at(id).cGfx.sceneNode->remove();
 			destroyEntity(id);
 		}
 	}
 
+	//TODO: Check the collision between the item and the player
+	void world::systemPickupItem(const entityId iId, const entityId pId) noexcept {
+		// ...collision check ?
+		auto &player(_world.at(pId));
+
+		//TODO: event to end invincibility
+		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(INVINCIBILITY)) == INVINCIBILITY)
+			player.cCharacter.invincibility = true;
+		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(MAXBOMBS)) == MAXBOMBS)
+			player.cCharacter.maxBombs++;
+		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(FOOTPOWERUP)) == FOOTPOWERUP)
+			player.cCharacter.footPowerUp = true;
+		if ((_world.at(iId).bit & std::bitset<Entity::bitSize>(POWER)) == POWER)
+			player.cCharacter.power++;
+	}
+
 	// ../../assets/meshs/ninja.b3d
-	std::string world::queryMeshFromActionTarget(const ActionTarget act) const {
+	//TODO remove breaks
+	std::string world::_queryMeshFromActionTarget(const ActionTarget act) const {
 		switch (act) {
 		case INVINCIBILITY:
 			return "../../assets/meshs/speedup.obj";
@@ -368,24 +386,17 @@ namespace ecs {
 	}
 
 	void world::drawEntities() {
-		for (auto &elem : _world) {
-			auto &entity = elem.second;
-			if (((entity.bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) &&
-				(entity.bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC) {
+		for (auto &elem : _world)
+		{
+			if (((elem.bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) &&
+				(elem.bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC) {
 				vec3d<float> pos {
-					entity.cPosition.x * sizeGround.x,
+					elem.cPosition.x * sizeGround.x,
 					0,
-					entity.cPosition.y * sizeGround.z
+					elem.cPosition.y * sizeGround.z
 				};
-				renderer.setPosition(entity.cGfx.sceneNode, pos);
+				renderer.setPosition(elem.cGfx.sceneNode, pos);
 			}
 		}
-		for (auto &elem : _world) {
-			if ((elem.second.bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE
-			    && elem.second.cDestructible.item) {
-				systemSpawnCollectibleFromBox(elem.first);
-			}
-		}
-
 	}
 }
