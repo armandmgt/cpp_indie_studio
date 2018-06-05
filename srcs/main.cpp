@@ -19,6 +19,8 @@ int main()
 	map.printMap();
 	gfx::Renderer renderer;
 	ecs::world ecs(renderer);
+	auto node = renderer.createElem("../../assets/meshs/speedup.obj");
+	renderer.setPosition(node, {10, 0, 10});
 	ecs.createGround(22, 20, "../../assets/meshs/ground.obj");
 	irr::EKEY_CODE key;
 	ecs._spawnEntitiesFromMap(std::move(map.getMap()));
