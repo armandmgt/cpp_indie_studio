@@ -21,6 +21,9 @@ set(SOURCE_FILES
         gfx/Renderer.cpp
         ../include/gfx/Renderer.hpp gfx/EventReceiver.cpp
         ../include/gfx/EventReceiver.hpp
+		../include/event/Event.hpp
+		../srcs/event/Event.cpp
+		../include/enum/EventEnum.hpp
         settingManager/settingManager.cpp
         ../include/settingManager/settingManager.hpp
         ../include/gfx/Image2D.hpp)

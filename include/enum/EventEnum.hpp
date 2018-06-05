@@ -12,15 +12,16 @@
 
 		enum eventKey
 		{
-			NONE, UP, DOWN, RIGHT, LEFT, PAUSE, RESTART, MENU,
-			QUIT, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P,
-			Q, R, S, T, U, V, W, X, Y, Z
+			NONE, UP, DOWN, RIGHT, LEFT, A, B, C, D, E, F, G, H,
+			I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
+			SPACE, SUPPR, ESCAPE, MOUSE
 		};
 
 		enum eventAction
 		{
 			NOTHING, XPLOSE, PUTBOMB, PUTITEM, MOVEUP,
-			MOVEDOWN, MOOVERIGHT, MOVELEFT
+			MOVEDOWN, MOVERIGHT, MOVELEFT, PAUSE, RESTART, MENU,
+			QUIT, CLICK
 		};
 	}
 
