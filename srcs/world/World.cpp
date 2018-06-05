@@ -368,8 +368,7 @@ namespace ecs {
 	}
 
 	void world::drawEntities() {
-		for (auto &elem : _world)
-		{
+		for (auto &elem : _world) {
 			auto &entity = elem.second;
 			if (((entity.bit & std::bitset<Entity::bitSize>(COMP_POSITION)) == COMP_POSITION) &&
 				(entity.bit & std::bitset<Entity::bitSize>(COMP_GRAPHIC)) == COMP_GRAPHIC) {
@@ -383,8 +382,7 @@ namespace ecs {
 		}
 		for (auto &elem : _world) {
 			if ((elem.second.bit & std::bitset<Entity::bitSize>(COMP_DESTRUCTIBLE)) == COMP_DESTRUCTIBLE
-			    && elem.second.cDestructible.item != nullptr) {
-				std::cout << "Pos : " << elem.first << std::endl;
+			    && elem.second.cDestructible.item) {
 				systemSpawnCollectibleFromBox(elem.first);
 			}
 		}

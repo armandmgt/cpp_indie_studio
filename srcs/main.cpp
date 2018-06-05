@@ -20,64 +20,24 @@ int main()
 	map.printMap();
 	gfx::Renderer renderer;
 	ecs::world ecs(renderer);
-	auto node = renderer.createElem("../../assets/meshs/bomb.obj");
+	auto node = renderer.createElem("../../assets/meshs/max-bomb.obj");
 	renderer.setPosition(node, {10, 0, 10});
 	ecs.createGround(22, 20, "../../assets/meshs/ground.obj");
 	ids::Event event(renderer);
 	irr::EKEY_CODE key;
-	ids::event_t ev;
+	ids::event_t ev{};
 
 	ecs._spawnEntitiesFromMap(std::move(map.getMap()));
 	ecs.drawEntities();
+	float z = 0;
 	while (renderer.isRunning()) {
 		if (event.pollEvent(key, ev)) {
 			if (ev.value.key == ids::ESCAPE)
 			renderer.close();
 		}
+		renderer.rotate(node, {0, z++, 0});
 		renderer.render();
 	}
 	// ecs.debug();
 	return 0;
 }
-/*
-	irr::core::stringw groundFile("../../assets/meshs/ground.obj");
-	irr::core::stringw characterFile("../../assets/meshs/ninja.b3d");
-vec3d<float> ninjaPos{10, 8, 10};
-irr::EKEY_CODE key;
-
-createGround(21, 20, groundFile, renderer);
-auto ninjaNode = renderer.createAnimatedElem(characterFile);
-if (ninjaNode != nullptr) {
-renderer.setScale(ninjaNode, 2.f);
-renderer.setPosition(ninjaNode, ninjaPos);
-renderer.rotate(ninjaNode, {0, 90, 0});
-renderer.addAnimation(ninjaNode, "walk", vec2d<int>{1, 12});
-renderer.setAnimationSpeed(ninjaNode, 14);
-renderer.setAnimation(ninjaNode, "walk");
-}
-while (renderer.isRunning()) {
-renderer.render();
-if (!renderer.getKeyPressed(key)) {
-renderer.setAnimationSpeed(ninjaNode, 0);
-continue;
-}
-switch (key) {
-case irr::KEY_ESCAPE:
-renderer.close();
-break;
-case irr::KEY_KEY_A:
-ninjaPos.x -= 1;
-renderer.rotate(ninjaNode, {0, -90, 0});
-renderer.setAnimationSpeed(ninjaNode, 14);
-break;
-case irr::KEY_KEY_D:
-ninjaPos.x += 1;
-renderer.rotate(ninjaNode, {0, 90, 0});
-renderer.setAnimationSpeed(ninjaNode, 14);
-break;
-default:
-break;
-}
-renderer.setPosition(ninjaNode, ninjaPos);
-}
-*/
