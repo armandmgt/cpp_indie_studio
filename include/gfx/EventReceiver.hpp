@@ -19,16 +19,18 @@ namespace gfx {
 			irr::core::position2di position;
 			bool LeftButtonDown;
 			SMouseState() : LeftButtonDown(false) { }
-		} MouseState;
+		} mouseState;
 
 		MyEventReceiver();
 		bool OnEvent(const irr::SEvent& event) override;
-		virtual bool IsKeyDown(irr::EKEY_CODE keyCode) const;
-		const SMouseState &GetMouseState() const;
+
+		virtual bool isKeyDown(irr::EKEY_CODE keyCode) const;
+
+		const SMouseState &getMouseState() const;
 
 
 	private:
-		bool KeyIsDown[irr::KEY_KEY_CODES_COUNT];
+		bool keyIsDown[irr::KEY_KEY_CODES_COUNT];
 	};
 }
 

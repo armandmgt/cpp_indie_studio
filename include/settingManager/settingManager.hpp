@@ -21,7 +21,7 @@ namespace opt {
 
 	private:
 		std::string &filename;
-		irr::IrrlichtDevice* NullDevice;
+		irr::IrrlichtDevice *nullDevice;
 		irr::core::map<irr::core::stringw, irr::core::stringw> settings;
 	};
 }

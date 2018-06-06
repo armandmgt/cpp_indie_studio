@@ -8,37 +8,34 @@
 #include <iostream>
 #include "settingManager/settingManager.hpp"
 
-opt::settingManager::settingManager(std::string &name) : filename(name),
-							       NullDevice(0)
+opt::settingManager::settingManager(std::string &name) : filename(name), nullDevice(nullptr)
 {
-	NullDevice = irr::createDevice(irr::video::EDT_NULL);
+	nullDevice = irr::createDevice(irr::video::EDT_NULL);
 }
 
 opt::settingManager::~settingManager()
 {
-	if (NullDevice) {
-		NullDevice->closeDevice();
-		NullDevice->drop();
+	if (nullDevice) {
+		nullDevice->closeDevice();
+		nullDevice->drop();
 	}
 }
 
 bool opt::settingManager::load()
 {
-	if (!NullDevice)
+	if (!nullDevice)
 		return false;
 
 	irr::core::stringw currentSection;
-	irr::io::IXMLReader* xml = NullDevice->getFileSystem()->createXMLReader(filename.c_str());
+	irr::io::IXMLReader *xml = nullDevice->getFileSystem()->createXMLReader(filename.c_str());
 	if (!xml)
 		return false;
 	while (xml->read()) {
 		switch (xml->getNodeType()) {
 			case irr::io::EXN_ELEMENT: {
-				irr::core::stringw key = xml->getAttributeValueSafe(
-					L"name");
+				irr::core::stringw key = xml->getAttributeValueSafe(L"name");
 				if (!key.empty()) {
-					settings[key] = xml->getAttributeValueSafe(
-						L"value");
+					settings[key] = xml->getAttributeValueSafe(L"value");
 				}
 				break;
 			}
