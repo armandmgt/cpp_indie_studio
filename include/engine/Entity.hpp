@@ -17,25 +17,38 @@ namespace ecs {
 
 	class Entity {
 	public:
-		template<class T>
-		T &getComponent() { return static_cast<T&>(componentArray.at(T::getType())); }
+		Entity() : bit{}, componentArray{}
+		{};
 
 		template<class T>
-		bool hasComponent() { return bit[T::getType()]; }
+		T &getComponent() {
+			static_assert(std::is_base_of<Component, T>(), "T is not a component");
+			if (!bit[T::getType()])
+				throw std::runtime_error("Entity has no T component");
+			return static_cast<T&>(*componentArray[T::getType()]);
+		}
+
+		template<class T>
+		bool hasComponent() {
+			static_assert(std::is_base_of<Component, T>(), "T is not a component");
+			return bit[T::getType()];
+		}
 
 		template <typename T, typename... Args>
 		void addComponent(Args&&... args) {
-			std::cout << "adding component " << T::getType() << std::endl;
+			static_assert(std::is_base_of<Component, T>(), "T is not a component");
 			bit[T::getType()] = true;
-			componentArray[T::getType()] = T{std::forward<Args>(args)...};
-			std::cout << "size is now " << componentArray.size() << std::endl;
+			componentArray[T::getType()] = new T{std::forward<Args>(args)...};
 		}
 
-		entityId id;
+		template<class T>
+		void removeComponent() {
+			bit[T::getType()] = false;
+		}
 
 	private:
 		std::bitset<MAX_COMPONENTS> bit;
-		std::vector<Component> componentArray;
+		std::array<Component*, MAX_COMPONENTS> componentArray;
 	};
 }
 

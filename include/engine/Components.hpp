@@ -93,7 +93,8 @@ namespace ecs {
 	};
 
 	struct Input : public Component {
-		Input(bool l, bool r, bool u, bool d) : goLeft(l), goRight(r), goUp(u), goDown(d)
+		Input(bool l, bool r, bool u, bool d, bool b)
+			: goLeft(l), goRight(r), goUp(u), goDown(d), putBomb(b)
 		{};
 		~Input() = default;
 		static comp getType() { return COMP_INPUT; };
@@ -105,7 +106,7 @@ namespace ecs {
 	};
 
 	struct AiInput : public Component {
-		AiInput(bool l, bool r, bool u, bool d) : goLeft(l), goRight(r), goUp(u), goDown(d)
+		AiInput(bool l, bool r, bool u, bool d, bool b) : goLeft(l), goRight(r), goUp(u), goDown(d), putBomb(b)
 		{};
 		~AiInput() = default;
 		static comp getType() { return COMP_AI_INPUT; };
@@ -117,12 +118,11 @@ namespace ecs {
 	};
 
 	struct Destructible : public Component {
-		Destructible(bool destructible, std::unique_ptr<Collectible> item)
-			: destructible(destructible), item(std::move(item))
+		explicit Destructible(std::unique_ptr<Collectible> item)
+			: item(std::move(item))
 		{};
 		~Destructible() = default;
 		static comp getType() { return COMP_DESTRUCTIBLE; };
-		bool  destructible;
 		std::unique_ptr<Collectible> item;
 	};
 

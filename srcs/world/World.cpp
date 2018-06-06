@@ -72,12 +72,13 @@ namespace ecs {
 
 	void world::_spawnWall(ActionTarget type, long posX, long posY) {
 		auto &ent = createEntity();
+		std::cout << "spawning Wall" << std::endl;
 
-		ent.addComponent<Destructible>(true, std::make_unique<Collectible>(type));
+		ent.addComponent<Destructible>(std::make_unique<Collectible>(type));
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Graphic>(renderer.createElem("../../assets/meshs/box.obj"));
 
-		auto &gfx = ent.getComponent<Graphic>();
+		auto const &gfx= ent.getComponent<Graphic>();
 		if (gfx.sceneNode == nullptr)
 			throw std::runtime_error("Cannot load box asset");
 		renderer.addTexture(gfx.sceneNode, "../../assets/textures/box.jpg");
@@ -85,37 +86,40 @@ namespace ecs {
 
 	void world::_spawnUWall(long posX, long posY) {
 		auto &ent = createEntity();
+		std::cout << "spawning UWall" << std::endl;
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Graphic>(renderer.createElem("../../assets/meshs/ground.obj"));
 
-		auto &gfx = ent.getComponent<Graphic>();
+		auto const &gfx = ent.getComponent<Graphic>();
+		std::cout << "got component" << std::endl;
 		if (gfx.sceneNode == nullptr)
 			throw std::runtime_error("Could not load wall asset");
 	}
 
 	void world::_spawnBWall(long posX, long posY)
 	{
+		std::cout << "spawning BWall" << std::endl;
 		auto &ent = createEntity();
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
-		ent.addComponent<Destructible>(true, nullptr);
+		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Graphic>(renderer.createElem("../../assets/meshs/box.obj"));
 
-		auto &gfx = ent.getComponent<Graphic>();
-		if (gfx.sceneNode == nullptr)
+		auto const &gfx = ent.getComponent<Graphic>();
+		if (gfx.sceneNode == nullptr || !renderer.addTexture(gfx.sceneNode, "../../assets/textures/box.jpg"))
 			throw std::runtime_error("Cannot load wall asset");
-		renderer.addTexture(gfx.sceneNode, "../../assets/textures/box.jpg");
 	}
 
 	void world::_spawnPlayer(long posX, long posY)
 	{
+		std::cout << "spawning Player" << std::endl;
 		auto &ent = createEntity();
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Velocity>(0.f, 0.f);
 		ent.addComponent<Character>(false, 1LU, 1LU, 1LU);
-		ent.addComponent<Destructible>(true, nullptr);
+		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
 		ent.addComponent<Graphic>(renderer.createAnimatedElem("../../assets/meshs/ninja.b3d"));
 	}
@@ -123,7 +127,6 @@ namespace ecs {
 	void world::debug()
 	{
 		for (auto &it : _world) {
-			std::cout << "Type : [" << it.id << "]" << std::endl;
 			if (it.hasComponent<Position>())
 				std::cout << "Position : [" << it.getComponent<Position>().x << ", " << it.getComponent<Position>().y << "]"
 										     << std::endl;
@@ -141,7 +144,7 @@ namespace ecs {
 			ent.addComponent<Explosion>(_world.at(id).getComponent<Character>().power, 5LU);
 			ent.addComponent<Graphic>(renderer.createAnimatedElem("../../assets/meshs/bomb.obj"));
 
-			auto &gfx = ent.getComponent<Graphic>();
+			auto const &gfx= ent.getComponent<Graphic>();
 			if (gfx.sceneNode == nullptr)
 				throw std::runtime_error("Cannot load bomb asset");
 		}
@@ -175,7 +178,7 @@ namespace ecs {
 	}
 
 	//TODO: Check the collision between the item and the player
-	void world::systemPickupItem(entityId iId, entityId pId) noexcept {
+	void world::systemPickupItem(entityId iId[[maybe_unused]], entityId pId) noexcept {
 		// ...collision check ?
 		auto &player = _world.at(pId);
 
