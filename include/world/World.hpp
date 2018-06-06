@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2018
 ** cpp_indie_studio
 ** File description:
-** world
+** World
 */
 
 #ifndef CPP_INDIE_STUDIO_WORLD_HPP
@@ -12,7 +12,7 @@
 #include <vector>
 #include <iostream>
 #include <functional>
-#include <glob.h>
+#include "engine/systems/Systems.hpp"
 #include "engine/Entity.hpp"
 #include "gfx/Renderer.hpp"
 #include "map/Map.hpp"
@@ -23,10 +23,10 @@ namespace ecs {
 		PLAYER, POWERUP, BOMB, WALL, U_WALL, FLAMME,
 	};
 
-	class world {
+	class World {
 	public:
-		explicit world(gfx::Renderer &renderer);
-		~world() = default;
+		explicit World(gfx::Renderer *renderer);
+		~World() = default;
 
 		Entity &createEntity();
 		void destroyEntity(entityId id);
@@ -47,12 +47,13 @@ namespace ecs {
 		void systemPickupItem(entityId, entityId) noexcept;
 		void systemParseInput(entityId pId) noexcept;
 
-	public:
-		std::vector<Entity> _world;
+		void update(long delta);
 
+	public:
+		std::vector<Entity> _entities;
+		std::vector<std::unique_ptr<System>> _systems;
 	private:
-		entityId curId;
-		gfx::Renderer &renderer;
+		gfx::Renderer *renderer;
 		vec3d<float> sizeGround;
 		irr::core::stringw _queryMeshFromActionTarget(ActionTarget) const;
 	};

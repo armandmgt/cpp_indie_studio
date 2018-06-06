@@ -53,8 +53,9 @@ namespace ecs {
 			delete componentArray[T::getType()];
 		}
 
-	private:
+	public:
 		std::bitset<MAX_COMPONENTS> bit;
+	private:
 		std::array<std::unique_ptr<Component>, MAX_COMPONENTS> componentArray;
 	};
 }
