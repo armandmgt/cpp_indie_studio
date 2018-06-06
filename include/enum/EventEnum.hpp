@@ -23,6 +23,12 @@
 			MOVEDOWN, MOVERIGHT, MOVELEFT, PAUSE, RESTART, MENU,
 			QUIT, CLICK
 		};
+
+		enum type_t
+		{
+			ACTION,
+			KEY
+		};
 	}
 
 #endif
