@@ -20,6 +20,13 @@ namespace ecs {
 		Entity() : bit{}, componentArray{}
 		{};
 
+		~Entity()
+		{
+			for (auto c : componentArray) {
+				delete c;
+			}
+		};
+
 		template<class T>
 		T &getComponent() {
 			static_assert(std::is_base_of<Component, T>(), "T is not a component");
