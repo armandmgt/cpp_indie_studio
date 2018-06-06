@@ -29,7 +29,7 @@ namespace ecs {
 		~world() = default;
 
 		Entity &createEntity();
-		void destroyEntity(entityId);
+		void destroyEntity(entityId id);
 		void _spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
 		void _spawnUWall(long posX, long posY);
 		void _spawnWall(ActionTarget type, long posX, long posY);
@@ -45,7 +45,7 @@ namespace ecs {
 		void systemMove(entityId) noexcept;
 		void systemSpawnCollectibleFromBox(entityId) noexcept;
 		void systemPickupItem(entityId, entityId) noexcept;
-		void systemParseInput(const entityId pId) noexcept;
+		void systemParseInput(entityId pId) noexcept;
 
 	public:
 		std::vector<Entity> _world;

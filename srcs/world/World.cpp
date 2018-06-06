@@ -7,6 +7,7 @@
 
 #include <functional>
 #include <memory>
+#include <algorithm>
 #include "engine/Components.hpp"
 #include "world/World.hpp"
 
@@ -34,8 +35,7 @@ namespace ecs {
 	}
 
 	void world::destroyEntity(entityId id) {
-		auto pos = _world.begin() + id;
-		_world.erase(pos);
+		_world.erase(_world.begin() + id);
 	}
 
 	void world::_spawnEntitiesFromMap(std::vector<std::string> &&gameMap) {

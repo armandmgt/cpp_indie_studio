@@ -9,6 +9,7 @@
 
 #include <bitset>
 #include <vector>
+#include <iostream>
 #include "Components.hpp"
 
 namespace ecs {
@@ -17,15 +18,12 @@ namespace ecs {
 
 	class Entity {
 	public:
-		Entity() : bit{}, componentArray{}
+		Entity() : bit{0}, componentArray{nullptr}
 		{};
-
-		~Entity()
-		{
-			for (auto c : componentArray) {
-				delete c;
-			}
-		};
+		Entity(Entity &) = delete;
+		Entity &operator=(Entity &) = delete;
+		Entity(Entity &&) = default;
+		Entity &operator=(Entity &&) = default;
 
 		template<class T>
 		T &getComponent() {
@@ -45,18 +43,19 @@ namespace ecs {
 		void addComponent(Args&&... args) {
 			static_assert(std::is_base_of<Component, T>(), "T is not a component");
 			bit[T::getType()] = true;
-			componentArray[T::getType()] = new T{std::forward<Args>(args)...};
+			componentArray[T::getType()] = std::unique_ptr<T>(new T{std::forward<Args>(args)...});
 		}
 
 		template<class T>
 		void removeComponent() {
+			static_assert(std::is_base_of<Component, T>(), "T is not a component");
 			bit[T::getType()] = false;
 			delete componentArray[T::getType()];
 		}
 
 	private:
 		std::bitset<MAX_COMPONENTS> bit;
-		std::array<Component*, MAX_COMPONENTS> componentArray;
+		std::array<std::unique_ptr<Component>, MAX_COMPONENTS> componentArray;
 	};
 }
 
