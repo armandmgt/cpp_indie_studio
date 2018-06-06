@@ -28,29 +28,29 @@ namespace ecs {
 		template<class T>
 		T &getComponent() {
 			static_assert(std::is_base_of<Component, T>(), "T is not a component");
-			if (!bit[T::getType()])
+			if (!bit[T::type])
 				throw std::runtime_error("Entity has no T component");
-			return static_cast<T&>(*componentArray[T::getType()]);
+			return static_cast<T&>(*componentArray[T::type]);
 		}
 
 		template<class T>
 		bool hasComponent() {
 			static_assert(std::is_base_of<Component, T>(), "T is not a component");
-			return bit[T::getType()];
+			return bit[T::type];
 		}
 
 		template <typename T, typename... Args>
 		void addComponent(Args&&... args) {
 			static_assert(std::is_base_of<Component, T>(), "T is not a component");
-			bit[T::getType()] = true;
-			componentArray[T::getType()] = std::unique_ptr<T>(new T{std::forward<Args>(args)...});
+			bit[T::type] = true;
+			componentArray[T::type] = std::unique_ptr<T>(new T{std::forward<Args>(args)...});
 		}
 
 		template<class T>
 		void removeComponent() {
 			static_assert(std::is_base_of<Component, T>(), "T is not a component");
-			bit[T::getType()] = false;
-			delete componentArray[T::getType()];
+			bit[T::type] = false;
+			delete componentArray[T::type];
 		}
 
 	public:

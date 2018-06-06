@@ -42,7 +42,7 @@ namespace ecs {
 			: footPowerUp(footPowerUp), power(power), speed(speed), maxBombs(maxBombs)
 		{};
 		~Character() = default;
-		static comp getType() { return COMP_CHARACTER; };
+		static comp const type = COMP_CHARACTER;
 		bool footPowerUp;
 		std::size_t power;
 		std::size_t speed;
@@ -50,7 +50,7 @@ namespace ecs {
 	};
 
 	struct Explosion : public Component {
-		static comp getType() { return COMP_EXPLOSION; };
+		static comp const type = COMP_EXPLOSION;
 		Explosion(std::size_t p, std::size_t t) : power(p), timeout(t)
 		{};
 		~Explosion() = default;
@@ -62,7 +62,7 @@ namespace ecs {
 		explicit Collectible(ActionTarget at) : action(at)
 		{};
 		~Collectible() = default;
-		static comp getType() { return COMP_COLLECTIBLE; };
+		static comp const type = COMP_COLLECTIBLE;
 		ActionTarget action;
 	};
 
@@ -70,7 +70,7 @@ namespace ecs {
 		Velocity(float w, float v) : x(w), y(v)
 		{};
 		~Velocity() = default;
-		static comp getType() { return COMP_VELOCITY; };
+		static comp const type = COMP_VELOCITY;
 		float x;
 		float y;
 	};
@@ -79,7 +79,7 @@ namespace ecs {
 		explicit Orientation(float ori) : orientation(ori)
 		{};
 		~Orientation() = default;
-		static comp getType() { return COMP_ORIENTATION; };
+		static comp const type = COMP_ORIENTATION;
 		float orientation;
 	};
 
@@ -87,7 +87,7 @@ namespace ecs {
 		Position(float d, float v) : x(d), y(v)
 		{};
 		~Position() = default;
-		static comp getType() { return COMP_POSITION; };
+		static comp const type = COMP_POSITION;
 		float x;
 		float y;
 	};
@@ -97,7 +97,7 @@ namespace ecs {
 			: goLeft(l), goRight(r), goUp(u), goDown(d), putBomb(b)
 		{};
 		~Input() = default;
-		static comp getType() { return COMP_INPUT; };
+		static comp const type = COMP_INPUT;
 		bool goLeft;
 		bool goRight;
 		bool goUp;
@@ -109,7 +109,7 @@ namespace ecs {
 		AiInput(bool l, bool r, bool u, bool d, bool b) : goLeft(l), goRight(r), goUp(u), goDown(d), putBomb(b)
 		{};
 		~AiInput() = default;
-		static comp getType() { return COMP_AI_INPUT; };
+		static comp const type = COMP_AI_INPUT;
 		bool goLeft;
 		bool goRight;
 		bool goUp;
@@ -122,7 +122,7 @@ namespace ecs {
 			: item(std::move(item))
 		{};
 		~Destructible() = default;
-		static comp getType() { return COMP_DESTRUCTIBLE; };
+		static comp const type = COMP_DESTRUCTIBLE;
 		std::unique_ptr<Collectible> item;
 	};
 
@@ -130,7 +130,7 @@ namespace ecs {
 		explicit Graphic(irr::scene::ISceneNode *s) : sceneNode(s)
 		{};
 		~Graphic() = default;
-		static comp getType() { return COMP_GRAPHIC; };
+		static comp const type = COMP_GRAPHIC;
 		irr::scene::ISceneNode *sceneNode;
 	};
 }
