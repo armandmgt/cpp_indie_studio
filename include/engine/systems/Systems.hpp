@@ -18,6 +18,7 @@ namespace ecs {
 
 		template<class... Types>
 		std::vector<Entity *> &getEntities(Types... types) {
+			_entities.clear();
 			for (auto &e : *_allEntities) {
 				if (passFilter<Types...>(e, types...))
 					_entities.push_back(&e);
@@ -27,14 +28,10 @@ namespace ecs {
 
 		template<class... Types>
 		bool passFilter(Entity &entity, Types... types) {
-			for (auto type : {types...}) {
-				std::cout << "checking for type " << type << std::endl;
-				if (!entity.bit[type]) {
-					std::cout << "false" << std::endl;
+			for (comp type : {types...}) {
+				if (!entity.bit[type])
 					return false;
-				}
 			}
-			std::cout << "true" << std::endl;
 			return true;
 		}
 

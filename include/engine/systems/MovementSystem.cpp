@@ -12,10 +12,14 @@ namespace ecs {
 	{
 	}
 
-	void MovementSystem::update(double delta) {
+	void MovementSystem::update(double delta[[maybe_unused]]) {
 		auto &entities = getEntities(COMP_POSITION, COMP_VELOCITY);
 
-		std::cout << "There are " << entities.size() << " entities with a position and velocity component"
-			<< std::endl;
+		for (auto e : entities) {
+			auto &position = e->getComponent<Position>();
+			auto &velocity = e->getComponent<Velocity>();
+			position.x += velocity.x;
+			position.y += velocity.y;
+		}
 	}
 };

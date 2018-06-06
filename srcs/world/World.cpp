@@ -143,10 +143,6 @@ namespace ecs {
 		if (_entities.at(id).hasComponent<Velocity>()) {
 			auto &entity = this->_entities.at(id);
 
-			auto &position = entity.getComponent<Position>();
-			auto &velocity = entity.getComponent<Velocity>();
-			position.x += velocity.x;
-			position.y += velocity.y;
 		}
 	}
 
