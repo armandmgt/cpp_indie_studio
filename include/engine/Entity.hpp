@@ -44,6 +44,7 @@ namespace ecs {
 		template<class T>
 		void removeComponent() {
 			bit[T::getType()] = false;
+			delete componentArray[T::getType()];
 		}
 
 	private:
