@@ -21,16 +21,16 @@
 			eventAction action;
 		};
 
-		enum type_t
+		struct player_t
 		{
-			ACTION,
-			KEY
-		};
+			int player;
+			value_t value;
+		}
 
 		struct event_t
 		{
-			value_t value;
 			type_t type;
+			player_t player;
 		};
 
 		class Event
@@ -39,7 +39,7 @@
 			explicit Event(gfx::Renderer &window);
 			~Event();
 			bool pollEvent(irr::EKEY_CODE &keyCode, event_t &event);
-
+			void getBackEnd(event_t event, int player);
 		private:
 			bool getKey(irr::EKEY_CODE &keyCode);
 			bool getAction(event_t event);
