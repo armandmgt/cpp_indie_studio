@@ -38,5 +38,5 @@ add_executable(bomberman ${SOURCE_FILES})
 
 target_link_libraries(bomberman Irrlicht)
 
-add_custom_command(TARGET bomberman POST_BUILD
-        COMMAND cp bomberman ${CMAKE_SOURCE_DIR})
+#add_custom_command(TARGET bomberman POST_BUILD
+#        COMMAND cp bomberman ${CMAKE_SOURCE_DIR})

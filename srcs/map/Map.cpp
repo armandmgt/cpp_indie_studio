@@ -5,11 +5,13 @@
 ** Map generation
 */
 
+#include <chrono>
 #include "map/Map.hpp"
 
 Map::Map(size_t width, size_t height) : _width(width), _height(height)
 {
-	std::srand(static_cast<unsigned int>(time(nullptr)));
+	auto time = std::chrono::system_clock::now();
+	std::srand(static_cast<unsigned int>(time.time_since_epoch().count()));
 }
 
 void Map::setCellItem(map_pos *pos, mapItem item)

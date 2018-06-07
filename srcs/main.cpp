@@ -21,7 +21,7 @@ int main()
 	map.printMap();
 	gfx::Renderer renderer;
 	ecs::World ecs(&renderer);
-	ecs.createGround(22, 20, "../../assets/meshs/ground.obj");
+	ecs.createGround(22, 20, "assets/meshs/ground.obj");
 	ids::Event event(renderer);
 	irr::EKEY_CODE key;
 	ids::event_t ev{};

@@ -65,12 +65,12 @@ namespace ecs {
 
 		ent.addComponent<Destructible>(std::make_unique<Collectible>(type));
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
-		ent.addComponent<Graphic>(renderer->createElem("../../assets/meshs/box.obj"));
+		ent.addComponent<Graphic>(renderer->createElem("assets/meshs/box.obj"));
 
 		auto const &gfx= ent.getComponent<Graphic>();
 		if (gfx.sceneNode == nullptr)
 			throw std::runtime_error("Cannot load box asset");
-		renderer->addTexture(gfx.sceneNode, "../../assets/textures/box.jpg");
+		renderer->addTexture(gfx.sceneNode, "assets/textures/box.jpg");
 	}
 
 	void World::_spawnUWall(long posX, long posY) {
@@ -78,7 +78,7 @@ namespace ecs {
 		std::cout << "spawning UWall" << std::endl;
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
-		ent.addComponent<Graphic>(renderer->createElem("../../assets/meshs/ground.obj"));
+		ent.addComponent<Graphic>(renderer->createElem("assets/meshs/ground.obj"));
 
 		auto const &gfx = ent.getComponent<Graphic>();
 		std::cout << "got component" << std::endl;
@@ -93,10 +93,10 @@ namespace ecs {
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Destructible>(nullptr);
-		ent.addComponent<Graphic>(renderer->createElem("../../assets/meshs/box.obj"));
+		ent.addComponent<Graphic>(renderer->createElem("assets/meshs/box.obj"));
 
 		auto const &gfx = ent.getComponent<Graphic>();
-		if (gfx.sceneNode == nullptr || !renderer->addTexture(gfx.sceneNode, "../../assets/textures/box.jpg"))
+		if (gfx.sceneNode == nullptr || !renderer->addTexture(gfx.sceneNode, "assets/textures/box.jpg"))
 			throw std::runtime_error("Cannot load wall asset");
 	}
 
@@ -110,7 +110,7 @@ namespace ecs {
 		ent.addComponent<Character>(false, 1LU, 1LU, 1LU);
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
-		ent.addComponent<Graphic>(renderer->createAnimatedElem("../../assets/meshs/ninja.b3d"));
+		ent.addComponent<Graphic>(renderer->createAnimatedElem("assets/meshs/ninja.b3d"));
 	}
 
 	void World::debug()
@@ -131,7 +131,7 @@ namespace ecs {
 
 			ent.addComponent<Velocity>(0.f, 0.f);
 			ent.addComponent<Explosion>(_entities.at(id).getComponent<Character>().power, 5LU);
-			ent.addComponent<Graphic>(renderer->createAnimatedElem("../../assets/meshs/bomb.obj"));
+			ent.addComponent<Graphic>(renderer->createAnimatedElem("assets/meshs/bomb.obj"));
 
 			auto const &gfx= ent.getComponent<Graphic>();
 			if (gfx.sceneNode == nullptr)
@@ -182,18 +182,18 @@ namespace ecs {
 		auto &player = _entities.at(id);
 	}
 
-	// ../../assets/meshs/ninja.b3d
+	// assets/meshs/ninja.b3d
 	//TODO remove breaks
 	irr::core::stringw World::_queryMeshFromActionTarget(const ActionTarget act) const {
 		switch (act) {
 		case KICK:
-			return "../../assets/meshs/foot.obj";
+			return "assets/meshs/foot.obj";
 		case MAX_BOMBS:
-			return "../../assets/meshs/max-bomb.obj";
+			return "assets/meshs/max-bomb.obj";
 		case SPEEDUP:
-			return "../../assets/meshs/speedup.obj";
+			return "assets/meshs/speedup.obj";
 		case POWER:
-			return "../../assets/meshs/powerup.obj";
+			return "assets/meshs/powerup.obj";
 		default:
 			throw std::logic_error("Unknown Action Target");
 		}
