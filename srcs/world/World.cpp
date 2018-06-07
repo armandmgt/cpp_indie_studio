@@ -113,6 +113,20 @@ namespace ecs {
 		ent.addComponent<Graphic>(renderer->createAnimatedElem("assets/meshs/ninja.b3d"));
 	}
 
+	void World::_spawnFlames(ecs::Position initialPos, size_t pwr) {
+		std::cout << "[SPAWN] flammes at [" << initialPos.x << ":" << initialPos.y << "] with power (" << pwr << ")" << std::endl;
+
+		auto &e = createEntity();
+		for (size_t i = 0; i < pwr; i++) {
+			e.addComponent<Position>(initialPos.x + i);
+			e.addComponent<Position>(initialPos.y + i);
+			e.addComponent<Position>(initialPos.x - i);
+			e.addComponent<Position>(initialPos.y - i);
+		}
+		e.addComponent<Orientation>(0.f);
+		e.addComponent<Graphic>(renderer->createAnimatedElem("assets/meshs/ninja.b3d"));
+	}
+
 	void World::debug()
 	{
 		for (auto &it : _entities) {

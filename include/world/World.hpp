@@ -35,6 +35,7 @@ namespace ecs {
 		void _spawnWall(ActionTarget type, long posX, long posY);
 		void _spawnBWall(long posX, long posY);
 		void _spawnPlayer(long posX, long posY);
+		void _spawnFlames(Position, size_t);
 
 		Entity &getEntity(entityId id);
 		void debug();

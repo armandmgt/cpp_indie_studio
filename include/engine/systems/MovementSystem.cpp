@@ -8,9 +8,7 @@
 #include "MovementSystem.hpp"
 
 namespace ecs {
-	MovementSystem::MovementSystem(std::vector<Entity> *allEntities) : System(allEntities)
-	{
-	}
+	MovementSystem::MovementSystem(std::vector<Entity> *allEntities) : System(allEntities) {}
 
 	void MovementSystem::update(double delta[[maybe_unused]]) {
 		auto &entities = getEntities(COMP_POSITION, COMP_VELOCITY);
