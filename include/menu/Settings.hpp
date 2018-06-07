@@ -26,6 +26,7 @@ namespace ids { namespace menu {
 		};
 		explicit Settings(gfx::Renderer *rend);
 		~Settings() final;
+		SceneId runPage() final;
 	private:
 
 		void settingsItems();

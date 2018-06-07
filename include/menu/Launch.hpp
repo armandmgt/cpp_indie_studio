@@ -21,6 +21,7 @@ namespace ids { namespace menu {
 		};
 
 		explicit Launch(gfx::Renderer *rend);
+		SceneId runPage() final;
 		~Launch();
 	private:
 		void decorateScene();

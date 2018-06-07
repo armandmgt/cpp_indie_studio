@@ -26,17 +26,17 @@
 			explicit AMenu(gfx::Renderer *rend, SceneId id);
 			AMenu() = default;
 			~AMenu() = default;
-			void computeEvent(vec2d<int> &mousePos);
-			SceneId getSceneId();
+			void computeEvent(std::pair<vec2d<int>, bool> mousePos);
+			virtual SceneId runPage() = 0;
 		protected:
 			bool setWindow();
-			bool buttonEvent();
+			void buttonEvent();
 			gfx::Renderer *_rend;
 			vec2d<int> _posBackground;
 			irr::core::stringw _backgroundImg;
 			std::vector<struct button> _infoButtons;
-			SceneId		_id;
-			vec2d<int>	_mousePos;
+			SceneId	_id;
+			std::pair<vec2d<int>, bool> _mousePos;
 
 		};
 

@@ -22,8 +22,7 @@ ids::menu::Settings::Settings(gfx::Renderer *rend) : AMenu(rend, SETTINGS)
 		 "/home/sandra/delivery/TEK2/cpp_indie_studio/srcs/Menu/assets/mute.png", vec2d<int>(928, 510)});
 	_items.emplace_back((struct items){"Board", NONE, "/home/sandra/delivery/TEK2/cpp_indie_studio/srcs/Menu/assets/Items/score-board.png",
 					   "/home/sandra/delivery/TEK2/cpp_indie_studio/srcs/Menu/assets/Items/score-board.png", vec2d<int>(480, 180)});
-	setWindow();
-	settingsItems();
+
 }
 
 ids::menu::Settings::~Settings()
@@ -33,12 +32,31 @@ ids::menu::Settings::~Settings()
 
 void ids::menu::Settings::settingsItems()
 {
-	for (auto &item : _items) {
-		_rend->load2D(item.soundOn, item.pos);
-	}
+	//_mousePos
 }
 
 void ids::menu::Settings::setMusicLevel()
 {
 
+}
+
+ids::IScene::SceneId ids::menu::Settings::runPage()
+{
+	setWindow();
+	for (auto &item : _items) {
+		_rend->load2D(item.soundOn, item.pos);
+	}
+	settingsItems();
+	while (_id != MENU && _id != QUIT) {
+		_rend->isRun();
+		if (_rend->isKeyPressed(irr::KEY_ESCAPE)) {
+			_id = ids::IScene::QUIT;
+			return _id;
+		}
+		auto mousePos = _rend->getMousePosition();
+		// _rend->isKeyPressed(irr::KEY_LBUTTON)
+		computeEvent({mousePos, true});
+		_rend->render();
+	}
+	return _id;
 }
