@@ -31,6 +31,7 @@ namespace ids { namespace menu {
 
 		void settingsItems();
 		void setMusicLevel();
+		evt::MyEventReceiver &_events;
 		musicState _music;
 		std::vector<Items> _items;
 	};

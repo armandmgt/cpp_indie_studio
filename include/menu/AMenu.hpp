@@ -27,7 +27,7 @@ namespace ids {
 			};
 
 			explicit AMenu(gfx::Renderer *rend, sceneId id);
-			void computeEvent(std::pair<vec2d<int>, bool> mousePos);
+			void computeEvent(evt::MyEventReceiver::MouseState &mouseData);
 
 		protected:
 			bool setWindow();

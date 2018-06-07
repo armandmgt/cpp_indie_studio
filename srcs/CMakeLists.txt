@@ -17,8 +17,8 @@ set(SOURCE_FILES
         map/Map.cpp
         ../include/map/Map.hpp
 
-        gfx/EventReceiver.cpp
-        ../include/gfx/EventReceiver.hpp
+        event/EventReceiver.cpp
+        ../include/event/EventReceiver.hpp
         ../include/event/Event.hpp
         ../srcs/event/Event.cpp
         gfx/Renderer.cpp

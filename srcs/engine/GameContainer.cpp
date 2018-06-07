@@ -7,7 +7,7 @@
 
 #include "engine/GameContainer.hpp"
 
-ids::GameContainer::GameContainer() : _scenes{}, _renderer{}, _ecs{&_renderer}, _eventManager{_renderer}
+ids::GameContainer::GameContainer() : _scenes{}, _renderer{}, _ecs{&_renderer}
 {
 	_scenes.push(_scenesManager.makeScene(IScene::MENU, &_renderer));
 }

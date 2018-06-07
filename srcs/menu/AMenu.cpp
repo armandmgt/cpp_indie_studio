@@ -40,9 +40,9 @@ void ids::menu::AMenu::buttonEvent()
 	}
 }
 
-void	ids::menu::AMenu::computeEvent(std::pair<vec2d<int>, bool> mousePos)
+void	ids::menu::AMenu::computeEvent(evt::MyEventReceiver::MouseState &mouseData)
 {
-	_mousePos.first = mousePos.first;
-	_mousePos.second = mousePos.second;
+	_mousePos.first = {mouseData.position.X, mouseData.position.Y};
+	_mousePos.second = mouseData.leftButtonDown;
 	buttonEvent();
 }
