@@ -5,11 +5,14 @@
 ** GameContainer
 */
 
-#ifndef CPP_INDIE_STUDIO_GAMECONTAINER_HPP
-#define CPP_INDIE_STUDIO_GAMECONTAINER_HPP
+#pragma once
 
+#include <stack>
 #include <irrlicht/irrlicht.h>
-//#include "GameEngine.hpp"
+#include "gfx/Renderer.hpp"
+#include "world/World.hpp"
+#include "event/Event.hpp"
+#include "scenes/ScenesManager.hpp"
 
 #ifdef _IRR_WINDOWS_
 #pragma comment(lib, "Irrlicht.lib")
@@ -18,23 +21,18 @@
 
 namespace ids {
 	class GameContainer {
-		public:
-		virtual ~GameContainer();
-		static GameContainer *create();
-		GameContainer(GameContainer const &) = delete;
-		GameContainer &operator=(GameContainer const &) = delete;
+	public:
+		GameContainer();
+		GameContainer(GameContainer &) = delete;
+		GameContainer &operator=(GameContainer &) = delete;
 
 		void start();
 
-		private:
-		GameContainer();
-
-		irr::video::IVideoDriver* _driver;
-		irr::scene::ISceneManager* _smgr;
-		irr::gui::IGUIEnvironment* _guienv;
-		irr::IrrlichtDevice *_device;
-//		GameEngine _ge;
+	private:
+		ScenesManager _scenesManager;
+		std::stack<std::unique_ptr<IScene>> _scenes;
+		gfx::Renderer _renderer;
+		ecs::World _ecs;
+		ids::Event _eventManager;
 	};
 }
-
-#endif //CPP_INDIE_STUDIO_GAMECONTAINER_HPP

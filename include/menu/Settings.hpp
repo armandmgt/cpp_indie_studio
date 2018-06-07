@@ -14,26 +14,25 @@ namespace ids { namespace menu {
 
 	class Settings : public AMenu {
 	public:
-		enum MusicId {
+		enum musicState {
 			ON, OFF, NONE
 		};
-		struct items {
+		struct Items {
 			std::string name;
-			MusicId state;
+			musicState state;
 			irr::core::stringw soundOn;
 			irr::core::stringw soundOff;
 			vec2d<int> pos;
 		};
 		explicit Settings(gfx::Renderer *rend);
-		~Settings() final;
-		SceneId runPage() final;
+		~Settings() override;
+		sceneId run() override;
 	private:
 
 		void settingsItems();
 		void setMusicLevel();
-		MusicId _music;
-		std::vector<struct items> _items;
-
+		musicState _music;
+		std::vector<Items> _items;
 	};
 }}
 
