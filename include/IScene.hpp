@@ -15,8 +15,6 @@ namespace ids {
 				GAME, QUIT, MENU, SETTINGS, SCORE, PAUSE
 			};
 			virtual ~IScene() = default;
-			virtual SceneId getSceneId() = 0;
 		};
 }
-
 #endif //SCENE_HPP

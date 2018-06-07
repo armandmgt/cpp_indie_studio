@@ -11,13 +11,21 @@
 #include "menu/AMenu.hpp"
 
 namespace ids { namespace menu {
-
 	class Launch : public AMenu {
 	public:
-		explicit Launch(gfx::Renderer *rend);
-		~Launch() = default;
+		struct items {
+			std::string name;
+			int timer;
+			irr::core::stringw path;
+			vec2d<int> pos;
+		};
 
+		explicit Launch(gfx::Renderer *rend);
+		SceneId runPage() final;
+		~Launch();
 	private:
+		void decorateScene();
+		std::vector<struct items> _items;
 	};
 }}
 
