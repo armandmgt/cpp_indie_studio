@@ -9,7 +9,6 @@
 #include <iostream>
 #include <memory>
 #include <chrono>
-#include "event/Event.hpp"
 #include "settingManager/settingManager.hpp"
 #include "gfx/Renderer.hpp"
 #include "world/World.hpp"
@@ -20,19 +19,19 @@ int main()
 	map.initMap(20);
 	map.printMap();
 	gfx::Renderer renderer;
+	evt::MyEventReceiver &event = renderer.getEventReceiver();
 	ecs::World ecs(&renderer);
 	ecs.createGround(22, 20, "assets/meshs/ground.obj");
-	ids::Event event(renderer);
-	std::queue<ids::eventType> ev;
+	std::queue<evt::eventType> ev;
 	std::chrono::steady_clock::time_point timer = std::chrono::steady_clock::now();
 
 	ecs._spawnEntitiesFromMap(std::move(map.getMap()));
 	ecs.drawEntities();
 	while (renderer.isRunning()) {
 		if (event.pollEvent()) {
-			ev = event.getEvent(1);
+			ev = event.getPlayerEvent(1);
 			while (!ev.empty()) {
-				if (ev.back().key == ids::ESCAPE)
+				if (ev.back().key == evt::ESCAPE)
 					renderer.close();
 				ev.pop();
 			}

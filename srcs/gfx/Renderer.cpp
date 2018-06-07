@@ -63,24 +63,6 @@ void gfx::Renderer::close()
 	device->closeDevice();
 }
 
-vec2d<int> gfx::Renderer::getMousePosition() const
-{
-	const gfx::MyEventReceiver::SMouseState &mouse = eventReceiver.getMouseState();
-
-	return {mouse.position.X, mouse.position.Y};
-}
-
-bool gfx::Renderer::getKeyPressed(irr::EKEY_CODE &keyCode) const
-{
-	for (int i = 0; i < irr::KEY_KEY_CODES_COUNT; i++) {
-		if (eventReceiver.isKeyDown(static_cast<irr::EKEY_CODE>(i))) {
-			keyCode = static_cast<irr::EKEY_CODE>(i);
-			return true;
-		}
-	}
-	return false;
-}
-
 irr::scene::ISceneNode *gfx::Renderer::createElem(irr::core::stringw const &filename)
 {
 	irr::scene::IMesh *mesh = smgr->getMesh(filename);
@@ -205,4 +187,9 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, const vec2d<int> 
 void gfx::Renderer::addArchive(irr::core::stringw const &filename)
 {
 	device->getFileSystem()->addFileArchive(filename);
+}
+
+evt::MyEventReceiver &gfx::Renderer::getEventReceiver()
+{
+	return eventReceiver;
 }
