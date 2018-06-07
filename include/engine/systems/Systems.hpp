@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include "engine/Entity.hpp"
 
 namespace ecs {
@@ -28,11 +29,10 @@ namespace ecs {
 
 		template<class... Types>
 		bool passFilter(Entity &entity, Types... types) {
-			for (comp type : {types...}) {
-				if (!entity.bit[type])
-					return false;
-			}
-			return true;
+			auto typesArr = {types...};
+			return std::all_of(std::begin(typesArr), std::end(typesArr), [&entity](comp type) {
+				return entity.bit[type];
+			});
 		}
 
 	private:
