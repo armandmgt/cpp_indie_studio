@@ -5,7 +5,6 @@
 ** Renderable
 */
 
-#include <iostream>
 #include "gfx/Renderer.hpp"
 
 //TODO Sound

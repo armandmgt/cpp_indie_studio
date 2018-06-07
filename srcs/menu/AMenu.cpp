@@ -5,8 +5,6 @@
 ** AMenu
 */
 
-#include <vector>
-#include <iostream>
 #include "menu/AMenu.hpp"
 #include "common/vec.hpp"
 

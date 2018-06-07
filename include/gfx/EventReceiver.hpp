@@ -8,6 +8,7 @@
 #define CPP_INDIE_STUDIO_EVENTRECEIVER_HPP
 
 #include <irrlicht/irrlicht.h>
+#include <map>
 
 namespace gfx {
 

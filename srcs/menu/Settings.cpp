@@ -5,7 +5,6 @@
 ** Settings
 */
 
-#include <iostream>
 #include "menu/Settings.hpp"
 
 ids::menu::Settings::Settings(gfx::Renderer *rend) : AMenu(rend, SETTINGS), _music{ON},

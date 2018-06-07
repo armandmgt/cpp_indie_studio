@@ -4,7 +4,7 @@
 ** File description:
 ** EventReceiver
 */
-#include <iostream>
+
 #include "gfx/EventReceiver.hpp"
 
 gfx::MyEventReceiver::MyEventReceiver()

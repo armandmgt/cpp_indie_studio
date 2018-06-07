@@ -5,10 +5,7 @@
 ** main
 */
 
-#include <string>
 #include <iostream>
-#include <memory>
-#include <chrono>
 #include "engine/GameContainer.hpp"
 
 int main()

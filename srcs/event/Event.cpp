@@ -5,8 +5,6 @@
 ** none
 */
 
-#include <chrono>
-#include <thread>
 #include <iterator>
 #include <irrlicht/Keycodes.h>
 #include "event/Event.hpp"

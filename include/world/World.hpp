@@ -8,12 +8,8 @@
 #ifndef CPP_INDIE_STUDIO_WORLD_HPP
 #define CPP_INDIE_STUDIO_WORLD_HPP
 
-#include <unordered_map>
 #include <vector>
-#include <iostream>
-#include <functional>
 #include "engine/systems/Systems.hpp"
-#include "engine/Entity.hpp"
 #include "gfx/Renderer.hpp"
 #include "map/Map.hpp"
 
