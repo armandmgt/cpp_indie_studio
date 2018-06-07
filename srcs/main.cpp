@@ -5,39 +5,41 @@
 ** main
 */
 
+#include <string>
 #include <iostream>
-#include <settingManager/settingManager.hpp>
-#include "menu/Launch.hpp"
-#include "menu/Settings.hpp"
+#include <memory>
+#include <chrono>
+#include "event/Event.hpp"
+#include "settingManager/settingManager.hpp"
 #include "gfx/Renderer.hpp"
+#include "world/World.hpp"
 
-int main() {
-	gfx::Renderer window;
-	vec2d<int> pos(0, 0);
-	bool check = false;
-	auto state = ids::IScene::MENU;
+int main()
+{
+	Map map(22, 20);
+	map.initMap(20);
+	map.printMap();
+	gfx::Renderer renderer;
+	ecs::World ecs(&renderer);
+	ecs.createGround(22, 20, "assets/meshs/ground.obj");
+	ids::Event event(renderer);
+	irr::EKEY_CODE key;
+	ids::event_t ev{};
+	std::chrono::steady_clock::time_point timer = std::chrono::steady_clock::now();
 
-	ids::menu::AMenu *testmenu;
-	while (true) {
-		switch (state) {
-			case ids::IScene::MENU:
-				delete testmenu;
-				testmenu = new ids::menu::Launch(&window);
-				state = testmenu->runPage();
-				printf("after menu %d", state);
-				break;
-			case ids::IScene::QUIT:
-				delete testmenu;
-				exit(0);
-			case ids::IScene::SETTINGS:
-				delete testmenu;
-				testmenu = new ids::menu::Settings(&window);
-				state = testmenu->runPage();
-				printf("after settings\n");
-				break;
+	ecs.spawnEntitiesFromMap(std::move(map.getMap()));
+	ecs.drawEntities();
+	while (renderer.isRunning()) {
+		if (event.pollEvent(key, ev)) {
+//			if (ev.value.key == ids::ESCAPE)
+//			renderer.close();
 		}
-		//window.render();
+		auto now = std::chrono::steady_clock::now();
+		auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(now - timer);
+		if (delta.count() > (1000 / 60)) {
+			ecs.update(delta.count());
+		}
+		renderer.render();
 	}
-	//}
 	return 0;
 }

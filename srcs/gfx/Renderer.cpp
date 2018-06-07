@@ -21,7 +21,7 @@ gfx::Renderer::Renderer()
 	smgr->addCameraSceneNodeFPS();
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
-	auto light = smgr->addLightSceneNode(nullptr, irr::core::vector3df{0, 300, -190},
+	auto light = smgr->addLightSceneNode(nullptr, irr::core::vector3df{100, 300, -190},
 		irr::video::SColorf{1, 1, 1, 0}, 500.f);
 	irr::scene::IBillboardSceneNode* bill = smgr->addBillboardSceneNode(
 		light, irr::core::dimension2d<irr::f32>(10, 10));
@@ -42,14 +42,13 @@ void gfx::Renderer::render()
 	smgr->drawAll();
 	guienv->drawAll();
 	driver->enableMaterial2D();
-	for (auto &image : images) {
+	for (auto &image : images)
 		driver->draw2DImage(image.texture, {image.position.x, image.position.y}, image.size);
-	}
 	driver->enableMaterial2D(false);
 	driver->endScene();
 }
 
-bool gfx::Renderer::isRun() const
+bool gfx::Renderer::isRunning() const
 {
 	return device->run();
 }
@@ -85,32 +84,33 @@ bool gfx::Renderer::getKeyPressed(irr::EKEY_CODE &keyCode) const
 irr::scene::ISceneNode *gfx::Renderer::createElem(irr::core::stringw const &filename)
 {
 	irr::scene::IMesh *mesh = smgr->getMesh(filename);
-	irr::scene::IMeshSceneNode *aniMesh;
+	irr::scene::IMeshSceneNode *sceneNode;
 
 	if (!mesh) {
 		return nullptr;
-	} else if (!(aniMesh = smgr->addMeshSceneNode(mesh))) {
+	} else if (!(sceneNode = smgr->addMeshSceneNode(mesh))) {
 		return nullptr;
 	} else {
-		aniMesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
-		return aniMesh;
+		sceneNode->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
+//		sceneNode->setDebugDataVisible(irr::scene::EDS_NORMALS);
+		return sceneNode;
 	}
 }
 
 irr::scene::IAnimatedMeshSceneNode *gfx::Renderer::createAnimatedElem(irr::core::stringw const &filename)
 {
 	irr::scene::IAnimatedMesh *mesh;
-	irr::scene::IAnimatedMeshSceneNode *aniMesh;
+	irr::scene::IAnimatedMeshSceneNode *sceneNode;
 
 	if (!(mesh = smgr->getMesh(filename.c_str()))) {
 		return nullptr;
-	} else if (!(aniMesh = smgr->addAnimatedMeshSceneNode(mesh))) {
+	} else if (!(sceneNode = smgr->addAnimatedMeshSceneNode(mesh))) {
 		return nullptr;
 	} else {
-		aniMesh->getMaterial(0).NormalizeNormals = true;
-		aniMesh->getMaterial(0).Lighting = true;
-		aniMesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
-		return aniMesh;
+		sceneNode->getMaterial(0).NormalizeNormals = true;
+		sceneNode->getMaterial(0).Lighting = true;
+		sceneNode->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
+		return sceneNode;
 	}
 }
 
@@ -123,6 +123,7 @@ bool gfx::Renderer::addTexture(irr::scene::ISceneNode *node, const irr::core::st
 	if (!(texture = driver->getTexture(filename)))
 		return false;
 	node->setMaterialTexture(0, texture);
+	node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	return true;
 }
 

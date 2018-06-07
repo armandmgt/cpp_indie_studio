@@ -26,7 +26,7 @@ namespace gfx {
 		~Renderer();
 
 		void render();
-		bool isRun() const;
+		bool isRunning() const;
 		void clearScene();
 		void close();
 
@@ -66,6 +66,5 @@ namespace gfx {
 		std::unordered_map<irr::scene::ISceneNode *, animationMap> animations;
 	};
 };
-
 
 #endif //CPP_INDIE_STUDIO_RENDERER_HPP
