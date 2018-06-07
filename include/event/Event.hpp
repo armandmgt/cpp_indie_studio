@@ -8,43 +8,30 @@
 #ifndef EVENT_HPP_
 	#define EVENT_HPP_
 
-	#include <unordered_map>
+	#include <map>
 	#include <queue>
 	#include "enum/EventEnum.hpp"
 	#include "gfx/Renderer.hpp"
 
 	namespace ids {
 
-		union value_t
+		struct eventType
 		{
-			eventKey key;
 			eventAction action;
-		};
-
-		enum type_t
-		{
-			ACTION,
-			KEY
-		};
-
-		struct event_t
-		{
-			value_t value;
-			type_t type;
+			eventKey key;
 		};
 
 		class Event
 		{
 		public:
-			explicit Event(gfx::Renderer &window);
-			~Event();
-			bool pollEvent(irr::EKEY_CODE &keyCode, event_t &event);
-
+			explicit Event(gfx::Renderer &window) noexcept;
+			~Event() = default;
+			bool pollEvent();
+			std::queue<ids::eventType> getEvent(std::size_t index);
 		private:
-			bool getKey(irr::EKEY_CODE &keyCode);
-			bool getAction(event_t event);
+			bool _fillKey(irr::EKEY_CODE &keyCode);
 			gfx::Renderer &renderer;
-			std::queue<event_t> buffer;
+			std::multimap<std::size_t, eventType> buffer;
 		};
 	}
 

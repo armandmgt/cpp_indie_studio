@@ -23,16 +23,19 @@ int main()
 	ecs::World ecs(&renderer);
 	ecs.createGround(22, 20, "assets/meshs/ground.obj");
 	ids::Event event(renderer);
-	irr::EKEY_CODE key;
-	ids::event_t ev{};
+	std::queue<ids::eventType> ev;
 	std::chrono::steady_clock::time_point timer = std::chrono::steady_clock::now();
 
 	ecs._spawnEntitiesFromMap(std::move(map.getMap()));
 	ecs.drawEntities();
 	while (renderer.isRunning()) {
-		if (event.pollEvent(key, ev)) {
-			if (ev.value.key == ids::ESCAPE)
-			renderer.close();
+		if (event.pollEvent()) {
+			ev = event.getEvent(1);
+			while (!ev.empty()) {
+				if (ev.back().key == ids::ESCAPE)
+					renderer.close();
+				ev.pop();
+			}
 		}
 		auto now = std::chrono::steady_clock::now();
 		auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(now - timer);

@@ -162,20 +162,20 @@ namespace ecs {
 		}
 	}
 
-	//TODO: Check the collision between the item and the player
+	//TODO: Check the collision between the item and the idPlayer
 	void World::systemPickupItem(entityId iId[[maybe_unused]], entityId pId) noexcept {
 		// ...collision check ?
 		auto &player = _entities.at(pId);
 
 		//TODO: event to end invincibility
 //		if ((_entities.at(iId).bit & std::bitset<Entity::bitSize>(KICK)) == KICK)
-//			player.cCharacter.invincibility = true;
+//			idPlayer.cCharacter.invincibility = true;
 //		if ((_entities.at(iId).bit & std::bitset<Entity::bitSize>(MAX_BOMBS)) == MAX_BOMBS)
-//			player.cCharacter.maxBombs++;
+//			idPlayer.cCharacter.maxBombs++;
 //		if ((_entities.at(iId).bit & std::bitset<Entity::bitSize>(SPEEDUP)) == SPEEDUP)
-//			player.cCharacter.footPowerUp = true;
+//			idPlayer.cCharacter.footPowerUp = true;
 //		if ((_entities.at(iId).bit & std::bitset<Entity::bitSize>(POWER)) == POWER)
-//			player.cCharacter.power++;
+//			idPlayer.cCharacter.power++;
 	}
 
 	void World::systemParseInput(const entityId id) noexcept {

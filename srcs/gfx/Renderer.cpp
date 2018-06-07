@@ -13,7 +13,7 @@ gfx::Renderer::Renderer()
 {
 	irr::core::stringw tittleWindow = "Bomberman";
 
-	if (!(device = irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1920, 1080), 1024,
+	if (!(device = irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1920, 1080), 16,
 		true, true, false, &eventReceiver)))
 		throw std::runtime_error("Cannot get device");
 	driver = device->getVideoDriver();
