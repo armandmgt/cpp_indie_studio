@@ -8,8 +8,9 @@
 #include <iostream>
 #include "gfx/Renderer.hpp"
 
-gfx::Renderer::Renderer()
+//TODO Sound
 
+gfx::Renderer::Renderer()
 {
 	irr::core::stringw tittleWindow = "Bomberman";
 
