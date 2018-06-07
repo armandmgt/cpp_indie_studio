@@ -2,10 +2,6 @@ set(SOURCE_FILES
         main.cpp
         ../include/engine/Components.hpp
 
-		../include/interfaces/IPlayer.hpp
-		../include/interfaces/IObject.hpp
-		../include/interfaces/IItem.hpp
-
 		../include/common/vec.hpp
 
         ../include/enum/AnimationType.hpp

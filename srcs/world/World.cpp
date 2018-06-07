@@ -118,10 +118,10 @@ namespace ecs {
 
 		auto &e = createEntity();
 		for (size_t i = 0; i < pwr; i++) {
-			e.addComponent<Position>(initialPos.x + i);
-			e.addComponent<Position>(initialPos.y + i);
-			e.addComponent<Position>(initialPos.x - i);
-			e.addComponent<Position>(initialPos.y - i);
+			e.addComponent<Position>(initialPos.x + i, initialPos.y);
+			e.addComponent<Position>(initialPos.x, initialPos.y + i);
+			e.addComponent<Position>(initialPos.x - i, initialPos.y);
+			e.addComponent<Position>(initialPos.x, initialPos.y - i);
 		}
 		e.addComponent<Orientation>(0.f);
 		e.addComponent<Graphic>(renderer->createAnimatedElem("assets/meshs/ninja.b3d"));
@@ -155,7 +155,7 @@ namespace ecs {
 
 	void World::systemMove(entityId id) noexcept {
 		if (_entities.at(id).hasComponent<Velocity>()) {
-			auto &entity = this->_entities.at(id);
+			this->_entities.at(id);
 
 		}
 	}
@@ -177,11 +177,10 @@ namespace ecs {
 	}
 
 	//TODO: Check the collision between the item and the player
-	void World::systemPickupItem(entityId iId[[maybe_unused]], entityId pId) noexcept {
+	void World::systemPickupItem(entityId iId[[maybe_unused]], entityId pId[[maybe_unused]]) noexcept {
 		// ...collision check ?
-		auto &player = _entities.at(pId);
+//		auto &player = _entities.at(pId);
 
-		//TODO: event to end invincibility
 //		if ((_entities.at(iId).bit & std::bitset<Entity::bitSize>(KICK)) == KICK)
 //			player.cCharacter.invincibility = true;
 //		if ((_entities.at(iId).bit & std::bitset<Entity::bitSize>(MAX_BOMBS)) == MAX_BOMBS)
@@ -192,8 +191,8 @@ namespace ecs {
 //			player.cCharacter.power++;
 	}
 
-	void World::systemParseInput(const entityId id) noexcept {
-		auto &player = _entities.at(id);
+	void World::systemParseInput(const entityId id[[maybe_unused]]) noexcept {
+//		auto &player = _entities.at(id);
 	}
 
 	// assets/meshs/ninja.b3d
