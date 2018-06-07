@@ -27,30 +27,30 @@ namespace ecs {
 		_entities.erase(_entities.begin() + id);
 	}
 
-	void World::_spawnEntitiesFromMap(std::vector<std::string> &&gameMap) {
+	void World::spawnEntitiesFromMap(std::vector<std::string> &&gameMap) {
 		for (auto itR = gameMap.begin(); itR != gameMap.end(); itR++) {
 			for (auto itC = itR->begin(); itC != itR->end(); itC++) {
 				switch (*itC) {
 					case BREAKABLE_WALL:
-						_spawnBWall(itC - itR->begin(), itR - gameMap.begin());
+						spawnBWall(itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case UNBREAKABLE_WALL:
-						_spawnUWall( itC - itR->begin(), itR - gameMap.begin());
+						spawnUWall(itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case MAP_PLAYER:
-						_spawnPlayer(itC - itR->begin(), itR - gameMap.begin());
+						spawnPlayer(itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case FIRE_UP:
-						_spawnWall(POWER, itC - itR->begin(), itR - gameMap.begin());
+						spawnWall(POWER, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case BOMB_UP:
-						_spawnWall(MAX_BOMBS, itC - itR->begin(), itR - gameMap.begin());
+						spawnWall(MAX_BOMBS, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case SPEED_UP:
-						_spawnWall(SPEEDUP, itC - itR->begin(), itR - gameMap.begin());
+						spawnWall(SPEEDUP, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case POWER_UP:
-						_spawnWall(KICK,  itC - itR->begin(), itR - gameMap.begin());
+						spawnWall(KICK, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					default:
 						break;
@@ -59,7 +59,7 @@ namespace ecs {
 		}
 	}
 
-	void World::_spawnWall(ActionTarget type, long posX, long posY) {
+	void World::spawnWall(ActionTarget type, long posX, long posY) {
 		auto &ent = createEntity();
 		std::cout << "spawning Wall" << std::endl;
 
@@ -73,7 +73,7 @@ namespace ecs {
 		renderer->addTexture(gfx.sceneNode, "assets/textures/box.jpg");
 	}
 
-	void World::_spawnUWall(long posX, long posY) {
+	void World::spawnUWall(long posX, long posY) {
 		auto &ent = createEntity();
 		std::cout << "spawning UWall" << std::endl;
 
@@ -86,7 +86,7 @@ namespace ecs {
 			throw std::runtime_error("Could not load wall asset");
 	}
 
-	void World::_spawnBWall(long posX, long posY)
+	void World::spawnBWall(long posX, long posY)
 	{
 		std::cout << "spawning BWall" << std::endl;
 		auto &ent = createEntity();
@@ -100,7 +100,7 @@ namespace ecs {
 			throw std::runtime_error("Cannot load wall asset");
 	}
 
-	void World::_spawnPlayer(long posX, long posY)
+	void World::spawnPlayer(long posX, long posY)
 	{
 		std::cout << "spawning Player" << std::endl;
 		auto &ent = createEntity();
@@ -111,6 +111,20 @@ namespace ecs {
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
 		ent.addComponent<Graphic>(renderer->createAnimatedElem("assets/meshs/ninja.b3d"));
+	}
+
+	void World::spawnFlames(ecs::Position initialPos, size_t pwr) {
+		std::cout << "[SPAWN] flammes at [" << initialPos.x << ":" << initialPos.y << "] with power (" << pwr << ")" << std::endl;
+
+		auto &e = createEntity();
+		for (size_t i = 0; i < pwr; i++) {
+			e.addComponent<Position>(initialPos.x + i, initialPos.y);
+			e.addComponent<Position>(initialPos.x, initialPos.y + i);
+			e.addComponent<Position>(initialPos.x - i, initialPos.y);
+			e.addComponent<Position>(initialPos.x, initialPos.y - i);
+		}
+		e.addComponent<Orientation>(0.f);
+		e.addComponent<Graphic>(renderer->createAnimatedElem("assets/meshs/ninja.b3d"));
 	}
 
 	void World::debug()
@@ -141,7 +155,7 @@ namespace ecs {
 
 	void World::systemMove(entityId id) noexcept {
 		if (_entities.at(id).hasComponent<Velocity>()) {
-			auto &entity = this->_entities.at(id);
+			this->_entities.at(id);
 
 		}
 	}
@@ -163,11 +177,10 @@ namespace ecs {
 	}
 
 	//TODO: Check the collision between the item and the player
-	void World::systemPickupItem(entityId iId[[maybe_unused]], entityId pId) noexcept {
+	void World::systemPickupItem(entityId iId[[maybe_unused]], entityId pId[[maybe_unused]]) noexcept {
 		// ...collision check ?
-		auto &player = _entities.at(pId);
+//		auto &player = _entities.at(pId);
 
-		//TODO: event to end invincibility
 //		if ((_entities.at(iId).bit & std::bitset<Entity::bitSize>(KICK)) == KICK)
 //			player.cCharacter.invincibility = true;
 //		if ((_entities.at(iId).bit & std::bitset<Entity::bitSize>(MAX_BOMBS)) == MAX_BOMBS)
@@ -178,8 +191,8 @@ namespace ecs {
 //			player.cCharacter.power++;
 	}
 
-	void World::systemParseInput(const entityId id) noexcept {
-		auto &player = _entities.at(id);
+	void World::systemParseInput(const entityId id[[maybe_unused]]) noexcept {
+//		auto &player = _entities.at(id);
 	}
 
 	// assets/meshs/ninja.b3d

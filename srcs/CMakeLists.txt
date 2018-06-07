@@ -37,6 +37,12 @@ set(SOURCE_FILES
         menu/Settings.cpp
         ../include/scenes/ScenesManager.hpp
         scenes/ScenesManager.cpp
+        ../include/gfx/Image2D.hpp
+        ../include/engine/systems/Systems.hpp
+        ../include/engine/systems/MovementSystem.cpp
+        ../include/engine/systems/MovementSystem.hpp
+        ../include/engine/systems/ExplosionSystem.cpp
+        ../include/engine/systems/ExplosionSystem.hpp
         )
 
 if(MSVC)
