@@ -43,7 +43,7 @@ set(SOURCE_FILES
         ../include/engine/systems/MovementSystem.hpp
         ../include/engine/systems/ExplosionSystem.cpp
         ../include/engine/systems/ExplosionSystem.hpp
-        )
+		../include/scenes/GameScene.cpp ../include/scenes/GameScene.hpp)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4 -lIrrlicht")
