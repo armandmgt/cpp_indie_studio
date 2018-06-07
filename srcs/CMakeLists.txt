@@ -47,14 +47,16 @@ set(SOURCE_FILES
         )
 
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "/W4 -lIrrlicht")
+    set(CMAKE_CXX_FLAGS "/W4 /permissive")
 else()
-    set(CMAKE_CXX_FLAGS "-W -Wall -lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor")
+    set(CMAKE_CXX_FLAGS "-W -Wall -Wextra -lIrrlicht -lGL -lXxf86vm -lXext -lX11 -lXcursor -Wfatal-errors")
 endif()
 
 add_executable(bomberman ${SOURCE_FILES})
-
-target_link_libraries(bomberman Irrlicht)
-
-#add_custom_command(TARGET bomberman POST_BUILD
-#        COMMAND cp bomberman ${CMAKE_SOURCE_DIR})
+	
+if (WIN32)
+   LINK_DIRECTORIES("../")
+   target_link_libraries(bomberman "../../srcs/Irrlicht")
+	add_custom_command(TARGET bomberman POST_BUILD
+	COMMAND cmd /c "start ${CMAKE_SOURCE_DIR}/WinSetupDirectory.bat")
+endif()
