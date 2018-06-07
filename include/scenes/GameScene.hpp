@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include <gfx/Renderer.hpp>
 #include <memory>
 #include "IScene.hpp"
+#include "gfx/Renderer.hpp"
 #include "world/World.hpp"
 
 namespace ids {
@@ -22,6 +22,7 @@ namespace ids {
 			sceneId run() final override;
 
 		private:
+			gfx::Renderer *_rend;
 			std::unique_ptr<ecs::World> _world;
 	};
 }

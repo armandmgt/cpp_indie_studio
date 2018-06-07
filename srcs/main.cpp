@@ -23,12 +23,8 @@ int main()
 	return 0;
 }
 
-//	Map map(22, 20);
-//	map.initMap(20);
-//	map.printMap();
 //	gfx::Renderer renderer;
 //	ecs::World ecs(&renderer);
-//	ecs.createGround(22, 20, "assets/meshs/ground.obj");
 //	ids::Event event(renderer);
 //	irr::EKEY_CODE key;
 //	ids::event_t ev{};
