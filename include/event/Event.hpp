@@ -25,7 +25,7 @@
 		{
 			int player;
 			value_t value;
-		}
+		};
 
 		struct event_t
 		{

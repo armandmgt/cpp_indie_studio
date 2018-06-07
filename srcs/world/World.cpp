@@ -27,30 +27,30 @@ namespace ecs {
 		_entities.erase(_entities.begin() + id);
 	}
 
-	void World::_spawnEntitiesFromMap(std::vector<std::string> &&gameMap) {
+	void World::spawnEntitiesFromMap(std::vector<std::string> &&gameMap) {
 		for (auto itR = gameMap.begin(); itR != gameMap.end(); itR++) {
 			for (auto itC = itR->begin(); itC != itR->end(); itC++) {
 				switch (*itC) {
 					case BREAKABLE_WALL:
-						_spawnBWall(itC - itR->begin(), itR - gameMap.begin());
+						spawnBWall(itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case UNBREAKABLE_WALL:
-						_spawnUWall( itC - itR->begin(), itR - gameMap.begin());
+						spawnUWall(itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case MAP_PLAYER:
-						_spawnPlayer(itC - itR->begin(), itR - gameMap.begin());
+						spawnPlayer(itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case FIRE_UP:
-						_spawnWall(POWER, itC - itR->begin(), itR - gameMap.begin());
+						spawnWall(POWER, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case BOMB_UP:
-						_spawnWall(MAX_BOMBS, itC - itR->begin(), itR - gameMap.begin());
+						spawnWall(MAX_BOMBS, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case SPEED_UP:
-						_spawnWall(SPEEDUP, itC - itR->begin(), itR - gameMap.begin());
+						spawnWall(SPEEDUP, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case POWER_UP:
-						_spawnWall(KICK,  itC - itR->begin(), itR - gameMap.begin());
+						spawnWall(KICK, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					default:
 						break;
@@ -59,7 +59,7 @@ namespace ecs {
 		}
 	}
 
-	void World::_spawnWall(ActionTarget type, long posX, long posY) {
+	void World::spawnWall(ActionTarget type, long posX, long posY) {
 		auto &ent = createEntity();
 		std::cout << "spawning Wall" << std::endl;
 
@@ -73,7 +73,7 @@ namespace ecs {
 		renderer->addTexture(gfx.sceneNode, "assets/textures/box.jpg");
 	}
 
-	void World::_spawnUWall(long posX, long posY) {
+	void World::spawnUWall(long posX, long posY) {
 		auto &ent = createEntity();
 		std::cout << "spawning UWall" << std::endl;
 
@@ -86,7 +86,7 @@ namespace ecs {
 			throw std::runtime_error("Could not load wall asset");
 	}
 
-	void World::_spawnBWall(long posX, long posY)
+	void World::spawnBWall(long posX, long posY)
 	{
 		std::cout << "spawning BWall" << std::endl;
 		auto &ent = createEntity();
@@ -100,7 +100,7 @@ namespace ecs {
 			throw std::runtime_error("Cannot load wall asset");
 	}
 
-	void World::_spawnPlayer(long posX, long posY)
+	void World::spawnPlayer(long posX, long posY)
 	{
 		std::cout << "spawning Player" << std::endl;
 		auto &ent = createEntity();
@@ -113,7 +113,7 @@ namespace ecs {
 		ent.addComponent<Graphic>(renderer->createAnimatedElem("assets/meshs/ninja.b3d"));
 	}
 
-	void World::_spawnFlames(ecs::Position initialPos, size_t pwr) {
+	void World::spawnFlames(ecs::Position initialPos, size_t pwr) {
 		std::cout << "[SPAWN] flammes at [" << initialPos.x << ":" << initialPos.y << "] with power (" << pwr << ")" << std::endl;
 
 		auto &e = createEntity();

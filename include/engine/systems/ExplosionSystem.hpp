@@ -1,6 +1,9 @@
-//
-// Created by Hoodie on 07/06/2018.
-//
+/*
+** EPITECH PROJECT, 2018
+** cpp_indie_studio
+** File description:
+** ExplosionSystem
+*/
 
 #pragma once
 

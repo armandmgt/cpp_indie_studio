@@ -30,12 +30,12 @@ namespace ecs {
 
 		Entity &createEntity();
 		void destroyEntity(entityId id);
-		void _spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
-		void _spawnUWall(long posX, long posY);
-		void _spawnWall(ActionTarget type, long posX, long posY);
-		void _spawnBWall(long posX, long posY);
-		void _spawnPlayer(long posX, long posY);
-		void _spawnFlames(Position, size_t);
+		void spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
+		void spawnUWall(long posX, long posY);
+		void spawnWall(ActionTarget type, long posX, long posY);
+		void spawnBWall(long posX, long posY);
+		void spawnPlayer(long posX, long posY);
+		void spawnFlames(Position, size_t);
 
 		Entity &getEntity(entityId id);
 		void debug();
