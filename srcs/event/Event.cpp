@@ -5,6 +5,8 @@
 ** none
 */
 
+#include <chrono>
+#include <thread>
 #include <iterator>
 #include <irrlicht/Keycodes.h>
 #include "event/Event.hpp"
@@ -20,25 +22,21 @@ ids::Event::~Event()
 bool ids::Event::getAction(event_t event)
 {
 	event_t tmp{};
-	static std::unordered_map<eventKey, player_t> const eventType = {
-		{NONE, {0, NOTHING}}, {UP, {1, MOVEUP}}, {DOWN, {1, MOVEDOWN}},
-		{RIGHT, {1, MOVERIGHT}}, {LEFT, {1, MOVELEFT}},
-		{A, {2, PUTBOMB}}, {B, {1, NOTHING}}, {C, {2, NOTHING}},
-		{D, {2, MOVERIGHT}}, {E, {2, PUTITEM}}, {F, {2, NOTHING}},
-		{G, {2, NOTHING}}, {H, {1, NOTHING}}, {I, {1, NOTHING}},
-		{J, {1, NOTHING}}, {K, {1, NOTHING}}, {L, {1, NOTHING}},
-		{M, {1, NOTHING}}, {N, {1, NOTHING}}, {O, {1, NOTHING}},
-		{P, {1, NOTHING}}, {Q, {2, MOVELEFT}}, {R, {2, NOTHING}},
-		{S, {2, MOVEDOWN}}, {T, {2, NOTHING}}, {U, {1, NOTHING}},
-		{V, {2, NOTHING}}, {W, {2, NOTHING}}, {X, {2, NOTHING}},
-		{Y, {1, NOTHING}}, {Z, {2, MOVEUP}}, {SPACE, {1, PAUSE}},
-		{DELE, {1, RESTART}}, {ESCAPE, {1, MENU}}, {MOUSE, {1, CLICK}}
+	static std::unordered_map<eventKey, eventAction> const eventType = {
+		{NONE, NOTHING}, {UP, MOVEUP}, {DOWN, MOVEDOWN},
+		{RIGHT, MOVERIGHT}, {LEFT, MOVELEFT}, {A, PUTBOMB},
+		{B, NOTHING}, {C, NOTHING}, {D, MOVERIGHT}, {E, PUTITEM},
+		{F, NOTHING}, {G, NOTHING}, {H, NOTHING}, {I, NOTHING},
+		{J, NOTHING}, {K, NOTHING}, {L, NOTHING}, {M, NOTHING},
+		{N, NOTHING}, {O, NOTHING}, {P, NOTHING}, {Q, MOVELEFT},
+		{R, NOTHING}, {S, MOVEDOWN}, {T, NOTHING}, {U, NOTHING},
+		{V, NOTHING}, {W, NOTHING}, {X, NOTHING}, {Y, NOTHING},
+		{Z, MOVEUP}, {SPACE, PAUSE}, {DELE, RESTART}, {ESCAPE, MENU},
+		{MOUSE, CLICK}
 	};
-
 	for (auto it = eventType.begin(); it != eventType.end(); it++) {
-		if (it->first == event.player.value.key) {
-			tmp.player.value.action = it->second->value;
-			tmp.player.player = it->second->player;
+		if (it->first == event.value.key) {
+			tmp.value.action = it->second;
 			tmp.type = ACTION;
 			buffer.push(tmp);
 			return true;
@@ -68,7 +66,7 @@ bool ids::Event::getKey(irr::EKEY_CODE &keyCode)
 
 	for (auto it : key) {
 		if (keyCode == it.first) {
-			tmp.player.value.key = it->second;
+			tmp.value.key = it.second;
 			tmp.type = KEY;
 			buffer.push(tmp);
 			getAction(tmp);
@@ -76,23 +74,6 @@ bool ids::Event::getKey(irr::EKEY_CODE &keyCode)
 		}
 	}
 	return false;
-}
-
-void ids::Event::getBackEnd(event_t event, int player)
-{
-	auto head;
-
-	for (auto it : buffer) {
-		if (event.player.player == player)
-			;
-		else if (event.player.player != player && *it == NULL) {
-			head = *it;
-			buffer.push(event);
-		} else if (event.player.player != player && *it == head) {
-			buffer.push(event);
-		}
-	}
-	buffer = buffer.end() - 1;
 }
 
 bool ids::Event::pollEvent(irr::EKEY_CODE &keyCode, event_t &event)
