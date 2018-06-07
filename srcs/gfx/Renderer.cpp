@@ -15,11 +15,11 @@ gfx::Renderer::Renderer()
 	irr::core::stringw tittleWindow = "Bomberman";
 
 	if (!(device = irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1920, 1080), 1024,
-		true, true, false, &eventReceiver)))
+		false, true, false, &eventReceiver)))
 		throw std::runtime_error("Cannot get device");
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
-	smgr->addCameraSceneNodeFPS();
+	smgr->addCameraSceneNode();
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
 	auto light = smgr->addLightSceneNode(nullptr, irr::core::vector3df{100, 300, -190},
@@ -29,7 +29,6 @@ gfx::Renderer::Renderer()
 	bill->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	bill->setMaterialFlag(irr::video::EMF_ZWRITE_ENABLE, false);
 	bill->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
-	light->setDebugDataVisible(irr::scene::EDS_FULL);
 }
 
 gfx::Renderer::~Renderer()
@@ -44,7 +43,8 @@ void gfx::Renderer::render()
 	guienv->drawAll();
 	driver->enableMaterial2D();
 	for (auto &image : images)
-		driver->draw2DImage(image.texture, {image.position.x, image.position.y}, image.size);
+		driver->draw2DImage(image.texture, {image.position.x, image.position.y}, image.size, nullptr,
+			irr::video::SColor(255,255,255,255), true);
 	driver->enableMaterial2D(false);
 	driver->endScene();
 }
@@ -80,6 +80,11 @@ bool gfx::Renderer::getKeyPressed(irr::EKEY_CODE &keyCode) const
 		}
 	}
 	return false;
+}
+
+bool gfx::Renderer::isKeyPressed(irr::EKEY_CODE code)
+{
+	return eventReceiver.isKeyDown(code);
 }
 
 irr::scene::ISceneNode *gfx::Renderer::createElem(irr::core::stringw const &filename)

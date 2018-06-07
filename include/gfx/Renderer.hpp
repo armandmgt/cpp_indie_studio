@@ -55,7 +55,9 @@ namespace gfx {
 		void load2D(irr::core::stringw const &filename, const vec2d<int> &pos);
 		void addArchive(irr::core::stringw const &filename);
 
-	private:
+		bool isKeyPressed(irr::EKEY_CODE code);
+
+		private:
 		irr::IrrlichtDevice *device;
 		irr::video::IVideoDriver *driver;
 		irr::scene::ISceneManager *smgr;

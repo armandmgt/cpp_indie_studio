@@ -10,23 +10,25 @@
 
 #include "menu/AMenu.hpp"
 
-namespace ids { namespace menu {
-	class Launch : public AMenu {
-	public:
-		struct items {
-			std::string name;
-			int timer;
-			irr::core::stringw path;
-			vec2d<int> pos;
-		};
+namespace ids {
+	namespace menu {
+		class Launch : public AMenu {
+		public:
+			struct Items {
+				std::string name;
+				int timer;
+				irr::core::stringw path;
+				vec2d<int> pos;
+			};
 
-		explicit Launch(gfx::Renderer *rend);
-		SceneId runPage() final;
-		~Launch();
-	private:
-		void decorateScene();
-		std::vector<struct items> _items;
-	};
-}}
+			explicit Launch(gfx::Renderer *rend);
+			~Launch() override;
+			sceneId run() override;
+		private:
+			void decorateScene();
+			std::vector<Items> _items;
+		};
+	}
+}
 
 #endif //LAUNCH_HPP

@@ -1,6 +1,8 @@
 set(SOURCE_FILES
         main.cpp
         ../include/engine/Components.hpp
+        ../include/engine/GameContainer.hpp
+        engine/GameContainer.cpp
 
 		../include/common/vec.hpp
 
@@ -9,6 +11,9 @@ set(SOURCE_FILES
 		../include/engine/Entity.hpp
 		world/World.cpp
 		../include/world/World.hpp
+        ../include/engine/systems/Systems.hpp
+        ../include/engine/systems/MovementSystem.hpp
+        ../include/engine/systems/MovementSystem.cpp
 
 		map/Map.cpp
 		../include/map/Map.hpp
@@ -21,10 +26,19 @@ set(SOURCE_FILES
 		../srcs/event/Event.cpp
 		../include/enum/EventEnum.hpp
         settingManager/settingManager.cpp
-        ../include/settingManager/settingManager.hpp ../include/gfx/Image2D.hpp
-        Menu/AMenu.cpp
-        ../include/menu/AMenu.hpp ../include/IScene.hpp ../include/menu/Launch.hpp
-        Menu/Launch.cpp ../include/menu/Settings.hpp Menu/Settings.cpp)
+        ../include/settingManager/settingManager.hpp
+        ../include/gfx/Image2D.hpp
+        ../include/scenes/IScene.hpp
+        ../include/menu/AMenu.hpp
+        menu/AMenu.cpp
+        ../include/menu/Launch.hpp
+        menu/Launch.cpp
+        ../include/menu/Settings.hpp
+        menu/Settings.cpp
+        ../include/scenes/ScenesManager.hpp
+        scenes/ScenesManager.cpp
+        )
+
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4 -lIrrlicht")
 else()
