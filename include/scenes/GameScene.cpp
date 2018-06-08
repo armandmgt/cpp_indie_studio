@@ -20,7 +20,7 @@ ids::GameScene::GameScene(gfx::Renderer *r)
 ids::IScene::sceneId ids::GameScene::run() {
 	_renderer->setCameraFPS();
 	_world->drawEntities();
-	while (_renderer->isRunning() && !_renderer->isKeyPressed(irr::KEY_ESCAPE))
+	while (_renderer->isRunning() && !_renderer->getEventReceiver().isKeyDown(irr::KEY_ESCAPE))
 		_renderer->render();
 	return MENU;
 }

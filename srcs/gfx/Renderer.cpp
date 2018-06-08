@@ -171,8 +171,7 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, const vec2d<int> 
 	if (!(texture = driver->getTexture(filename)))
 		throw std::runtime_error("Cannot load texture");
 	const irr::core::dimension2d<irr::u32> &texSize = texture->getOriginalSize();
-	irr::core::rect<irr::s32> size{{0, 0},
-		{static_cast<irr::s32>(texSize.Width), static_cast<irr::s32>(texSize.Height)}};
+	irr::core::rect<irr::s32> size{{0, 0}, {static_cast<irr::s32>(texSize.Width), static_cast<irr::s32>(texSize.Height)}};
 	images.emplace_back(texture, pos, std::move(size));
 }
 
@@ -181,17 +180,17 @@ void gfx::Renderer::addArchive(irr::core::stringw const &filename)
 	device->getFileSystem()->addFileArchive(filename);
 }
 
-// void gfx::Renderer::setCameraFPS()
-// {
-// 	smgr->addCameraSceneNodeFPS();
-// 	auto light = smgr->addLightSceneNode(nullptr, irr::core::vector3df{100, 300, -190},
-// 		irr::video::SColorf{1, 1, 1, 0}, 500.f);
-// 	irr::scene::IBillboardSceneNode* bill = smgr->addBillboardSceneNode(
-// 		light, irr::core::dimension2d<irr::f32>(10, 10));
-// 	bill->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-// 	bill->setMaterialFlag(irr::video::EMF_ZWRITE_ENABLE, false);
-// 	bill->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
-// }
+void gfx::Renderer::setCameraFPS()
+{
+	smgr->addCameraSceneNodeFPS();
+	auto light = smgr->addLightSceneNode(nullptr, irr::core::vector3df{100, 300, -190},
+ 		irr::video::SColorf{1, 1, 1, 0}, 500.f);
+ 	irr::scene::IBillboardSceneNode* bill = smgr->addBillboardSceneNode(
+ 		light, irr::core::dimension2d<irr::f32>(10, 10));
+ 	bill->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+ 	bill->setMaterialFlag(irr::video::EMF_ZWRITE_ENABLE, false);
+ 	bill->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
+}
 
 evt::MyEventReceiver &gfx::Renderer::getEventReceiver()
 {

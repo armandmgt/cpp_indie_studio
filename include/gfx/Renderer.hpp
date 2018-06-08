@@ -29,8 +29,6 @@ namespace gfx {
 		void clearScene();
 		void close();
 
-		bool getKeyPressed(irr::EKEY_CODE &keyCode) const;
-
 		irr::scene::ISceneNode *createElem(irr::core::stringw const &filename);
 		irr::scene::IAnimatedMeshSceneNode *createAnimatedElem(irr::core::stringw const &filename);
 
@@ -52,10 +50,10 @@ namespace gfx {
 		);
 		void load2D(irr::core::stringw const &filename, const vec2d<int> &pos);
 		void addArchive(irr::core::stringw const &filename);
-
+		void setCameraFPS();
 		evt::MyEventReceiver &getEventReceiver();
 
-		public:
+	public:
 		evt::MyEventReceiver eventReceiver;
 	private:
 		irr::IrrlichtDevice *device;
