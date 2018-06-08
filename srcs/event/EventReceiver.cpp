@@ -70,9 +70,6 @@ bool evt::MyEventReceiver::_fillKey(irr::EKEY_CODE &keyCode)
 	if (value == mapEvent.end())
 		return false;
 	buffer.emplace(mapEvent.at(keyCode));
-	for (auto &it : buffer) {
-		std::cout << it.first << " = [" << it.second.key << ", " << it.second.action << "]" << std::endl;
-	}
 	return true;
 }
 

@@ -114,7 +114,7 @@ namespace ecs {
 	}
 
 	void World::spawnFlames(ecs::Position initialPos, size_t pwr) {
-		std::cout << "[SPAWN] flammes at [" << initialPos.x << ":" << initialPos.y << "] with power (" << pwr << ")" << std::endl;
+		//std::cout << "[SPAWN] flammes at [" << initialPos.x << ":" << initialPos.y << "] with power (" << pwr << ")" << std::endl;
 
 		auto &e = createEntity();
 		for (size_t i = 0; i < pwr; i++) {
