@@ -7,9 +7,9 @@
 
 #include "GameScene.hpp"
 
-ids::GameScene::GameScene(gfx::Renderer *r) {
+ids::GameScene::GameScene(gfx::Renderer *r)
+		: _world{std::make_unique<ecs::World>(r)}, _renderer{r} {
 	Map map(22, 20);
-	this->_world = std::make_unique<ecs::World>(r);
 
 	map.initMap(20);
 	map.printMap();
