@@ -9,6 +9,7 @@
 
 #include <irrlicht/irrlicht.h>
 #include <memory>
+#include "common/vec.hpp"
 
 namespace ecs {
 	enum ActionTarget {
@@ -126,10 +127,12 @@ namespace ecs {
 	};
 
 	struct Graphic : public Component {
-		explicit Graphic(irr::scene::ISceneNode *s) : sceneNode(s)
+		explicit Graphic(irr::scene::ISceneNode *s, float scale = 1.f) :
+				sceneNode(s), _scale(scale)
 		{};
 		~Graphic() = default;
 		static comp const type = COMP_GRAPHIC;
 		irr::scene::ISceneNode *sceneNode;
+		float _scale;
 	};
 }
