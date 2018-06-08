@@ -7,22 +7,21 @@
 
 #pragma once
 
-#include <gfx/Renderer.hpp>
 #include <memory>
 #include "IScene.hpp"
+#include "gfx/Renderer.hpp"
 #include "world/World.hpp"
 
 namespace ids {
 	class GameScene : public IScene {
 		public:
-			GameScene(gfx::Renderer *);
+			explicit GameScene(gfx::Renderer *);
 			~GameScene() noexcept final = default;
 
-			std::unique_ptr<ecs::World> &getWorld();
-			sceneId run() final override;
+			sceneId run() final;
 
 		private:
 			std::unique_ptr<ecs::World> _world;
-			std::unique_ptr<gfx::Renderer> _renderer;
+			gfx::Renderer *_renderer;
 	};
 }

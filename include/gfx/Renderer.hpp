@@ -57,6 +57,8 @@ namespace gfx {
 
 		bool isKeyPressed(irr::EKEY_CODE code);
 
+		void setCameraFPS();
+
 		private:
 		irr::IrrlichtDevice *device;
 		irr::video::IVideoDriver *driver;

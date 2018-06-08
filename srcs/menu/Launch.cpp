@@ -44,7 +44,7 @@ ids::IScene::sceneId ids::menu::Launch::run()
 {
 	setWindow();
 	decorateScene();
-	while (_rend->isRunning() && _id != SETTINGS && _id != QUIT) {
+	while (_rend->isRunning() && _id == MENU) {
 		if (_rend->isKeyPressed(irr::KEY_ESCAPE)) {
 			_id = ids::IScene::QUIT;
 			return _id;
@@ -56,5 +56,6 @@ ids::IScene::sceneId ids::menu::Launch::run()
 		computeEvent({mousePos, true});
 		_rend->render();
 	}
+	_rend->clearScene();
 	return _id;
 }

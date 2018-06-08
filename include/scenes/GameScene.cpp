@@ -8,17 +8,19 @@
 #include "GameScene.hpp"
 
 ids::GameScene::GameScene(gfx::Renderer *r) {
-	auto *w = new ecs::World(r);
+	Map map(22, 20);
+	this->_world = std::make_unique<ecs::World>(r);
 
-	this->_world = std::make_unique<ecs::World>(*w);
-	this->_renderer = std::make_unique<gfx::Renderer>(*r);
-}
-
-std::unique_ptr<ecs::World> &ids::GameScene::getWorld() {
-	return _world;
+	map.initMap(20);
+	map.printMap();
+	_world->createGround(22, 20, "../assets/meshs/ground.obj");
+	_world->spawnEntitiesFromMap(std::move(map.getMap()));
 }
 
 ids::IScene::sceneId ids::GameScene::run() {
-
-	return GAME;
+	_renderer->setCameraFPS();
+	_world->drawEntities();
+	while (_renderer->isRunning() && !_renderer->isKeyPressed(irr::KEY_ESCAPE))
+		_renderer->render();
+	return MENU;
 }
