@@ -5,10 +5,10 @@
 ** Settings
 */
 
-#include <iostream>
 #include "menu/Settings.hpp"
 
-ids::menu::Settings::Settings(gfx::Renderer *rend) : AMenu(rend, SETTINGS), _music{ON},
+ids::menu::Settings::Settings(gfx::Renderer *rend) : AMenu(rend, SETTINGS), _events{rend->getEventReceiver()},
+	_music{ON},
 	_items{
 		{"Sound", ON, "../assets/menu/volume.png", "../assets/menu/mute.png", {928, 510}},
 		{"Board", NONE, "../assets/menu/Items/score-board.png", "../assets/menu/Items/score-board.png",
@@ -51,13 +51,13 @@ ids::IScene::sceneId ids::menu::Settings::run()
 	}
 	settingsItems();
 	while (_rend->isRunning() && _id != MENU && _id != QUIT) {
-		if (_rend->isKeyPressed(irr::KEY_ESCAPE)) {
+		if (_events.isKeyDown(irr::KEY_ESCAPE)) {
 			_id = ids::IScene::QUIT;
 			return _id;
 		}
-		auto mousePos = _rend->getMousePosition();
+		auto mousePos = _events.getMousePosition();
 		// _rend->isKeyPressed(irr::KEY_LBUTTON)
-		computeEvent({mousePos, true});
+		computeEvent(mousePos);
 		_rend->render();
 	}
 	return _id;

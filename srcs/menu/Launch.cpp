@@ -8,7 +8,7 @@
 #include <iostream>
 #include "menu/Launch.hpp"
 
-ids::menu::Launch::Launch(gfx::Renderer *rend) : AMenu(rend, MENU),
+ids::menu::Launch::Launch(gfx::Renderer *rend) : AMenu(rend, MENU), _events{rend->getEventReceiver()},
 	_items{
 		{"bomberman", 0, "../assets/menu/Items/bomber-man.png", {600, 400}},
 		{"speak-bubble", 5, "../assets/menu/Items/speak-bubble.png", {1350, 450}},
@@ -45,15 +45,15 @@ ids::IScene::sceneId ids::menu::Launch::run()
 	setWindow();
 	decorateScene();
 	while (_rend->isRunning() && _id != SETTINGS && _id != QUIT) {
-		if (_rend->isKeyPressed(irr::KEY_ESCAPE)) {
+		if (_events.isKeyDown(irr::KEY_ESCAPE)) {
 			_id = ids::IScene::QUIT;
 			return _id;
 		}
-		auto mousePos = _rend->getMousePosition();
-		std::cout << mousePos.x << " " << mousePos.y << std::endl;
+		auto mousePos = _events.getMousePosition();
+		std::cout << mousePos.position.X << " " << mousePos.position.Y << std::endl;
 		//if (_rend->isKeyPressed(irr::KEY_LBUTTON)) {
 
-		computeEvent({mousePos, true});
+		computeEvent(mousePos);
 		_rend->render();
 	}
 	return _id;

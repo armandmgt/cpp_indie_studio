@@ -33,6 +33,5 @@ namespace ids {
 		std::stack<std::unique_ptr<IScene>> _scenes;
 		gfx::Renderer _renderer;
 		ecs::World _ecs;
-		ids::Event _eventManager;
 	};
 }

@@ -13,11 +13,10 @@
 #include "common/vec.hpp"
 #include "enum/EventEnum.hpp"
 #include "gfx/Image2D.hpp"
-#include "EventReceiver.hpp"
+#include "event/EventReceiver.hpp"
 
 namespace gfx {
 
-	using mabBinding = std::unordered_map<irr::EKEY_CODE, ids::eventKey>;
 	using idSprite = long;
 
 	class Renderer {
@@ -30,7 +29,6 @@ namespace gfx {
 		void clearScene();
 		void close();
 
-		vec2d<int> getMousePosition() const;
 		bool getKeyPressed(irr::EKEY_CODE &keyCode) const;
 
 		irr::scene::ISceneNode *createElem(irr::core::stringw const &filename);
@@ -55,15 +53,16 @@ namespace gfx {
 		void load2D(irr::core::stringw const &filename, const vec2d<int> &pos);
 		void addArchive(irr::core::stringw const &filename);
 
-		bool isKeyPressed(irr::EKEY_CODE code);
+		evt::MyEventReceiver &getEventReceiver();
 
-		private:
+		public:
+		evt::MyEventReceiver eventReceiver;
+	private:
 		irr::IrrlichtDevice *device;
 		irr::video::IVideoDriver *driver;
 		irr::scene::ISceneManager *smgr;
 		irr::gui::IGUIEnvironment *guienv;
 		std::vector<gfx::image2D> images;
-		MyEventReceiver eventReceiver;
 		using animationMap = std::unordered_map<std::string, vec2d<int>>;
 		std::unordered_map<irr::scene::ISceneNode *, animationMap> animations;
 	};

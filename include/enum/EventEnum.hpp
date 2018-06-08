@@ -8,20 +8,18 @@
 #ifndef ENUM_HPP_
 	#define ENUM_HPP_
 
-	namespace ids {
-
+	namespace evt {
 		enum eventKey
 		{
-			NONE, UP, DOWN, RIGHT, LEFT, A, B, C, D, E, F, G, H,
+			UP, DOWN, RIGHT, LEFT, A, B, C, D, E, F, G, H,
 			I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
-			SPACE, DELE, ESCAPE, MOUSE
+			SPACE, DELETE, ESCAPE, MOUSE
 		};
 
 		enum eventAction
 		{
-			NOTHING, XPLOSE, PUTBOMB, PUTITEM, MOVEUP,
-			MOVEDOWN, MOVERIGHT, MOVELEFT, PAUSE, RESTART, MENU,
-			QUIT, CLICK
+			PUTBOMB, MOVEUP, MOVEDOWN, MOVERIGHT, MOVELEFT,
+			PAUSE, RESTART, MENU, QUIT, CLICK
 		};
 	}
 

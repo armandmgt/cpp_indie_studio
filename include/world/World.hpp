@@ -8,12 +8,8 @@
 #ifndef CPP_INDIE_STUDIO_WORLD_HPP
 #define CPP_INDIE_STUDIO_WORLD_HPP
 
-#include <unordered_map>
 #include <vector>
-#include <iostream>
-#include <functional>
 #include "engine/systems/Systems.hpp"
-#include "engine/Entity.hpp"
 #include "gfx/Renderer.hpp"
 #include "map/Map.hpp"
 
@@ -42,17 +38,15 @@ namespace ecs {
 
 		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);
 		void drawEntities();
-		void systemSpawnBomb(entityId);
-		void systemMove(entityId) noexcept;
-		void systemSpawnCollectibleFromBox(entityId) noexcept;
-		void systemPickupItem(entityId, entityId) noexcept;
-		void systemParseInput(entityId pId) noexcept;
+		void spawnBombSystem(entityId);
+		void spawnCollectibleFromBoxSystem(entityId) noexcept;
 
 		void update(long delta);
 
 	public:
-		std::vector<Entity> _entities;
-		std::vector<std::unique_ptr<System>> _systems;
+		std::vector<Entity> entities;
+		std::vector<std::unique_ptr<System>> systems;
+
 	private:
 		gfx::Renderer *renderer;
 		vec3d<float> sizeGround;
