@@ -8,7 +8,6 @@
 #pragma once
 
 #include <irrlicht/irrlicht.h>
-#include <cstddef>
 #include <memory>
 
 namespace ecs {

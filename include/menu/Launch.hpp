@@ -26,6 +26,7 @@ namespace ids {
 			sceneId run() override;
 		private:
 			void decorateScene();
+			evt::MyEventReceiver &_events;
 			std::vector<Items> _items;
 		};
 	}

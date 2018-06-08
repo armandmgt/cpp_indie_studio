@@ -7,7 +7,7 @@
 #ifndef CPP_INDIE_STUDIO_IMAGE2D_HPP
 #define CPP_INDIE_STUDIO_IMAGE2D_HPP
 
-#include <vector>
+//#include <vector>
 #include <irrlicht/ITexture.h>
 #include "common/vec.hpp"
 

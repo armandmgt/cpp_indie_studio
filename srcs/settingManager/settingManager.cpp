@@ -5,7 +5,6 @@
 ** SettingManager
 */
 
-#include <iostream>
 #include "settingManager/settingManager.hpp"
 
 opt::settingManager::settingManager(std::string &name) : filename(name), nullDevice(nullptr)

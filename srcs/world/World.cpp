@@ -5,7 +5,6 @@
 ** World
 */
 
-#include <memory>
 #include "engine/systems/MovementSystem.hpp"
 #include "engine/systems/ExplosionSystem.hpp"
 #include "engine/Components.hpp"
