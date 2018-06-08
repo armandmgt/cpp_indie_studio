@@ -56,5 +56,6 @@ ids::IScene::sceneId ids::menu::Launch::run()
 		computeEvent(mousePos);
 		_rend->render();
 	}
+	_rend->clearScene();
 	return _id;
 }

@@ -36,6 +36,14 @@ set(SOURCE_FILES
         ../include/settingManager/settingManager.hpp
 
         scenes/ScenesManager.cpp
+        ../include/gfx/Image2D.hpp
+        ../include/engine/systems/Systems.hpp
+        ../include/engine/systems/MovementSystem.cpp
+        ../include/engine/systems/MovementSystem.hpp
+        ../include/engine/systems/ExplosionSystem.cpp
+        ../include/engine/systems/ExplosionSystem.hpp
+        ../include/scenes/GameScene.cpp
+        ../include/scenes/GameScene.hpp
         ../include/scenes/IScene.hpp
         ../include/scenes/ScenesManager.hpp
 
@@ -43,8 +51,7 @@ set(SOURCE_FILES
         ../include/enum/AnimationType.hpp
         ../include/enum/EventEnum.hpp
 
-        ../include/common/vec.hpp
-        )
+        ../include/common/vec.hpp)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4 /permissive")

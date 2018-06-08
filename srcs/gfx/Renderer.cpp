@@ -19,13 +19,6 @@ gfx::Renderer::Renderer()
 	smgr->addCameraSceneNode();
 	device->setWindowCaption(tittleWindow.c_str());
 	guienv = device->getGUIEnvironment();
-	auto light = smgr->addLightSceneNode(nullptr, irr::core::vector3df{100, 300, -190},
-		irr::video::SColorf{1, 1, 1, 0}, 500.f);
-	irr::scene::IBillboardSceneNode* bill = smgr->addBillboardSceneNode(
-		light, irr::core::dimension2d<irr::f32>(10, 10));
-	bill->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	bill->setMaterialFlag(irr::video::EMF_ZWRITE_ENABLE, false);
-	bill->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
 }
 
 gfx::Renderer::~Renderer()
@@ -53,6 +46,7 @@ bool gfx::Renderer::isRunning() const
 
 void gfx::Renderer::clearScene()
 {
+	images.clear();
 	smgr->clear();
 }
 
@@ -186,6 +180,18 @@ void gfx::Renderer::addArchive(irr::core::stringw const &filename)
 {
 	device->getFileSystem()->addFileArchive(filename);
 }
+
+// void gfx::Renderer::setCameraFPS()
+// {
+// 	smgr->addCameraSceneNodeFPS();
+// 	auto light = smgr->addLightSceneNode(nullptr, irr::core::vector3df{100, 300, -190},
+// 		irr::video::SColorf{1, 1, 1, 0}, 500.f);
+// 	irr::scene::IBillboardSceneNode* bill = smgr->addBillboardSceneNode(
+// 		light, irr::core::dimension2d<irr::f32>(10, 10));
+// 	bill->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+// 	bill->setMaterialFlag(irr::video::EMF_ZWRITE_ENABLE, false);
+// 	bill->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
+// }
 
 evt::MyEventReceiver &gfx::Renderer::getEventReceiver()
 {
