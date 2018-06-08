@@ -51,7 +51,6 @@ namespace gfx {
 		void load2D(irr::core::stringw const &filename, const vec2d<int> &pos);
 		void addArchive(irr::core::stringw const &filename);
 		void setCameraFPS();
-		void setCameraPosition(const vec3d<int> &pos);
 		evt::MyEventReceiver &getEventReceiver();
 
 	public:
