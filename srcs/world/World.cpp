@@ -61,7 +61,6 @@ namespace ecs {
 
 	void World::spawnWall(ActionTarget type, long posX, long posY) {
 		auto &ent = createEntity();
-		std::cout << "spawning Wall" << std::endl;
 
 		ent.addComponent<Destructible>(std::make_unique<Collectible>(type));
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
@@ -74,21 +73,23 @@ namespace ecs {
 	}
 
 	void World::spawnUWall(long posX, long posY) {
+		static int rand = 0;
 		auto &ent = createEntity();
-		std::cout << "spawning UWall" << std::endl;
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
-		ent.addComponent<Graphic>(renderer->createElem("../assets/meshs/ground.obj"));
+		if (rand % 2)
+			ent.addComponent<Graphic>(renderer->createElem("../assets/meshs/wallBlue.obj"));
+		else
+			ent.addComponent<Graphic>(renderer->createElem("../assets/meshs/wallGreen.obj"));
+		rand++;
 
 		auto const &gfx = ent.getComponent<Graphic>();
-		std::cout << "got component" << std::endl;
 		if (gfx.sceneNode == nullptr)
 			throw std::runtime_error("Could not load wall asset");
 	}
 
 	void World::spawnBWall(long posX, long posY)
 	{
-		std::cout << "spawning BWall" << std::endl;
 		auto &ent = createEntity();
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
@@ -102,7 +103,6 @@ namespace ecs {
 
 	void World::spawnPlayer(long posX, long posY)
 	{
-		std::cout << "spawning Player" << std::endl;
 		auto &ent = createEntity();
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
