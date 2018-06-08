@@ -101,11 +101,12 @@ namespace ecs {
 
 	void World::spawnPlayer(long posX, long posY)
 	{
+		static std::size_t playerId;
 		auto &ent = createEntity();
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Velocity>(0.f, 0.f);
-		ent.addComponent<Character>(false, 1LU, 1LU, 1LU);
+		ent.addComponent<Character>(false, 1LU, 1LU, 1LU, playerId++);
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
 		ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));

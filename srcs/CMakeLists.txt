@@ -51,7 +51,7 @@ set(SOURCE_FILES
         ../include/enum/AnimationType.hpp
         ../include/enum/EventEnum.hpp
 
-        ../include/common/vec.hpp)
+        ../include/common/vec.hpp ../include/engine/systems/PlayerMovement.cpp ../include/engine/systems/PlayerMovement.hpp)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4 /permissive")

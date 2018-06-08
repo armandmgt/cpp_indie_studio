@@ -7,6 +7,8 @@
 
 #include <iostream>
 #include <unordered_map>
+#include <queue>
+#include <algorithm>
 #include "event/EventReceiver.hpp"
 
 evt::MyEventReceiver::MyEventReceiver()
@@ -50,42 +52,47 @@ const evt::MyEventReceiver::MouseState &evt::MyEventReceiver::getMousePosition()
 
 bool evt::MyEventReceiver::_fillKey(irr::EKEY_CODE &keyCode)
 {
-	static std::unordered_map<irr::EKEY_CODE, std::pair<std::size_t, evt::eventType>> const mapEvent {
-		{irr::KEY_UP, {1, {evt::MOVEUP, evt::UP}}},
-		{irr::KEY_DOWN, {1, {evt::MOVEDOWN, evt::DOWN}}},
-		{irr::KEY_RIGHT, {1, {evt::MOVERIGHT, evt::RIGHT}}},
-		{irr::KEY_LEFT, {1, {evt::MOVELEFT, evt::LEFT}}},
-		{irr::KEY_DELETE, {1, {evt::RESTART, evt::DELETE}}},
-		{irr::KEY_ESCAPE, {1, {evt::QUIT, evt::ESCAPE}}},
-		{irr::KEY_LBUTTON, {1, {evt::CLICK, evt::MOUSE}}},
-		{irr::KEY_KEY_A, {2, {evt::PUTBOMB, evt::A}}},
-		{irr::KEY_KEY_D, {2, {evt::MOVERIGHT, evt::D}}},
-		{irr::KEY_KEY_Q, {2, {evt::MOVELEFT, evt::Q}}},
-		{irr::KEY_KEY_S, {2, {evt::MOVEDOWN, evt::S}}},
-		{irr::KEY_KEY_Z, {2, {evt::MOVEUP, evt::Z}}},
-		{irr::KEY_SPACE, {1, {evt::PAUSE, evt::SPACE}}}
+	static std::unordered_map<irr::EKEY_CODE, evt::PlayerEvent> const mapEvent {
+		{irr::KEY_KEY_O, {1, {evt::MOVEMENT, evt::MOVEUP, evt::UP}}},
+		{irr::KEY_KEY_L, {1, {evt::MOVEMENT, evt::MOVEDOWN, evt::DOWN}}},
+		{irr::KEY_KEY_M, {1, {evt::MOVEMENT, evt::MOVERIGHT, evt::RIGHT}}},
+		{irr::KEY_KEY_K, {1, {evt::MOVEMENT, evt::MOVELEFT, evt::LEFT}}},
+		{irr::KEY_KEY_I, {1, {evt::ACTION, evt::PUTBOMB, evt::I}}},
+		{irr::KEY_DELETE, {1, {evt::ACTION, evt::RESTART, evt::DELETE}}},
+		{irr::KEY_ESCAPE, {1, {evt::ACTION, evt::QUIT, evt::ESCAPE}}},
+		{irr::KEY_LBUTTON, {1, {evt::ACTION, evt::CLICK, evt::MOUSE}}},
+		{irr::KEY_KEY_A, {2, {evt::ACTION, evt::PUTBOMB, evt::A}}},
+		{irr::KEY_KEY_D, {2, {evt::MOVEMENT, evt::MOVERIGHT, evt::D}}},
+		{irr::KEY_KEY_Q, {2, {evt::MOVEMENT, evt::MOVELEFT, evt::Q}}},
+		{irr::KEY_KEY_S, {2, {evt::MOVEMENT, evt::MOVEDOWN, evt::S}}},
+		{irr::KEY_KEY_Z, {2, {evt::MOVEMENT, evt::MOVEUP, evt::Z}}},
+		{irr::KEY_SPACE, {1, {evt::MOVEMENT, evt::PAUSE, evt::SPACE}}}
 	};
 
-	auto value = mapEvent.find(keyCode);
-	if (value == mapEvent.end())
+	auto playerEvent = mapEvent.find(keyCode);
+	if (playerEvent == mapEvent.end())
 		return false;
-	buffer.emplace(mapEvent.at(keyCode));
+	auto &event = playerEvent->second;
+	buffer.emplace(event.id, event.event);
 	return true;
 }
 
-std::queue<evt::eventType> evt::MyEventReceiver::getPlayerEvent(std::size_t playerId)
+std::queue<evt::Event> evt::MyEventReceiver::getPlayerEvent(std::size_t id, evt::eventType type)
 {
-	std::queue<evt::eventType> eventQueue;
+	std::queue<evt::Event> eventQueue;
 
-	std::multimap<std::size_t, evt::eventType>::iterator eventIt;
-	while ((eventIt = buffer.find(playerId)) != buffer.end()) {
-		eventQueue.push(eventIt->second);
-		buffer.erase(eventIt);
+	//TODO : remove_copy_if ?
+	std::multimap<playerId, Event>::iterator eventIt;
+	while ((eventIt = buffer.find(id)) != buffer.end()) {
+		if (eventIt->second.type == type) {
+			eventQueue.push(eventIt->second);
+			buffer.erase(eventIt);
+		}
 	}
 	return eventQueue;
 }
 
-bool evt::MyEventReceiver::pollEvent()
+bool evt::MyEventReceiver::hasEvent()
 {
 	irr::EKEY_CODE  keyCode;
 
