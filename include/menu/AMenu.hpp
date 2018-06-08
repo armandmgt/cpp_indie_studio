@@ -27,6 +27,8 @@ namespace ids {
 			};
 
 			explicit AMenu(gfx::Renderer *rend, sceneId id);
+			~AMenu() override = default;
+
 			void computeEvent(evt::MyEventReceiver::MouseState &mouseData);
 
 		protected:

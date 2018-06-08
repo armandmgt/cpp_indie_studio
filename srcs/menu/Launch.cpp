@@ -44,13 +44,12 @@ ids::IScene::sceneId ids::menu::Launch::run()
 {
 	setWindow();
 	decorateScene();
-	while (_rend->isRunning() && _id != SETTINGS && _id != QUIT) {
+	while (_rend->isRunning() && _id == MENU) {
 		if (_events.isKeyDown(irr::KEY_ESCAPE)) {
 			_id = ids::IScene::QUIT;
 			return _id;
 		}
 		auto mousePos = _events.getMousePosition();
-		std::cout << mousePos.position.X << " " << mousePos.position.Y << std::endl;
 		//if (_rend->isKeyPressed(irr::KEY_LBUTTON)) {
 
 		computeEvent(mousePos);

@@ -5,19 +5,25 @@
 ** ScenesManager
 */
 
-#include <iostream>
+#include "scenes/GameScene.hpp"
 #include "scenes/ScenesManager.hpp"
 #include "menu/Launch.hpp"
 #include "menu/Settings.hpp"
 
-std::unique_ptr<ids::IScene> ids::ScenesManager::makeScene(IScene::sceneId sceneId, gfx::Renderer *renderer)
+ids::ScenesManager::ScenesManager(gfx::Renderer *renderer) : _renderer{renderer}
 {
+}
+
+std::unique_ptr<ids::IScene> ids::ScenesManager::makeScene(IScene::sceneId sceneId)
+{
+	//TODO: change all these .lock().get() by giving weak_ptr to AMenu and GameScene
 	switch (sceneId) {
 	case IScene::MENU:
-		return std::make_unique<ids::menu::Launch>(renderer);
+		return std::make_unique<ids::menu::Launch>(_renderer);
 	case IScene::SETTINGS:
-		std::cout << "renderer in makeScene " << renderer << std::endl;
-		return std::make_unique<ids::menu::Settings>(renderer);
+		return std::make_unique<ids::menu::Settings>(_renderer);
+	case IScene::GAME:
+		return std::make_unique<ids::GameScene>(_renderer);
 	default:
 		throw std::runtime_error("Cannot instantiate scene of this type");
 	}

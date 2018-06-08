@@ -27,7 +27,7 @@ bool Map::_addWall(size_t x, size_t y)
 		for (auto &it : _gamble)
 			if (rand > it.first)
 				continue;
-			else {
+			else if (_map[y][x] != UNBREAKABLE_WALL) {
 				_map[y][x] = it.second;
 				break;
 			}
@@ -82,12 +82,22 @@ void Map::_proceduralGen(size_t wallsToCreate)
 	}
 }
 
+void Map::fillLine(std::string &line)
+{
+	for (std::size_t i = 2; i < _width - 2; i++) {
+		if (i % 2 == 0)
+			line[i] = UNBREAKABLE_WALL;
+	}
+}
+
 void Map::_fillMap()
 {
 	_map.emplace_back(std::string(_width, UNBREAKABLE_WALL));
-	for (size_t i = 1; i < _height - 1; i++) {
+	for (std::size_t i = 1; i < _height - 1; i++) {
 		std::string tmp(_width, BREAKABLE_WALL);
 		tmp[0] = UNBREAKABLE_WALL;
+		if (i % 2 == 0)
+			fillLine(tmp);
 		tmp[_width - 1] = UNBREAKABLE_WALL;
 		_map.push_back(tmp);
 	}

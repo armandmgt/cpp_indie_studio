@@ -14,6 +14,11 @@
 namespace ids {
 	class ScenesManager {
 	public:
-		std::unique_ptr<ids::IScene> makeScene(IScene::sceneId sceneId, gfx::Renderer *renderer);
+		explicit ScenesManager(gfx::Renderer *renderer);
+
+		std::unique_ptr<ids::IScene> makeScene(IScene::sceneId sceneId);
+
+	private:
+		gfx::Renderer *_renderer;
 	};
 }

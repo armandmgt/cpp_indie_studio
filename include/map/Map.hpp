@@ -51,6 +51,7 @@ private:
 	size_t _height;
 	bool _addWall(size_t, size_t);
 	void _fillMap();
+	void fillLine(std::string &);
 	void _proceduralGen(size_t);
 	void _digTopLeftCorner();
 	void _digTopRightCorner();
@@ -58,10 +59,10 @@ private:
 	void _digBottomRightCorner();
 
 	std::map<int, mapItem> const _gamble = {
-		{50, UNBREAKABLE_WALL},
-		{70, POWER_UP},
-		{80, SPEED_UP},
-		{90, BOMB_UP},
+		{40, EMPTY},
+		{55, POWER_UP},
+		{70, SPEED_UP},
+		{85, BOMB_UP},
 		{100, FIRE_UP}
 	};
 };
