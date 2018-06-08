@@ -9,7 +9,6 @@
 
 #include <irrlicht/irrlicht.h>
 #include <memory>
-#include "common/vec.hpp"
 
 namespace ecs {
 	enum ActionTarget {
