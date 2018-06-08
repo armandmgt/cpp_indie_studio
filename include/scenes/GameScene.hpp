@@ -23,5 +23,6 @@ namespace ids {
 
 		private:
 			std::unique_ptr<ecs::World> _world;
+			std::unique_ptr<gfx::Renderer> _renderer;
 	};
 }
