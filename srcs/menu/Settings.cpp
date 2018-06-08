@@ -7,22 +7,20 @@
 
 #include "menu/Settings.hpp"
 
-ids::menu::Settings::Settings(gfx::Renderer *rend) : AMenu(rend, SETTINGS), _events{rend->getEventReceiver()},
+ids::menu::Settings::Settings(gfx::Renderer *rend, ids::Music *music) : AMenu(rend, SETTINGS, music), _events{rend->getEventReceiver()},
 	_music{ON},
 	_items{
-		{"Sound", ON, "../assets/menu/volume.png", "../assets/menu/mute.png", {928, 510}},
-		{"Board", NONE, "../assets/menu/Items/score-board.png", "../assets/menu/Items/score-board.png",
+		{{64, 64}, ON, "../assets/menu/volume.png", "../assets/menu/mute.png", {950, 510}},
+		{{960, 720}, NONE, "../assets/menu/Items/score-board.png", "../assets/menu/Items/score-board.png",
 			{480, 180}}
 	}
 {
 	_infoButtons = {
-		{{480,1000}, {107,55}, "../assets/menu/buttons/default/play-button.png",
+		{{700,1000}, {107,55}, "../assets/menu/buttons/default/play-button.png",
 			"../assets/menu/buttons/active/a-play-button.png", GAME, false},
-		{{750,1000}, {195,53}, "../assets/menu/buttons/default/scores-button.png",
-			"../assets/menu/buttons/active/a-scores-button.png", SCORE, false},
-		{{1100,1000}, {143,53}, "../assets/menu/buttons/default/back-button.png",
+		{{930, 1000}, {143,53}, "../assets/menu/buttons/default/back-button.png",
 			"../assets/menu/buttons/active/a-back-button.png", MENU, false},
-		{{1400,1000}, {101,63}, "../assets/menu/buttons/default/quit-button.png",
+		{{1200,1000}, {101,63}, "../assets/menu/buttons/default/quit-button.png",
 			"../assets/menu/buttons/active/a-quit-button.png", QUIT, false}
 	};
 	_backgroundImg = "../assets/menu/background/background-default.png";
@@ -38,9 +36,23 @@ void ids::menu::Settings::settingsItems()
 	//_mousePos
 }
 
-void ids::menu::Settings::setMusicLevel()
-{
 
+void	ids::menu::Settings::itemEvent()
+{
+	std::size_t id = 0;
+	if (_mousePos.second && _mousePos.first.x >= _items[0].pos.x && _mousePos.first.x < _items[0].pos.x + _items[0].size.x
+	    && _mousePos.first.y >= _items[0].pos.y && _mousePos.first.y < _items[0].pos.y + _items[0].size.y) {
+		if (_items[0].state == ON) {
+			_items[0].state = OFF;
+			_musicManager->pauseMusic(id);
+			_rend->load2D(_items[0].soundOff, _items[0].pos);
+		}
+		else {
+			_items[0].state = ON;
+			_musicManager->playMusic(id);
+			_rend->load2D(_items[0].soundOn, _items[0].pos);
+		}
+	}
 }
 
 ids::IScene::sceneId ids::menu::Settings::run()
@@ -50,7 +62,7 @@ ids::IScene::sceneId ids::menu::Settings::run()
 		_rend->load2D(item.soundOn, item.pos);
 	}
 	settingsItems();
-	while (_rend->isRunning() && _id != MENU && _id != QUIT) {
+	while (_rend->isRunning() && _id == SETTINGS) {
 		if (_events.isKeyDown(irr::KEY_ESCAPE)) {
 			_id = ids::IScene::QUIT;
 			return _id;
@@ -58,6 +70,7 @@ ids::IScene::sceneId ids::menu::Settings::run()
 		auto mousePos = _events.getMousePosition();
 		// _rend->isKeyPressed(irr::KEY_LBUTTON)
 		computeEvent(mousePos);
+		itemEvent();
 		_rend->render();
 	}
 	return _id;

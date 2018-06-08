@@ -11,6 +11,7 @@
 #include <string>
 #include "gfx/Renderer.hpp"
 #include "scenes/IScene.hpp"
+#include "common/Music.hpp"
 
 namespace ids {
 	namespace menu {
@@ -26,7 +27,7 @@ namespace ids {
 				bool hovered;
 			};
 
-			explicit AMenu(gfx::Renderer *rend, sceneId id);
+			explicit AMenu(gfx::Renderer *rend, sceneId id, ids::Music *music);
 			~AMenu() override = default;
 
 			void computeEvent(evt::MyEventReceiver::MouseState &mouseData);
@@ -40,6 +41,7 @@ namespace ids {
 			std::vector<Button> _infoButtons;
 			sceneId	_id;
 			std::pair<vec2d<int>, bool> _mousePos;
+			Music *_musicManager;
 
 		};
 	}

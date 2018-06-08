@@ -7,8 +7,7 @@
 
 #include "engine/GameContainer.hpp"
 
-//TODO: remove this .get() and make ecs::World take a weak_ptr
-ids::GameContainer::GameContainer() : _scenesManager{&_renderer}, _renderer{}, _ecs{&_renderer}
+ids::GameContainer::GameContainer() : _renderer{}, _ecs{&_renderer}, _music{}, _scenesManager{&_renderer, &_music}
 {
 }
 

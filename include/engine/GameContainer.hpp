@@ -13,6 +13,7 @@
 #include "world/World.hpp"
 #include "event/Event.hpp"
 #include "scenes/ScenesManager.hpp"
+#include "common/Music.hpp"
 
 #ifdef _IRR_WINDOWS_
 #pragma comment(lib, "Irrlicht.lib")
@@ -32,5 +33,6 @@ namespace ids {
 		ScenesManager _scenesManager;
 		gfx::Renderer _renderer;
 		ecs::World _ecs;
+		Music _music;
 	};
 }

@@ -8,8 +8,8 @@
 #include "menu/AMenu.hpp"
 #include "common/vec.hpp"
 
-ids::menu::AMenu::AMenu(gfx::Renderer *rend, sceneId id) : _rend(rend), _posBackground(0,0), _id(id),
-	_mousePos(vec2d<int>(0,0), false)
+ids::menu::AMenu::AMenu(gfx::Renderer *rend, sceneId id, ids::Music *music) : _rend(rend), _posBackground(0,0), _id(id),
+	_mousePos(vec2d<int>(0,0), false), _musicManager(music)
 {
 }
 

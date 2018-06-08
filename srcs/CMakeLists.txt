@@ -51,7 +51,12 @@ set(SOURCE_FILES
         ../include/enum/AnimationType.hpp
         ../include/enum/EventEnum.hpp
 
-        ../include/common/vec.hpp)
+        ../include/common/vec.hpp
+        ../include/common/Music.hpp
+        Music/Music.cpp
+        menu/LoadGame.cpp
+        ../include/menu/LoadGame.hpp
+        )
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4 /permissive")
@@ -63,8 +68,10 @@ add_executable(bomberman ${SOURCE_FILES})
 
 if (WIN32)
    LINK_DIRECTORIES("../")
+   target_link_libraries(bomberman "../../srcs/Irrlicht" sfml-audio)
+   add_custom_command(TARGET bomberman POST_BUILD
+           COMMAND cmd /c "start ${CMAKE_SOURCE_DIR}/WinSetupDirectory.bat")
+else ()
+    target_link_libraries(bomberman Irrlicht sfml-audio)
    include_directories("../irrlicht/")
-   target_link_libraries(bomberman "../../srcs/Irrlicht")
-	add_custom_command(TARGET bomberman POST_BUILD
-	COMMAND cmd /c "start ${CMAKE_SOURCE_DIR}/WinSetupDirectory.bat")
 endif()
