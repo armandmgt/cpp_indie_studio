@@ -24,6 +24,7 @@ gfx::Renderer::Renderer()
 
 gfx::Renderer::~Renderer()
 {
+	device->run();
 	device->drop();
 }
 
