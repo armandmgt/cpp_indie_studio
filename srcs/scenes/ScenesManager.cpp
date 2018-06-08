@@ -6,7 +6,7 @@
 */
 
 #include <iostream>
-#include <scenes/GameScene.hpp>
+#include "scenes/GameScene.hpp"
 #include "scenes/ScenesManager.hpp"
 #include "menu/Launch.hpp"
 #include "menu/Settings.hpp"
