@@ -185,10 +185,7 @@ void gfx::Renderer::addArchive(irr::core::stringw const &filename)
 
 void gfx::Renderer::setCameraFPS()
 {
-	auto camera = smgr->addCameraSceneNodeFPS();
-	camera->setPosition({100, 300, -190});
-	std::cout << "Position : [" << camera->getPosition().X << ", " << camera->getPosition().Y << ", "
-		  << camera->getPosition().Z << "]" << std::endl;
+	smgr->addCameraSceneNode(nullptr, {97, 126, -4}, {100, -350, 300});
 	auto light = smgr->addLightSceneNode(nullptr, irr::core::vector3df{100, 300, -190},
 		irr::video::SColorf{1, 1, 1, 0}, 500.f);
 	irr::scene::IBillboardSceneNode *bill = smgr->addBillboardSceneNode(

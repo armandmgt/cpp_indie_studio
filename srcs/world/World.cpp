@@ -77,10 +77,8 @@ namespace ecs {
 		auto &ent = createEntity();
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
-		if (rand % 2)
-			ent.addComponent<Graphic>(renderer->createElem("../assets/meshs/wallBlue.obj"));
-		else
-			ent.addComponent<Graphic>(renderer->createElem("../assets/meshs/wallGreen.obj"));
+		ent.addComponent<Graphic>(renderer->createElem(
+			rand % 2 ? "../assets/meshs/wallBlue.obj" : "../assets/meshs/wallGreen.obj"));
 		rand++;
 
 		auto const &gfx = ent.getComponent<Graphic>();

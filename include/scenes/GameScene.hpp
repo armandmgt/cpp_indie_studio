@@ -23,5 +23,6 @@ namespace ids {
 		private:
 			std::unique_ptr<ecs::World> _world;
 			gfx::Renderer *_renderer;
+			evt::MyEventReceiver &_event;
 	};
 }
