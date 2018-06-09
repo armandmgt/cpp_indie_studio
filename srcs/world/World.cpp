@@ -214,9 +214,10 @@ namespace ecs {
 					elem.getComponent<Position>().y * sizeGround.z
 				};
 				renderer->setPosition(elem.getComponent<Graphic>().sceneNode, pos);
-				if (elem.hasComponent<Character>())
-					renderer->setScale(elem.getComponent<Graphic>().sceneNode,
-						elem.getComponent<Graphic>()._scale);
+				if (elem.hasComponent<Character>() && elem.hasComponent<Graphic>()) {
+					auto comp = elem.getComponent<Graphic>();
+					renderer->setScale(comp.sceneNode, comp.scale);
+				}
 			}
 		}
 	}
