@@ -5,13 +5,14 @@
 ** gamescene
 */
 
-#include <engine/systems/PlayerMovement.hpp>
-#include <engine/systems/MovementSystem.hpp>
-#include <engine/systems/ParseInputSystem.hpp>
+#include "engine/systems/PlayerMovement.hpp"
+#include "engine/systems/MovementSystem.hpp"
+#include "engine/systems/ParseInputSystem.hpp"
+#include "engine/systems/PutBombSystem.hpp"
 #include "GameScene.hpp"
 
 ids::GameScene::GameScene(gfx::Renderer *r)
-		: _world{std::make_unique<ecs::World>(r)}, _renderer{r}, _event{r->getEventReceiver()} {
+		: _world{std::make_shared<ecs::World>(r)}, _renderer{r}, _event{r->getEventReceiver()} {
 	Map map(21, 20);
 
 	map.initMap(20);
@@ -26,10 +27,12 @@ void ids::GameScene::_initSystem()
 	std::unique_ptr<ecs::MovementSystem> movSys = std::make_unique<ecs::MovementSystem>(&_world->entities, _renderer);
 	std::unique_ptr<ecs::ParseInput> parseSys = std::make_unique<ecs::ParseInput>(&_world->entities,
 		_renderer->getEventReceiver());
+	std::unique_ptr<ecs::PutBombSystem> bomSys = std::make_unique<ecs::PutBombSystem>(&_world->entities, _world);
 
 	_systemList.push_back(std::move(parseSys));
 	_systemList.push_back(std::move(movPlayerSys));
 	_systemList.push_back(std::move(movSys));
+	_systemList.push_back(std::move(bomSys));
 }
 
 

@@ -139,17 +139,19 @@ namespace ecs {
 		}
 	}
 
-	void World::spawnBombSystem(entityId id) {
-		if (entities.at(id).hasComponent<Character>()) {
+	void World::spawnBombSystem(Entity *player) {
+		if (player->hasComponent<Character>()) {
 			auto &ent = createEntity();
 
-			ent.addComponent<Velocity>(0.f, 0.f);
-			ent.addComponent<Explosion>(entities.at(id).getComponent<Character>().power, 5LU);
+			ent.addComponent<Explosion>(player->getComponent<Character>().power, 5LU);
 			ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/bomb.obj"));
+			ent.addComponent<Position>(player->getComponent<Position>());
 
 			auto const &gfx= ent.getComponent<Graphic>();
 			if (gfx.sceneNode == nullptr)
 				throw std::runtime_error("Cannot load bomb asset");
+			auto &pos = ent.getComponent<Position>();
+			renderer->setPosition(gfx.sceneNode, {pos.x, 0, pos.y});
 		}
 	}
 

@@ -38,7 +38,7 @@ namespace ecs {
 
 		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);
 		void drawEntities();
-		void spawnBombSystem(entityId);
+		void spawnBombSystem(Entity *);
 		void spawnCollectibleFromBoxSystem(entityId) noexcept;
 
 		void update(long delta);

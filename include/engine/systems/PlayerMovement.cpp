@@ -18,7 +18,6 @@ namespace ecs {
 		for (auto &player : entities) {
 			auto &input = player->getComponent<Input>();
 			auto &velocityPlayer = player->getComponent<Velocity>();
-			auto &InputPlayer = player->getComponent<Input>();
 			if (input.goDown) {
 				velocityPlayer.y -= 0.1;
 				input.goDown = false;

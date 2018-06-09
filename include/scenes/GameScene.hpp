@@ -26,7 +26,7 @@ namespace ids {
 			void _initSystem();
 
 		private:
-			std::unique_ptr<ecs::World> _world;
+			std::shared_ptr<ecs::World> _world;
 			gfx::Renderer *_renderer;
 			evt::MyEventReceiver &_event;
 			std::list<std::unique_ptr<ecs::System>> _systemList{};
