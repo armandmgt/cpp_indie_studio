@@ -7,8 +7,8 @@
 
 #include "ExplosionSystem.hpp"
 
-ecs::ExplosionSystem::ExplosionSystem(std::vector<ecs::Entity> *allEntities)
-		: System(allEntities) {}
+ecs::ExplosionSystem::ExplosionSystem(std::vector<ecs::Entity> *allEntities, gfx::Renderer *render)
+		: System(allEntities, render) {}
 
 void ecs::ExplosionSystem::update(double delta[[maybe_unused]]) {
 	auto &entities = getEntities(COMP_POSITION, COMP_EXPLOSION);

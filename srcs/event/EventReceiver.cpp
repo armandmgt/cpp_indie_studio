@@ -8,6 +8,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <queue>
+#include <list>
 #include <algorithm>
 #include "event/EventReceiver.hpp"
 
@@ -81,13 +82,16 @@ std::queue<evt::Event> evt::MyEventReceiver::getPlayerEvent(std::size_t id, evt:
 {
 	std::queue<evt::Event> eventQueue;
 
-	//TODO : remove_copy_if ?
-	std::multimap<playerId, Event>::iterator eventIt;
-	while ((eventIt = buffer.find(id)) != buffer.end()) {
-		if (eventIt->second.type == type) {
+	for (auto eventIt = buffer.begin(); eventIt != buffer.end();) {
+		if (eventIt->second.type == type && eventIt->first == id)
 			eventQueue.push(eventIt->second);
-			buffer.erase(eventIt);
-		}
+		eventIt++;
+	}
+	for (auto eventIt = buffer.begin(); eventIt != buffer.end(); ) {
+		if (eventIt->second.type == type && eventIt->first == id)
+			eventIt = buffer.erase(eventIt);
+		else
+			eventIt++;
 	}
 	return eventQueue;
 }

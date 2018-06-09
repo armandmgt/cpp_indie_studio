@@ -12,7 +12,7 @@
 namespace ecs {
 	class ExplosionSystem : public System {
 	public:
-		explicit ExplosionSystem(std::vector<Entity> *);
+		explicit ExplosionSystem(std::vector<Entity> *, gfx::Renderer *);
 
 		void update(double) override;
 	};

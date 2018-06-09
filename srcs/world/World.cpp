@@ -14,7 +14,7 @@ namespace ecs {
 
 	World::World(gfx::Renderer *render) : entities{}, renderer{render}
 	{
-		systems.push_back(std::make_unique<MovementSystem>(&entities));
+		systems.push_back(std::make_unique<MovementSystem>(&entities, render));
 	}
 
 	Entity &World::createEntity()

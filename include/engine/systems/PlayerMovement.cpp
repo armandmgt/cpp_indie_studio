@@ -4,32 +4,28 @@
 ** File description:
 ** PlayerMovement
 */
+
 #include <iostream>
 #include "PlayerMovement.hpp"
 
 namespace ecs {
-	PlayerMovement::PlayerMovement(std::vector<Entity> *allEntities, evt::MyEventReceiver &e) :
-		System(allEntities), _eventReceiver(e) {}
+	PlayerMovement::PlayerMovement(std::vector<Entity> *allEntities, gfx::Renderer *gfx, evt::MyEventReceiver &e) :
+		System(allEntities, gfx), _eventReceiver(e) {}
 
 	void PlayerMovement::update(double delta[[maybe_unused]]) {
 		auto &entities = getEntities(COMP_CHARACTER, COMP_VELOCITY);
 
-		for (std::size_t i = 0; i < 4; i++) {
-			auto playerEvent = _eventReceiver.getPlayerEvent(i, evt::MOVEMENT);
+		for (auto &player : entities) {
+			auto playerEvent = _eventReceiver.getPlayerEvent(player->getComponent<Character>().id, evt::MOVEMENT);
 			while (!playerEvent.empty()) {
-				std::cout << "Player " << i << " event : " << playerEvent.front().action << std::endl;
+				if (playerEvent.front().action == evt::MOVEUP) {
+					auto &playerVel = player->getComponent<Velocity>();
+					playerVel.x += 0.1;
+					std::cout << "now Vel::x equal to " << player->getComponent<Velocity>().x <<
+					        std::endl;
+				}
 				playerEvent.pop();
 			}
 		}
-
-		for (auto e : entities) {
-			auto &position = e->getComponent<Position>();
-			auto &velocity = e->getComponent<Velocity>();
-			position.x += velocity.x;
-			position.y += velocity.y;
-		}
-
-
 	}
-
 }

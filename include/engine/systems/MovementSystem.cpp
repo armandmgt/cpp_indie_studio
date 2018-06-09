@@ -8,16 +8,22 @@
 #include "MovementSystem.hpp"
 
 namespace ecs {
-	MovementSystem::MovementSystem(std::vector<Entity> *allEntities) : System(allEntities) {}
+	MovementSystem::MovementSystem(std::vector<Entity> *allEntities, gfx::Renderer *render) : System(allEntities,
+													 render) {}
 
 	void MovementSystem::update(double delta[[maybe_unused]]) {
 		auto &entities = getEntities(COMP_POSITION, COMP_VELOCITY);
 
-		for (auto e : entities) {
+		for (auto &e : entities) {
 			auto &position = e->getComponent<Position>();
 			auto &velocity = e->getComponent<Velocity>();
 			position.x += velocity.x;
 			position.y += velocity.y;
+			velocity.x = 0;
+			velocity.y = 0;
+			if (e->hasComponent<Graphic>()) {
+
+			}
 		}
 	}
 };

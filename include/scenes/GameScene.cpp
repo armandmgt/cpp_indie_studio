@@ -21,8 +21,9 @@ ids::GameScene::GameScene(gfx::Renderer *r)
 
 void ids::GameScene::_initSystem()
 {
-	std::unique_ptr<ecs::PlayerMovement> movPlayerSys = std::make_unique<ecs::PlayerMovement>(&_world->entities, _event);
-	std::unique_ptr<ecs::MovementSystem> movSys = std::make_unique<ecs::MovementSystem>(&_world->entities);
+	std::unique_ptr<ecs::PlayerMovement> movPlayerSys = std::make_unique<ecs::PlayerMovement>(&_world->entities,
+		_renderer, _event);
+	std::unique_ptr<ecs::MovementSystem> movSys = std::make_unique<ecs::MovementSystem>(&_world->entities, _renderer);
 
 	_systemList.push_back(std::move(movPlayerSys));
 	_systemList.push_back(std::move(movSys));
