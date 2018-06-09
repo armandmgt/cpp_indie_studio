@@ -9,6 +9,7 @@
 
 #include <bitset>
 #include <vector>
+#include <array>
 #include "Components.hpp"
 
 namespace ecs {

@@ -9,7 +9,7 @@
 
 #include <irrlicht/irrlicht.h>
 #include <unordered_map>
-#include <vector>
+#include <deque>
 #include "common/vec.hpp"
 #include "enum/EventEnum.hpp"
 #include "gfx/Image2D.hpp"
@@ -49,6 +49,7 @@ namespace gfx {
 			const irr::core::rect<irr::s32> &rect
 		);
 		void load2D(irr::core::stringw const &filename, const vec2d<int> &pos);
+		void remove2D(irr::core::stringw const &filename);
 		void addArchive(irr::core::stringw const &filename);
 		void setCameraFPS();
 		evt::MyEventReceiver &getEventReceiver();
@@ -60,7 +61,7 @@ namespace gfx {
 		irr::video::IVideoDriver *driver;
 		irr::scene::ISceneManager *smgr;
 		irr::gui::IGUIEnvironment *guienv;
-		std::vector<gfx::image2D> images;
+		std::deque<gfx::Image2D> images;
 		using animationMap = std::unordered_map<std::string, vec2d<int>>;
 		std::unordered_map<irr::scene::ISceneNode *, animationMap> animations;
 	};

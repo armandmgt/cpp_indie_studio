@@ -61,7 +61,6 @@ namespace ecs {
 
 	void World::spawnWall(ActionTarget type, long posX, long posY) {
 		auto &ent = createEntity();
-		std::cout << "spawning Wall" << std::endl;
 
 		ent.addComponent<Destructible>(std::make_unique<Collectible>(type));
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
@@ -74,21 +73,21 @@ namespace ecs {
 	}
 
 	void World::spawnUWall(long posX, long posY) {
+		static int rand = 0;
 		auto &ent = createEntity();
-		std::cout << "spawning UWall" << std::endl;
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
-		ent.addComponent<Graphic>(renderer->createElem("../assets/meshs/ground.obj"));
+		ent.addComponent<Graphic>(renderer->createElem(
+			rand % 2 ? "../assets/meshs/wallBlue.obj" : "../assets/meshs/wallGreen.obj"));
+		rand++;
 
 		auto const &gfx = ent.getComponent<Graphic>();
-		std::cout << "got component" << std::endl;
 		if (gfx.sceneNode == nullptr)
 			throw std::runtime_error("Could not load wall asset");
 	}
 
 	void World::spawnBWall(long posX, long posY)
 	{
-		std::cout << "spawning BWall" << std::endl;
 		auto &ent = createEntity();
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
@@ -102,7 +101,6 @@ namespace ecs {
 
 	void World::spawnPlayer(long posX, long posY)
 	{
-		std::cout << "spawning Player" << std::endl;
 		auto &ent = createEntity();
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
@@ -110,11 +108,11 @@ namespace ecs {
 		ent.addComponent<Character>(false, 1LU, 1LU, 1LU);
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
-		ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
+		ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"), 2);
 	}
 
 	void World::spawnFlames(ecs::Position initialPos, size_t pwr) {
-		std::cout << "[SPAWN] flammes at [" << initialPos.x << ":" << initialPos.y << "] with power (" << pwr << ")" << std::endl;
+		//std::cout << "[SPAWN] flammes at [" << initialPos.x << ":" << initialPos.y << "] with power (" << pwr << ")" << std::endl;
 
 		auto &e = createEntity();
 		for (size_t i = 0; i < pwr; i++) {
@@ -214,6 +212,10 @@ namespace ecs {
 					elem.getComponent<Position>().y * sizeGround.z
 				};
 				renderer->setPosition(elem.getComponent<Graphic>().sceneNode, pos);
+				if (elem.hasComponent<Character>() && elem.hasComponent<Graphic>()) {
+					auto comp = elem.getComponent<Graphic>();
+					renderer->setScale(comp.sceneNode, comp.scale);
+				}
 			}
 		}
 	}
