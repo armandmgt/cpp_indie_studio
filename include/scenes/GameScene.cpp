@@ -1,13 +1,13 @@
-#include <engine/systems/PlayerMovement.hpp>
-#include <engine/systems/MovementSystem.hpp>
-#include "GameScene.hpp"
-
 /*
 ** EPITECH PROJECT, 2018
 ** cpp_indie_studio
 ** File description:
 ** gamescene
 */
+
+#include <engine/systems/PlayerMovement.hpp>
+#include <engine/systems/MovementSystem.hpp>
+#include "GameScene.hpp"
 
 ids::GameScene::GameScene(gfx::Renderer *r)
 		: _world{std::make_unique<ecs::World>(r)}, _renderer{r}, _event{r->getEventReceiver()} {

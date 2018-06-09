@@ -15,5 +15,8 @@ namespace ecs {
 		explicit ExplosionSystem(std::vector<Entity> *, gfx::Renderer *);
 
 		void update(double) override;
+
+	private:
+		gfx::Renderer *_renderer;
 	};
 }

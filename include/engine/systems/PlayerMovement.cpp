@@ -10,7 +10,7 @@
 
 namespace ecs {
 	PlayerMovement::PlayerMovement(std::vector<Entity> *allEntities, gfx::Renderer *gfx, evt::MyEventReceiver &e) :
-		System(allEntities, gfx), _eventReceiver(e) {}
+		System(allEntities), _eventReceiver(e), _renderer(gfx) {}
 
 	void PlayerMovement::update(double delta[[maybe_unused]]) {
 		auto &entities = getEntities(COMP_CHARACTER, COMP_VELOCITY);

@@ -14,8 +14,7 @@
 namespace ecs {
 	class System {
 	public:
-		explicit System(std::vector<Entity> *allEntities, gfx::Renderer *render) : _allEntities(allEntities),
-											   _renderer(render)
+		explicit System(std::vector<Entity> *allEntities) : _allEntities(allEntities)
 		{};
 		virtual void update(double delta) = 0;
 
@@ -40,6 +39,5 @@ namespace ecs {
 	private:
 		std::vector<Entity> *_allEntities;
 		std::vector<Entity *> _entities;
-		gfx::Renderer *_renderer;
 	};
 };

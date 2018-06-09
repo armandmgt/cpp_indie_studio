@@ -18,6 +18,7 @@ namespace ecs {
 		void update(double delta) override;
 
 	private:
+		gfx::Renderer *_renderer;
 		evt::MyEventReceiver &_eventReceiver;
 	};
 };
