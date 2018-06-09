@@ -93,8 +93,8 @@ namespace ecs {
 	};
 
 	struct Input : public Component {
-		Input(bool l, bool r, bool u, bool d, bool b)
-			: goLeft(l), goRight(r), goUp(u), goDown(d), putBomb(b)
+		Input(bool ai)
+			: goLeft(false), goRight(false), goUp(false), goDown(false), putBomb(false), isAi(ai)
 		{};
 		~Input() = default;
 		static comp const type = COMP_INPUT;
@@ -103,6 +103,7 @@ namespace ecs {
 		bool goUp;
 		bool goDown;
 		bool putBomb;
+		bool isAi;
 	};
 
 	struct AiInput : public Component {

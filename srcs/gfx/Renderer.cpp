@@ -218,3 +218,8 @@ evt::MyEventReceiver &gfx::Renderer::getEventReceiver()
 {
 	return eventReceiver;
 }
+
+void gfx::Renderer::setSizeGround(vec3d<float> &sizeGround)
+{
+	_sizeGround = sizeGround;
+}

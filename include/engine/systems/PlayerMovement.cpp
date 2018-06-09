@@ -9,22 +9,26 @@
 #include "PlayerMovement.hpp"
 
 namespace ecs {
-	PlayerMovement::PlayerMovement(std::vector<Entity> *allEntities, gfx::Renderer *gfx, evt::MyEventReceiver &e) :
-		System(allEntities), _eventReceiver(e), _renderer(gfx) {}
+	PlayerMovement::PlayerMovement(std::vector<Entity> *allEntities) :
+		System(allEntities) {}
 
 	void PlayerMovement::update(double delta[[maybe_unused]]) {
-		auto &entities = getEntities(COMP_CHARACTER, COMP_VELOCITY);
+		auto &entities = getEntities(COMP_CHARACTER, COMP_VELOCITY, COMP_INPUT);
 
 		for (auto &player : entities) {
-			auto playerEvent = _eventReceiver.getPlayerEvent(player->getComponent<Character>().id, evt::MOVEMENT);
-			while (!playerEvent.empty()) {
-				if (playerEvent.front().action == evt::MOVEUP) {
-					auto &playerVel = player->getComponent<Velocity>();
-					playerVel.x += 0.1;
-					std::cout << "now Vel::x equal to " << player->getComponent<Velocity>().x <<
-					        std::endl;
-				}
-				playerEvent.pop();
+			auto &input = player->getComponent<Input>();
+			auto &velocityPlayer = player->getComponent<Velocity>();
+			if (input.goDown) {
+				velocityPlayer.x -= 0.1;
+			}
+			if (input.goUp) {
+				velocityPlayer.x += 0.1;
+			}
+			if (input.goLeft) {
+				velocityPlayer.y -= 0.1;
+			}
+			if (input.goRight) {
+				velocityPlayer.y += 0.1;
 			}
 		}
 	}

@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2018
 ** cpp_indie_studio
 ** File description:
-** PlayerMovement
+** ParseInput
 */
 
 #pragma once
@@ -11,10 +11,13 @@
 #include "Systems.hpp"
 
 namespace ecs {
-	class PlayerMovement : public System {
+	class ParseInput : public System {
 	public:
-		explicit PlayerMovement(std::vector<Entity> *);
+		ParseInput(std::vector<ecs::Entity> *allEntities, evt::MyEventReceiver &e);
 
 		void update(double delta) override;
+
+	private:
+		evt::MyEventReceiver &event;
 	};
 };

@@ -15,7 +15,6 @@ namespace ecs {
 		explicit MovementSystem(std::vector<Entity> *, gfx::Renderer *);
 
 		void update(double delta) override;
-
 	private:
 		gfx::Renderer *_renderer;
 	};

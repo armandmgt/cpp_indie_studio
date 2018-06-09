@@ -109,6 +109,7 @@ namespace ecs {
 		ent.addComponent<Character>(false, 1LU, 1LU, 1LU, playerId++);
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
+		ent.addComponent<Input>(false);
 		ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"), 2);
 	}
 

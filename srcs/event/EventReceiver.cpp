@@ -78,17 +78,17 @@ bool evt::MyEventReceiver::_fillKey(irr::EKEY_CODE &keyCode)
 	return true;
 }
 
-std::queue<evt::Event> evt::MyEventReceiver::getPlayerEvent(std::size_t id, evt::eventType type)
+std::queue<evt::Event> evt::MyEventReceiver::getPlayerEvent(std::size_t id)
 {
 	std::queue<evt::Event> eventQueue;
 
 	for (auto eventIt = buffer.begin(); eventIt != buffer.end();) {
-		if (eventIt->second.type == type && eventIt->first == id)
+		if (eventIt->first == id)
 			eventQueue.push(eventIt->second);
 		eventIt++;
 	}
 	for (auto eventIt = buffer.begin(); eventIt != buffer.end(); ) {
-		if (eventIt->second.type == type && eventIt->first == id)
+		if (eventIt->first == id)
 			eventIt = buffer.erase(eventIt);
 		else
 			eventIt++;

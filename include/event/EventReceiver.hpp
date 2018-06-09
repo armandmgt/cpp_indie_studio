@@ -48,7 +48,7 @@ namespace evt {
 		bool getKeyPressed(irr::EKEY_CODE &keyCode) const;
 
 		bool hasEvent();
-		std::queue<evt::Event> getPlayerEvent(std::size_t id, eventType type);
+		std::queue<evt::Event> getPlayerEvent(std::size_t id);
 
 	private:
 		bool _fillKey(irr::EKEY_CODE &keyCode);
