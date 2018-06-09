@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ParseInputSystem.hpp"/*
 ** EPITECH PROJECT, 2018
 ** cpp_indie_studio
@@ -11,7 +12,7 @@ ecs::ParseInput::ParseInput(std::vector<ecs::Entity> *allEntities, evt::MyEventR
 	: System(allEntities), event(e) {}
 
 void ecs::ParseInput::update(double delta[[maybe_unused]]) {
-	auto &entities = getEntities(COMP_POSITION, COMP_EXPLOSION);
+	auto &entities = getEntities(COMP_CHARACTER, COMP_INPUT);
 
 	for (auto &e : entities) {
 		auto &InputPlayer = e->getComponent<Input>();
@@ -28,6 +29,10 @@ void ecs::ParseInput::update(double delta[[maybe_unused]]) {
 				InputPlayer.goRight = true;
 			if (event.action == evt::PUTBOMB)
 				InputPlayer.putBomb = true;
+			std::cout << "InputPlayer : \n\tGo Up : " << InputPlayer.goUp << "\n\tGo Down : " << InputPlayer
+				.goDown <<
+				  "\n\tGo Left : " << InputPlayer.goLeft << "\n\tGo Right : " << InputPlayer.goRight <<
+				  std::endl;
 			events.pop();
 		}
 	}

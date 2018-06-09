@@ -23,8 +23,7 @@ namespace ecs {
 			velocity.y = 0;
 			if (e->hasComponent<Graphic>()) {
 				auto &gfxEntitie = e->getComponent<Graphic>();
-				auto &posEntitie = e->getComponent<Position>();
-				_renderer->setPosition(gfxEntitie.sceneNode, {posEntitie.x, -7, posEntitie.y});
+				_renderer->setPosition(gfxEntitie.sceneNode, {position.x, 0, position.y});
 			}
 		}
 	}

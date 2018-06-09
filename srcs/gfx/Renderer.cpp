@@ -132,7 +132,7 @@ bool gfx::Renderer::setPosition(irr::scene::ISceneNode *node, const vec3d<float>
 {
 	if (!node)
 		return false;
-	node->setPosition({pos.x, pos.y, pos.z});
+	node->setPosition({pos.x * _sizeGround.x, pos.y, pos.z * _sizeGround.z});
 	return true;
 }
 

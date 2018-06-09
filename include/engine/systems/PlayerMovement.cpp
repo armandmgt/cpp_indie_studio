@@ -18,17 +18,22 @@ namespace ecs {
 		for (auto &player : entities) {
 			auto &input = player->getComponent<Input>();
 			auto &velocityPlayer = player->getComponent<Velocity>();
+			auto &InputPlayer = player->getComponent<Input>();
 			if (input.goDown) {
-				velocityPlayer.x -= 0.1;
+				velocityPlayer.y -= 0.1;
+				input.goDown = false;
 			}
 			if (input.goUp) {
-				velocityPlayer.x += 0.1;
+				velocityPlayer.y += 0.1;
+				input.goUp = false;
 			}
 			if (input.goLeft) {
-				velocityPlayer.y -= 0.1;
+				velocityPlayer.x -= 0.1;
+				input.goLeft = false;
 			}
 			if (input.goRight) {
-				velocityPlayer.y += 0.1;
+				velocityPlayer.x += 0.1;
+				input.goRight = false;
 			}
 		}
 	}

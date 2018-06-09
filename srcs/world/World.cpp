@@ -196,12 +196,14 @@ namespace ecs {
 					return;
 				}
 				renderer->setPosition(node, pos);
-				if (x == 0)
+				if (x == 0) {
 					sizeGround = renderer->getSize(node);
-				pos.z += sizeGround.z;
+					renderer->setSizeGround(sizeGround);
+				}
+				pos.z += 1;
 			}
 			pos.z = 0;
-			pos.x += sizeGround.x;
+			pos.x += 1;
 		}
 	}
 
@@ -209,9 +211,9 @@ namespace ecs {
 		for (auto &elem : entities) {
 			if (elem.hasComponent<Position>() && elem.hasComponent<Graphic>()) {
 				vec3d<float> pos {
-					elem.getComponent<Position>().x * sizeGround.x,
+					elem.getComponent<Position>().x,
 					0,
-					elem.getComponent<Position>().y * sizeGround.z
+					elem.getComponent<Position>().y
 				};
 				renderer->setPosition(elem.getComponent<Graphic>().sceneNode, pos);
 				if (elem.hasComponent<Character>() && elem.hasComponent<Graphic>()) {
