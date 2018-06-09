@@ -32,8 +32,10 @@ set(SOURCE_FILES
         ../include/menu/AMenu.hpp
         ../include/menu/Launch.hpp
         ../include/menu/Settings.hpp
-        ../inlcude/menu/LoadGame.hpp
+        ../include/menu/LoadGame.hpp
 
+        ../include/common/Music.hpp
+        Music/Music.cpp
 
         settingManager/settingManager.cpp
         ../include/settingManager/settingManager.hpp

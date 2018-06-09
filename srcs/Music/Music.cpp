@@ -8,44 +8,49 @@
 #include <iostream>
 #include "common/Music.hpp"
 
-ids::Music::Music() noexcept : _musicId(0)
+bool ids::Music::musicInit()
 {
+	return _music.empty();
 }
 
-bool	ids::Music::isPlaying()
+bool ids::Music::getState(ids::Music::musicId music)
 {
-	return _music.size() > 0;
+	return _music[music].active;
 }
 
-ids::Music::id ids::Music::createMusic(std::string &file)
+ids::Music::musicId ids::Music::createMusic(std::string &file)
 {
 	std::unique_ptr<sf::Music> music = std::make_unique<sf::Music>();
-	sf::SoundBuffer buffer;
+
 	music->openFromFile(file);
 	music->setVolume(60);
 	music->setLoop(true);
-	_music.insert({_musicId, std::move(music)});
+
+	_music.push_back({std::move(music), false});
+
+	//_music.insert({_musicId, std::move(music)});
 	return _musicId++;
 }
 
-void ids::Music::playMusic(ids::Music::id music)
+void ids::Music::playMusic(ids::Music::musicId music)
 {
-	auto it = _music.find(music);
-	if (it != _music.end()) {
-		it->second->play();
+	if (music < _music.size()) {
+		_music[music].sfMusic->play();
+		_music[music].active = true;
 	}
 }
 
-void ids::Music::destroyMusic(ids::Music::id music)
+void ids::Music::destroyMusic(ids::Music::musicId music)
 {
-	auto it = _music.find(music);
-	_music.erase(it);
+	if (music < _music.size()) {
+		_music.erase(_music.begin() + music);
+	}
 }
 
-void ids::Music::pauseMusic(ids::Music::id music)
+void ids::Music::pauseMusic(ids::Music::musicId music)
 {
-	auto it = _music.find(music);
-	if (it != _music.end()) {
-		it->second->pause();
+	if (music < _music.size()) {
+		_music[music].sfMusic->pause();
+		_music[music].active = false;
 	}
 }

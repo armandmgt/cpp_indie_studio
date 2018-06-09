@@ -31,23 +31,18 @@ ids::menu::Settings::~Settings()
 	_rend->clearScene();
 }
 
-void ids::menu::Settings::settingsItems()
-{
-	//_mousePos
-}
-
-
 void	ids::menu::Settings::itemEvent()
 {
 	std::size_t id = 0;
-	if (_mousePos.second && _mousePos.first.x >= _items[0].pos.x && _mousePos.first.x < _items[0].pos.x + _items[0].size.x
-	    && _mousePos.first.y >= _items[0].pos.y && _mousePos.first.y < _items[0].pos.y + _items[0].size.y) {
+	if (_mouse.state && inside_rect(_items[0].pos, _items[0].size)) {
 		if (_items[0].state == ON) {
 			_items[0].state = OFF;
 			_musicManager->pauseMusic(id);
+			_rend->remove2D(_items[0].soundOn);
 			_rend->load2D(_items[0].soundOff, _items[0].pos);
 		}
 		else {
+			_rend->remove2D(_items[0].soundOff);
 			_items[0].state = ON;
 			_musicManager->playMusic(id);
 			_rend->load2D(_items[0].soundOn, _items[0].pos);
@@ -61,7 +56,6 @@ ids::IScene::sceneId ids::menu::Settings::run()
 	for (auto &item : _items) {
 		_rend->load2D(item.soundOn, item.pos);
 	}
-	settingsItems();
 	while (_rend->isRunning() && _id == SETTINGS) {
 		if (_events.isKeyDown(irr::KEY_ESCAPE)) {
 			_id = ids::IScene::QUIT;

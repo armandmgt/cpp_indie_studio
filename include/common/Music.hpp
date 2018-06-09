@@ -10,32 +10,29 @@
 
 #include <SFML/Audio.hpp>
 #include <unordered_map>
-//#include <SFML/Audio/Export.hpp>
-//#include <SFML/Audio/SoundStream.hpp>
-//#include <SFML/Audio/Music.hpp>
-//#include <SFML/Audio/InputSoundFile.hpp>
-//#include <SFML/System/Mutex.hpp>
-//#include <SFML/System/Time.hpp>
 #include <memory>
 
 namespace ids {
 	class Music {
-		using id = std::size_t;
-//		struct Music {
-//			sf::SoundBuffer buffer;
-//			sf::Music mus;
-//		};
+		using musicId = std::size_t;
+		struct Info {
+			std::unique_ptr<sf::Music> sfMusic;
+			bool active;
+		};
 	public:
-		Music() noexcept;
+		Music() = default;
 		~Music() = default;
-		bool	isPlaying();
-		id createMusic(std::string &file);
-		void playMusic(id music);
-		void destroyMusic(id music);
-		void pauseMusic(id music);
+		bool	getState(musicId);
+		musicId createMusic(std::string &file);
+		void playMusic(musicId music);
+		void destroyMusic(musicId music);
+		void pauseMusic(musicId music);
+		bool musicInit();
 	private:
-		std::unordered_map<id, std::unique_ptr<sf::Music>> _music{};
-		id _musicId;
+
+		//std::unordered_map<musicId, std::unique_ptr<sf::Music>> _music{};
+		std::vector<Info> _music;
+		musicId _musicId;
 	};
 }
 

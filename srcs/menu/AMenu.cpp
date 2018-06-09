@@ -9,7 +9,7 @@
 #include "common/vec.hpp"
 
 ids::menu::AMenu::AMenu(gfx::Renderer *rend, sceneId id, ids::Music *music) : _rend(rend), _posBackground(0,0), _id(id),
-	_mousePos(vec2d<int>(0,0), false), _musicManager(music)
+	_mouse{{0,0}, false}, _musicManager(music)
 {
 }
 
@@ -22,14 +22,19 @@ bool	ids::menu::AMenu::setWindow()
 	return true;
 }
 
+bool ids::menu::AMenu::inside_rect(vec2d<int> &pos, vec2d<int> &size)
+{
+	return _mouse.pos.x >= pos.x && _mouse.pos.x < pos.x + size.x
+	    && _mouse.pos.y >= pos.y && _mouse.pos.y < pos.y + size.y;
+}
+
 void ids::menu::AMenu::buttonEvent()
 {
 	for (auto &button : _infoButtons) {
-		if (_mousePos.first.x >= button.pos.x && _mousePos.first.x < button.pos.x + button.size.x
-			&& _mousePos.first.y >= button.pos.y && _mousePos.first.y < button.pos.y + button.size.y) {
+		if (inside_rect(button.pos, button.size)) {
 				_rend->remove2D(button.inactive);
 				_rend->load2D(button.active, button.pos);
-				if (_mousePos.second) {
+				if (_mouse.state) {
 					_id = button.action;
 				}
 				button.hovered = true;
@@ -44,7 +49,7 @@ void ids::menu::AMenu::buttonEvent()
 
 void	ids::menu::AMenu::computeEvent(evt::MyEventReceiver::MouseState &mouseData)
 {
-	_mousePos.first = {mouseData.position.X, mouseData.position.Y};
-	_mousePos.second = mouseData.leftButtonDown;
+	_mouse.pos = {mouseData.position.X, mouseData.position.Y};
+	_mouse.state = mouseData.leftButtonDown;
 	buttonEvent();
 }

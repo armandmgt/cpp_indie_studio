@@ -35,9 +35,7 @@ ids::menu::LoadGame::~LoadGame()
 
 void	ids::menu::LoadGame::itemEvent()
 {
-	if (_mousePos.second && _mousePos.first.x >= _items[_itemIndex].pos.x && _mousePos.first.x < _items[_itemIndex].pos.x + _items[_itemIndex].size.x
-	    && _mousePos.first.y >= _items[_itemIndex].pos.y && _mousePos.first.y < _items[_itemIndex].pos.y + _items[_itemIndex].size.y
-		) {
+	if (_mouse.state && inside_rect(_items[_itemIndex].pos, _items[_itemIndex].size)) {
 		_itemIndex++;
 		if (_itemIndex >= _items.size()) {
 			_itemIndex = 0;

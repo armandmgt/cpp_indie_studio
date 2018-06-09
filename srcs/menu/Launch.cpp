@@ -26,10 +26,12 @@ ids::menu::Launch::Launch(gfx::Renderer *rend, ids::Music *music) : AMenu(rend, 
 		        "../assets/menu/buttons/active/a-quit-button.png", QUIT, false}
 	};
 	_backgroundImg = "../assets/menu/background/menu-background.png";
-	if (!_musicManager->isPlaying()) {
+	if (_musicManager->musicInit()) {
 		std::string audio = "../assets/MusicFiles/oyeah.wav";
-		auto sampleId = _musicManager->createMusic(audio);
-		_musicManager->playMusic(sampleId);
+		auto sample = _musicManager->createMusic(audio);
+		if (!_musicManager->getState(sample)) {
+			_musicManager->playMusic(sample);
+		}
 	}
 }
 

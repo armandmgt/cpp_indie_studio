@@ -29,7 +29,6 @@ namespace ids { namespace menu {
 		~Settings() override;
 		sceneId run() override;
 	private:
-		void settingsItems();
 		void	itemEvent();
 		evt::MyEventReceiver &_events;
 		musicState _music;
