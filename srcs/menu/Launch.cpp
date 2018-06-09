@@ -45,7 +45,7 @@ ids::IScene::sceneId ids::menu::Launch::run()
 	setWindow();
 	decorateScene();
 	if (!_rend->isRunning())
-		return ids::IScene::QUIT;
+		_id = ids::IScene::QUIT;
 	while (_rend->isRunning() && _id == MENU) {
 		if (_events.isKeyDown(irr::KEY_ESCAPE)) {
 			_id = ids::IScene::QUIT;
