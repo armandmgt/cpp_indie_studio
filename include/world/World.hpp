@@ -24,8 +24,7 @@ namespace ecs {
 		explicit World(gfx::Renderer *renderer);
 		~World() = default;
 
-		Entity &createEntity();
-		void destroyEntity(entityId id);
+		Entity &createEntity(std::size_t );
 		void spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
 		void spawnUWall(long posX, long posY);
 		void spawnWall(ActionTarget type, long posX, long posY);
@@ -38,6 +37,7 @@ namespace ecs {
 
 		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);
 		void drawEntities();
+		void destroyEntity(std::size_t &id);
 		void spawnBombSystem(Entity *);
 		void spawnCollectibleFromBoxSystem(entityId) noexcept;
 
@@ -48,6 +48,7 @@ namespace ecs {
 		std::vector<std::unique_ptr<System>> systems;
 
 	private:
+		std::size_t _currId = 0;
 		gfx::Renderer *renderer;
 		vec3d<float> sizeGround;
 		irr::core::stringw _queryMeshFromActionTarget(ActionTarget) const;

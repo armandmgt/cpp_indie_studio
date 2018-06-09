@@ -5,17 +5,25 @@
 ** ExplosionSystem
 */
 
+#include <iostream>
 #include "ExplosionSystem.hpp"
 
-ecs::ExplosionSystem::ExplosionSystem(std::vector<ecs::Entity> *allEntities, gfx::Renderer *render)
-		: System(allEntities), _renderer(render) {}
+ecs::ExplosionSystem::ExplosionSystem(std::vector<Entity> *allEntities, gfx::Renderer *render, std::shared_ptr<ecs::World>
+        world)
+		: System(allEntities), _renderer(render), _world(world) {}
 
 void ecs::ExplosionSystem::update(double delta[[maybe_unused]]) {
 	auto &entities = getEntities(COMP_POSITION, COMP_EXPLOSION);
 
-	for (auto e : entities) {
+	for (auto &e : entities) {
 		auto &position = e->getComponent<Position>();
-		std::size_t power = e->getComponent<Explosion>().power;
-		std::size_t timeout = e->getComponent<Explosion>().timeout;
+		auto &exp = e->getComponent<Explosion>();
+		auto now = std::chrono::steady_clock::now();
+		std::chrono::duration<double> diff = now - exp.time;
+		std::cout << "Time : " << diff.count() << std::endl;
+		if (diff.count() > exp.timeout) {
+			e->getComponent<Graphic>().sceneNode->remove();
+			_world->destroyEntity(e->id);
+		}
 	}
 }

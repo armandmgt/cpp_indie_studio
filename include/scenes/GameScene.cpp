@@ -5,6 +5,7 @@
 ** gamescene
 */
 
+#include <engine/systems/ExplosionSystem.hpp>
 #include "engine/systems/PlayerMovement.hpp"
 #include "engine/systems/MovementSystem.hpp"
 #include "engine/systems/ParseInputSystem.hpp"
@@ -28,11 +29,14 @@ void ids::GameScene::_initSystem()
 	std::unique_ptr<ecs::ParseInput> parseSys = std::make_unique<ecs::ParseInput>(&_world->entities,
 		_renderer->getEventReceiver());
 	std::unique_ptr<ecs::PutBombSystem> bomSys = std::make_unique<ecs::PutBombSystem>(&_world->entities, _world);
+	std::unique_ptr<ecs::ExplosionSystem> expSys = std::make_unique<ecs::ExplosionSystem>(&_world->entities,
+		_renderer, _world);
 
 	_systemList.push_back(std::move(parseSys));
 	_systemList.push_back(std::move(movPlayerSys));
 	_systemList.push_back(std::move(movSys));
 	_systemList.push_back(std::move(bomSys));
+	_systemList.push_back(std::move(expSys));
 }
 
 
@@ -42,8 +46,7 @@ ids::IScene::sceneId ids::GameScene::run() {
 	_world->drawEntities();
 	while (_renderer->isRunning() && !_event.isKeyDown(irr::KEY_ESCAPE)) {
 		_renderer->render();
-		if (!_event.hasEvent())
-			continue;
+		_event.hasEvent();
 		for (auto &it : _systemList) {
 			it->update(1);
 		}

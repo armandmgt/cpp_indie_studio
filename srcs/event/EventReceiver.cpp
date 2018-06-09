@@ -82,10 +82,8 @@ std::queue<evt::Event> evt::MyEventReceiver::getPlayerEvent(std::size_t id)
 {
 	std::queue<evt::Event> eventQueue;
 
-	std::cout << id << std::endl;
 	for (auto eventIt = buffer.begin(); eventIt != buffer.end();) {
 		if (eventIt->first == id) {
-			std::cout << eventIt->second.action << std::endl;
 			eventQueue.push(eventIt->second);
 		}
 		eventIt++;

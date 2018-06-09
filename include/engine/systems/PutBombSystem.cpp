@@ -18,7 +18,6 @@ namespace ecs {
 
 		for (auto &player : entities) {
 			auto &input = player->getComponent<Input>();
-			auto &velocityPlayer = player->getComponent<Velocity>();
 			if (input.putBomb) {
 				_world->spawnBombSystem(player);
 				input.putBomb = false;

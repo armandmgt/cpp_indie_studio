@@ -5,6 +5,8 @@
 ** World
 */
 
+#include <ctime>
+#include <chrono>
 #include "engine/systems/MovementSystem.hpp"
 #include "engine/systems/ExplosionSystem.hpp"
 #include "engine/Components.hpp"
@@ -17,14 +19,10 @@ namespace ecs {
 		systems.push_back(std::make_unique<MovementSystem>(&entities, render));
 	}
 
-	Entity &World::createEntity()
+	Entity &World::createEntity(std::size_t _currId)
 	{
-		entities.emplace_back();
+		entities.emplace_back(_currId);
 		return entities.back();
-	}
-
-	void World::destroyEntity(entityId id) {
-		entities.erase(entities.begin() + id);
 	}
 
 	void World::spawnEntitiesFromMap(std::vector<std::string> &&gameMap) {
@@ -60,7 +58,7 @@ namespace ecs {
 	}
 
 	void World::spawnWall(ActionTarget type, long posX, long posY) {
-		auto &ent = createEntity();
+		auto &ent = createEntity(_currId++);
 
 		ent.addComponent<Destructible>(std::make_unique<Collectible>(type));
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
@@ -74,7 +72,7 @@ namespace ecs {
 
 	void World::spawnUWall(long posX, long posY) {
 		static int rand = 0;
-		auto &ent = createEntity();
+		auto &ent = createEntity(_currId++);
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Graphic>(renderer->createElem(
@@ -88,7 +86,7 @@ namespace ecs {
 
 	void World::spawnBWall(long posX, long posY)
 	{
-		auto &ent = createEntity();
+		auto &ent = createEntity(_currId++);
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Destructible>(nullptr);
@@ -102,7 +100,7 @@ namespace ecs {
 	void World::spawnPlayer(long posX, long posY)
 	{
 		static std::size_t playerId;
-		auto &ent = createEntity();
+		auto &ent = createEntity(_currId++);
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Velocity>(0.f, 0.f);
@@ -110,13 +108,13 @@ namespace ecs {
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
 		ent.addComponent<Input>(false);
-		ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"), 2);
+		ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"), 2.f);
 	}
 
 	void World::spawnFlames(ecs::Position initialPos, size_t pwr) {
 		//std::cout << "[SPAWN] flammes at [" << initialPos.x << ":" << initialPos.y << "] with power (" << pwr << ")" << std::endl;
 
-		auto &e = createEntity();
+		auto &e = createEntity(_currId++);
 		for (size_t i = 0; i < pwr; i++) {
 			e.addComponent<Position>(initialPos.x + i, initialPos.y);
 			e.addComponent<Position>(initialPos.x, initialPos.y + i);
@@ -141,9 +139,10 @@ namespace ecs {
 
 	void World::spawnBombSystem(Entity *player) {
 		if (player->hasComponent<Character>()) {
-			auto &ent = createEntity();
+			auto &ent = createEntity(_currId++);
 
-			ent.addComponent<Explosion>(player->getComponent<Character>().power, 5LU);
+			ent.addComponent<Explosion>(player->getComponent<Character>().power, 5,
+						    std::chrono::steady_clock::now());
 			ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/bomb.obj"));
 			ent.addComponent<Position>(player->getComponent<Position>());
 
@@ -159,7 +158,7 @@ namespace ecs {
 	void World::spawnCollectibleFromBoxSystem(entityId id) noexcept {
 		if (entities.at(id).hasComponent<Destructible>()) {
 			auto &box = this->entities.at(id);
-			auto &ent = createEntity();
+			auto &ent = createEntity(_currId++);
 
 			ent.addComponent<Collectible>(box.getComponent<Collectible>());
 			ent.addComponent<Position>(box.getComponent<Position>());
@@ -234,5 +233,13 @@ namespace ecs {
 		for (auto &s : systems) {
 			s->update(delta);
 		}
+	}
+
+	void World::destroyEntity(std::size_t &id) {
+		std::remove_if(entities.begin(), entities.end(),
+			       [id] (Entity const &e) {
+			std::cout << std::boolalpha << (e.id == id) << std::endl;
+			return e.id == id ;
+		});
 	}
 }
