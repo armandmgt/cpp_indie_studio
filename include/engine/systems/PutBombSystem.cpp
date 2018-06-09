@@ -20,8 +20,6 @@ namespace ecs {
 			auto &input = player->getComponent<Input>();
 			auto &velocityPlayer = player->getComponent<Velocity>();
 			if (input.putBomb) {
-				std::cout << "Yeah : " << player->getComponent<Character>().id << " wan't to pose a "
-								      "bomb" << std::endl;
 				_world->spawnBombSystem(player);
 				input.putBomb = false;
 			}
