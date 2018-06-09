@@ -126,10 +126,12 @@ namespace ecs {
 	};
 
 	struct Graphic : public Component {
-		explicit Graphic(irr::scene::ISceneNode *s) : sceneNode(s)
+		explicit Graphic(irr::scene::ISceneNode *s, float scalling = 1.f) :
+				sceneNode(s), scale(scalling)
 		{};
 		~Graphic() = default;
 		static comp const type = COMP_GRAPHIC;
 		irr::scene::ISceneNode *sceneNode;
+		float scale;
 	};
 }
