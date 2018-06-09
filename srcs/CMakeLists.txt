@@ -29,10 +29,12 @@ set(SOURCE_FILES
         menu/Launch.cpp
         menu/Settings.cpp
         menu/LoadGame.cpp
+        menu/Pause.cpp
         ../include/menu/AMenu.hpp
         ../include/menu/Launch.hpp
         ../include/menu/Settings.hpp
         ../include/menu/LoadGame.hpp
+        ../include/menu/Pause.hpp
 
         ../include/common/Music.hpp
         Music/Music.cpp

@@ -62,7 +62,6 @@ ids::IScene::sceneId ids::menu::Settings::run()
 			return _id;
 		}
 		auto mousePos = _events.getMousePosition();
-		// _rend->isKeyPressed(irr::KEY_LBUTTON)
 		computeEvent(mousePos);
 		itemEvent();
 		_rend->render();
