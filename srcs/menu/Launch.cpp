@@ -55,5 +55,8 @@ ids::IScene::sceneId ids::menu::Launch::run()
 		computeEvent(mousePos);
 		_rend->render();
 	}
+	if (!_rend->isRunning())
+		_id = ids::IScene::QUIT;
+	_rend->clearScene();
 	return _id;
 }

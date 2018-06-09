@@ -29,9 +29,7 @@ namespace gfx {
 			size = std::move(other.size);
 			return *this;
 		}
-		~Image2D() {
-			texture->drop();
-		}
+		~Image2D() = default;
 
 		irr::core::stringw filename;
 		irr::video::ITexture *texture{};
