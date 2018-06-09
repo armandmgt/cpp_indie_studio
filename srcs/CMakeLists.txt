@@ -28,9 +28,12 @@ set(SOURCE_FILES
         menu/AMenu.cpp
         menu/Launch.cpp
         menu/Settings.cpp
+        menu/LoadGame.cpp
         ../include/menu/AMenu.hpp
         ../include/menu/Launch.hpp
         ../include/menu/Settings.hpp
+        ../inlcude/menu/LoadGame.hpp
+
 
         settingManager/settingManager.cpp
         ../include/settingManager/settingManager.hpp
@@ -51,12 +54,7 @@ set(SOURCE_FILES
         ../include/enum/AnimationType.hpp
         ../include/enum/EventEnum.hpp
 
-        ../include/common/vec.hpp
-        ../include/common/Music.hpp
-        Music/Music.cpp
-        menu/LoadGame.cpp
-        ../include/menu/LoadGame.hpp
-        )
+        ../include/common/vec.hpp)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4 /permissive")
@@ -65,12 +63,13 @@ else()
 endif()
 
 add_executable(bomberman ${SOURCE_FILES})
-
+	
 if (WIN32)
    LINK_DIRECTORIES("../")
-   target_link_libraries(bomberman "../../srcs/Irrlicht" sfml-audio)
-   add_custom_command(TARGET bomberman POST_BUILD
-           COMMAND cmd /c "start ${CMAKE_SOURCE_DIR}/WinSetupDirectory.bat")
+   target_link_libraries(bomberman "../../srcs/Irrlicht")
+   target_link_libraries(bomberman "../../srcs/sfml-audio")
+	add_custom_command(TARGET bomberman POST_BUILD
+	COMMAND cmd /c "start ${CMAKE_SOURCE_DIR}/WinSetupDirectory.bat")
 else ()
     target_link_libraries(bomberman Irrlicht sfml-audio)
    include_directories("../irrlicht/")

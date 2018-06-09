@@ -108,7 +108,7 @@ namespace ecs {
 		ent.addComponent<Character>(false, 1LU, 1LU, 1LU);
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
-		ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
+		ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"), 2);
 	}
 
 	void World::spawnFlames(ecs::Position initialPos, size_t pwr) {
@@ -212,6 +212,10 @@ namespace ecs {
 					elem.getComponent<Position>().y * sizeGround.z
 				};
 				renderer->setPosition(elem.getComponent<Graphic>().sceneNode, pos);
+				if (elem.hasComponent<Character>() && elem.hasComponent<Graphic>()) {
+					auto comp = elem.getComponent<Graphic>();
+					renderer->setScale(comp.sceneNode, comp.scale);
+				}
 			}
 		}
 	}
