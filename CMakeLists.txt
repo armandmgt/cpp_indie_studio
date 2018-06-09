@@ -5,4 +5,8 @@ project(cpp_indie_studio)
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(include)
+if (WIN32)
+	include_directories(irrlicht)
+	include_directories(SFML)
+endif()
 add_subdirectory(srcs)

@@ -63,8 +63,8 @@ add_executable(bomberman ${SOURCE_FILES})
 	
 if (WIN32)
    LINK_DIRECTORIES("../")
-   include_directories("../irrlicht/")
    target_link_libraries(bomberman "../../srcs/Irrlicht")
+   target_link_libraries(bomberman "../../srcs/sfml-audio")
 	add_custom_command(TARGET bomberman POST_BUILD
 	COMMAND cmd /c "start ${CMAKE_SOURCE_DIR}/WinSetupDirectory.bat")
 endif()

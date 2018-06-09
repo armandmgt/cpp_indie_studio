@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <algorithm>
 #include "gfx/Renderer.hpp"
 
 gfx::Renderer::Renderer()
@@ -34,9 +35,10 @@ void gfx::Renderer::render()
 	smgr->drawAll();
 	guienv->drawAll();
 	driver->enableMaterial2D();
-	for (auto &image : images)
+	std::for_each(images.begin(), images.end(), [this](const Image2D &image) {
 		driver->draw2DImage(image.texture, {image.position.x, image.position.y}, image.size, nullptr,
 			irr::video::SColor(255,255,255,255), true);
+	});
 	driver->enableMaterial2D(false);
 	driver->endScene();
 }
@@ -164,7 +166,12 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, const vec2d<int> 
 
 	if (!(texture = driver->getTexture(filename)))
 		throw std::runtime_error("Cannot load texture");
-	images.emplace_back(texture, pos, rect);
+	auto it = std::find_if(images.begin(), images.end(), [&filename](const Image2D &image) {
+		return filename == image.filename;
+	});
+	if (it != images.end())
+		*it = gfx::Image2D{filename, texture, pos, rect};
+	images.emplace_back(gfx::Image2D{filename, texture, pos, rect});
 }
 
 void gfx::Renderer::load2D(irr::core::stringw const &filename, const vec2d<int> &pos)
@@ -175,7 +182,19 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, const vec2d<int> 
 	const irr::core::dimension2d<irr::u32> &texSize = texture->getOriginalSize();
 	irr::core::rect<irr::s32> size{{0, 0},
 		{static_cast<irr::s32>(texSize.Width), static_cast<irr::s32>(texSize.Height)}};
-	images.emplace_back(texture, pos, std::move(size));
+	auto it = std::find_if(images.begin(), images.end(), [&filename](const Image2D &image) {
+		return filename == image.filename;
+	});
+	if (it != images.end())
+		*it = gfx::Image2D{filename, texture, pos, std::move(size)};
+	images.emplace_back(gfx::Image2D{filename, texture, pos, std::move(size)});
+}
+
+void gfx::Renderer::remove2D(irr::core::stringw const &filename)
+{
+	std::remove_if(images.begin(), images.end(), [&filename](const Image2D &image) {
+		return filename == image.filename;
+	});
 }
 
 void gfx::Renderer::addArchive(irr::core::stringw const &filename)
