@@ -8,7 +8,7 @@
 #include "engine/systems/MovementSystem.hpp"
 
 namespace ecs {
-	MovementSystem::MovementSystem(entityVector allEntities, gfx::Renderer *render)
+	MovementSystem::MovementSystem(entityVector allEntities, std::shared_ptr<gfx::Renderer> render)
 		: System(allEntities), _renderer(render)
 	{
 	}

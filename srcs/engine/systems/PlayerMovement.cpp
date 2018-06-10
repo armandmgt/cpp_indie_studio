@@ -5,8 +5,7 @@
 ** PlayerMovement
 */
 
-#include <iostream>
-#include "PlayerMovement.hpp"
+#include "engine/systems/PlayerMovement.hpp"
 
 namespace ecs {
 	PlayerMovement::PlayerMovement(entityVector allEntities) : System(allEntities)

@@ -7,8 +7,6 @@ set(SOURCE_FILES
         ../include/engine/Entity.hpp
         ../include/engine/systems/Systems.hpp
         ../include/engine/systems/MovementSystem.hpp
-		engine/systems/MovementSystem.cpp
-		engine/systems/ExplosionSystem.cpp
         ../include/engine/systems/ExplosionSystem.hpp
 
         world/World.cpp
@@ -45,9 +43,7 @@ set(SOURCE_FILES
         scenes/ScenesManager.cpp
         ../include/gfx/Image2D.hpp
         ../include/engine/systems/Systems.hpp
-		engine/systems/MovementSystem.cpp
         ../include/engine/systems/MovementSystem.hpp
-		engine/systems/ExplosionSystem.cpp
         ../include/engine/systems/ExplosionSystem.hpp
         ../include/scenes/GameScene.cpp
         ../include/scenes/GameScene.hpp
@@ -58,7 +54,19 @@ set(SOURCE_FILES
         ../include/enum/AnimationType.hpp
         ../include/enum/EventEnum.hpp
 
-        ../include/common/vec.hpp ../include/engine/systems/PlayerMovement.cpp ../include/engine/systems/PlayerMovement.hpp ../include/engine/systems/ParseInputSystem.cpp ../include/engine/systems/ParseInputSystem.hpp ../include/engine/systems/PutBombSystem.cpp ../include/engine/systems/PutBombSystem.hpp ../include/engine/systems/DespawnSystem.cpp ../include/engine/systems/DespawnSystem.hpp ../include/engine/systems/BreakDestructibleSystem.cpp ../include/engine/systems/BreakDestructibleSystem.hpp ../include/engine/Entity.cpp)
+        ../include/common/vec.hpp engine/systems/PlayerMovement.cpp
+        ../include/engine/systems/PlayerMovement.hpp
+        engine/systems/ParseInputSystem.cpp
+        engine/systems/ExplosionSystem.cpp
+        engine/systems/
+        ../include/engine/systems/ParseInputSystem.hpp
+        engine/systems/PutBombSystem.cpp
+        ../include/engine/systems/PutBombSystem.hpp
+        engine/systems/DespawnSystem.cpp
+        ../include/engine/systems/DespawnSystem.hpp
+        engine/systems/BreakDestructibleSystem.cpp
+        ../include/engine/systems/BreakDestructibleSystem.hpp
+        ../include/engine/Entity.cpp engine/systems/MovementSystem.cpp)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4 /permissive")

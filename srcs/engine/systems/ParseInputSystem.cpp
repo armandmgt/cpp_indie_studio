@@ -1,12 +1,11 @@
-#include <iostream>
-#include "ParseInputSystem.hpp"/*
+/*
 ** EPITECH PROJECT, 2018
 ** cpp_indie_studio
 ** File description:
 ** ParseInput
 */
 
-#include "ParseInputSystem.hpp"
+#include "engine/systems/ParseInputSystem.hpp"
 
 ecs::ParseInput::ParseInput(entityVector allEntities, evt::MyEventReceiver &e) : System(allEntities), event(e)
 {

@@ -5,9 +5,8 @@
 ** PlayerMovement
 */
 
-#include <iostream>
 #include <memory>
-#include "PutBombSystem.hpp"
+#include "engine/systems/PutBombSystem.hpp"
 
 namespace ecs {
 	PutBombSystem::PutBombSystem(entityVector allEntities, std::shared_ptr<ecs::World> world)

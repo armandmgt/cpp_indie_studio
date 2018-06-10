@@ -6,9 +6,9 @@
 */
 
 #include <iostream>
-#include "BreakDestructibleSystem.hpp"
+#include "engine/systems/BreakDestructibleSystem.hpp"
 
-ecs::BreakDestructibleSystem::BreakDestructibleSystem(entityVector allEntities, gfx::Renderer *render,
+ecs::BreakDestructibleSystem::BreakDestructibleSystem(entityVector allEntities, std::shared_ptr<gfx::Renderer> render,
 				      std::shared_ptr<ecs::World> world
 ) : System(allEntities), _renderer(render), _world(world)
 {

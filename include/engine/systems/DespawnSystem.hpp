@@ -13,12 +13,12 @@
 namespace ecs {
 	class DespawnSystem : public System {
 	public:
-		explicit DespawnSystem(entityVector, gfx::Renderer *, std::shared_ptr<ecs::World> world);
+		explicit DespawnSystem(entityVector, std::shared_ptr<gfx::Renderer>, std::shared_ptr<ecs::World> world);
 
 		void update(double) override;
 
 	private:
-		gfx::Renderer *_renderer;
+		std::shared_ptr<gfx::Renderer> _renderer;
 		std::shared_ptr<ecs::World> _world;
 	};
 }

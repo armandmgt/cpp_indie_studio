@@ -6,9 +6,10 @@
 */
 
 #include <iostream>
-#include "DespawnSystem.hpp"
+#include "engine/systems/DespawnSystem.hpp"
 
-ecs::DespawnSystem::DespawnSystem(entityVector allEntities, gfx::Renderer *render, std::shared_ptr<ecs::World> world)
+ecs::DespawnSystem::DespawnSystem(entityVector allEntities, std::shared_ptr<gfx::Renderer> render,
+				  std::shared_ptr<ecs::World> world)
 	: System(allEntities), _renderer(render), _world(world)
 {
 }

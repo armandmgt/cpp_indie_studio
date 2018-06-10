@@ -10,7 +10,6 @@
 #include <irrlicht/irrlicht.h>
 #include <memory>
 #include <chrono>
-#include <iostream>
 
 namespace ecs {
 	enum ActionTarget {
