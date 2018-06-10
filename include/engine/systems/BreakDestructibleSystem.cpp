@@ -15,9 +15,12 @@ ecs::BreakDestructibleSystem::BreakDestructibleSystem(entityVector allEntities, 
 }
 
 void ecs::BreakDestructibleSystem::update(double delta[[maybe_unused]]) {
-	auto &boxes = getEntities(COMP_DESTRUCTIBLE);
+	auto &boxes = getEntities(COMP_DESTRUCTIBLE, COMP_POSITION);
 	auto &flames = getEntities(COMP_DAMAGE, COMP_POSITION);
 
+	for (auto it = boxes.begin(); it != boxes.end(); it++) {
+		std::cout << "Box found : " << (*it)->id << std::endl;
+	}
 	for (auto &flame : flames) {
 		auto &posFlame = flame->getComponent<Position>();
 		for (auto &box : boxes) {

@@ -19,9 +19,9 @@ namespace ecs {
 	{
 	}
 
-	Entity &World::createEntity(std::size_t _currId)
+	Entity &World::createEntity()
 	{
-		entities->push_back(std::make_unique<Entity>(_currId));
+		entities->push_back(std::make_unique<Entity>());
 		return *entities->back();
 	}
 
@@ -58,7 +58,7 @@ namespace ecs {
 	}
 
 	void World::spawnWall(ActionTarget type, long posX, long posY) {
-		auto &ent = createEntity(_currId++);
+		auto &ent = createEntity();
 
 		ent.addComponent<Destructible>(std::make_unique<Collectible>(type));
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
@@ -72,7 +72,7 @@ namespace ecs {
 
 	void World::spawnUWall(long posX, long posY) {
 		static int rand = 0;
-		auto &ent = createEntity(_currId++);
+		auto &ent = createEntity();
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Graphic>(renderer->createElem(
@@ -86,7 +86,7 @@ namespace ecs {
 
 	void World::spawnBWall(long posX, long posY)
 	{
-		auto &ent = createEntity(_currId++);
+		auto &ent = createEntity();
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Destructible>(nullptr);
@@ -100,7 +100,7 @@ namespace ecs {
 	void World::spawnPlayer(long posX, long posY)
 	{
 		static std::size_t playerId;
-		auto &ent = createEntity(_currId++);
+		auto &ent = createEntity();
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Velocity>(0.f, 0.f);
@@ -113,7 +113,7 @@ namespace ecs {
 
 	void World::spawnFlames(ecs::Position initialPos, int pwr) {
 		for (auto i = pwr * (-1); i <= pwr; i++) {
-			auto &e = createEntity(_currId++);
+			auto &e = createEntity();
 			e.addComponent<Orientation>(0.f);
 			e.addComponent<Position>(initialPos.x, initialPos.y - i);
 			e.addComponent<Ephemere>(3LU, std::chrono::steady_clock::now());
@@ -123,7 +123,7 @@ namespace ecs {
 			renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
 		}
 		for (auto i = pwr * (-1); i <= pwr; i++) {
-			auto &e = createEntity(_currId++);
+			auto &e = createEntity();
 			e.addComponent<Orientation>(0.f);
 			e.addComponent<Position>(initialPos.x - i, initialPos.y);
 			e.addComponent<Ephemere>(3LU, std::chrono::steady_clock::now());
@@ -136,7 +136,7 @@ namespace ecs {
 
 	void World::spawnBombSystem(Entity *player) {
 		if (player->hasComponent<Character>()) {
-			auto &ent = createEntity(_currId++);
+			auto &ent = createEntity();
 			auto &posPlayer = player->getComponent<Position>();
 			vec2d<int> posBomb = toIntegerPos<int>(posPlayer.x, posPlayer.y);
 
@@ -155,7 +155,7 @@ namespace ecs {
 
 	void World::spawnCollectibleFromBoxSystem(Entity *box) noexcept {
 		if (box->hasComponent<Destructible>() && box->getComponent<Destructible>().item != nullptr) {
-			auto &ent = createEntity(_currId++);
+			auto &ent = createEntity();
 
 			std::cerr << "Get Collectible on box : " << box->id << std::endl;
 			ent.addComponent<Collectible>(box->getComponent<Collectible>());

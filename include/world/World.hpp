@@ -34,7 +34,7 @@ namespace ecs {
 		explicit World(gfx::Renderer *renderer);
 		~World() = default;
 
-		Entity &createEntity(std::size_t );
+		Entity &createEntity();
 		void spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
 		void spawnUWall(long posX, long posY);
 		void spawnWall(ActionTarget type, long posX, long posY);
