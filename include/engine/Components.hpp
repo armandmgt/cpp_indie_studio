@@ -53,11 +53,11 @@ namespace ecs {
 
 	struct Explosion : public Component {
 		static comp const type = COMP_EXPLOSION;
-		Explosion(std::size_t p, std::size_t t, std::chrono::time_point<std::chrono::steady_clock> ti)
+		Explosion(int p, std::size_t t, std::chrono::time_point<std::chrono::steady_clock> ti)
 			: power(p), timeout(t), time(ti)
 		{};
 		~Explosion() = default;
-		std::size_t power;
+		int power;
 		std::size_t timeout;
 		std::chrono::time_point<std::chrono::steady_clock> time;
 	};

@@ -111,19 +111,28 @@ namespace ecs {
 		ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"), 2.f);
 	}
 
-	void World::spawnFlames(ecs::Position initialPos, size_t pwr) {
+	void World::spawnFlames(ecs::Position initialPos, int pwr) {
 		//std::cout << "[SPAWN] flammes at [" << initialPos.x << ":" << initialPos.y << "] with power (" << pwr << ")" << std::endl;
 
-		auto &e = createEntity(_currId++);
-		for (size_t i = 0; i < pwr; i++) {
-			e.addComponent<Position>(initialPos.x + i, initialPos.y);
-			e.addComponent<Position>(initialPos.x, initialPos.y + i);
-			e.addComponent<Position>(initialPos.x - i, initialPos.y);
+		for (auto i = static_cast<int>(pwr * (-1)); i < pwr; i++) {
+			auto &e = createEntity(_currId++);
+			e.addComponent<Orientation>(0.f);
 			e.addComponent<Position>(initialPos.x, initialPos.y - i);
+			e.addComponent<Ephemere>(3U, std::chrono::steady_clock::now());
+			e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
+			auto &posE = e.getComponent<Position>();
+			renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
 		}
-		e.addComponent<Orientation>(0.f);
-		e.addComponent<Ephemere>(3U, std::chrono::steady_clock::now());
-		e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
+		for (auto i = static_cast<int>(pwr * (-1)); i < pwr; i++) {
+			auto &e = createEntity(_currId++);
+			e.addComponent<Orientation>(0.f);
+			e.addComponent<Position>(initialPos.x - 1, initialPos.y);
+			e.addComponent<Ephemere>(3U, std::chrono::steady_clock::now());
+			e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
+			auto &posE = e.getComponent<Position>();
+			renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
+		}
+
 	}
 
 	void World::debug()

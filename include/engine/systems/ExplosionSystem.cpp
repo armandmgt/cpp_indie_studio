@@ -24,6 +24,7 @@ void ecs::ExplosionSystem::update(double delta[[maybe_unused]]) {
 		if (diff.count() > exp.timeout) {
 			std::cout << "Check value = " << e->id << std::endl;
 			e->getComponent<Graphic>().sceneNode->remove();
+			_world->spawnFlames(e->getComponent<Position>(), e->getComponent<Explosion>().power);
 			for (auto it = _allEntities->begin(); it != _allEntities->end(); ) {
 				if (it->id == e->id) {
 					it = _allEntities->erase(it);
