@@ -37,7 +37,7 @@ set(SOURCE_FILES
         ../include/menu/Pause.hpp
 
         ../include/common/Music.hpp
-        Music/Music.cpp
+        music/Music.cpp
 
         settingManager/settingManager.cpp
         ../include/settingManager/settingManager.hpp
