@@ -18,7 +18,7 @@ void ecs::ExplosionSystem::update(double delta[[maybe_unused]]) {
 	auto &entities = getEntities(COMP_POSITION, COMP_EXPLOSION);
 
 	for (auto &e : entities) {
-		auto &exp = e->getComponent<Explosion>();
+		auto &exp = e->getComponent<Ephemere>();
 		auto now = std::chrono::steady_clock::now();
 		std::chrono::duration<double> diff = now - exp.time;
 		if (diff.count() > exp.timeout) {

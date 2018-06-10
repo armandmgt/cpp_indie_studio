@@ -133,14 +133,12 @@ namespace ecs {
 
 	}
 
-	}
-
 	void World::spawnBombSystem(Entity *player) {
 		if (player->hasComponent<Character>()) {
 			auto &ent = createEntity(_currId++);
 
-			ent.addComponent<Explosion>(player->getComponent<Character>().power, 5LU,
-						    std::chrono::steady_clock::now());
+			ent.addComponent<Explosion>(player->getComponent<Character>().power);
+			ent.addComponent<Ephemere>(5LU, std::chrono::steady_clock::now());
 			ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/bomb.obj"));
 			ent.addComponent<Position>(player->getComponent<Position>());
 

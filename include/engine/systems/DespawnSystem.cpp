@@ -1,4 +1,4 @@
-#include "DespawnSystem.hpp"/*
+/*
 ** EPITECH PROJECT, 2018
 ** cpp_indie_studio
 ** File description:
@@ -16,12 +16,10 @@ ecs::DespawnSystem::DespawnSystem(entityVector allEntities, gfx::Renderer *rende
 void ecs::DespawnSystem::update(double delta[[maybe_unused]]) {
 	auto &entities = getEntities(COMP_EPHEMERE, COMP_GRAPHIC);
 
-	std::cout << "how many flames ? " << entities.size() << std::endl;
 	for (auto &e : entities) {
 		auto &exp = e->getComponent<Ephemere>();
 		auto now = std::chrono::steady_clock::now();
 		std::chrono::duration<double> diff = now - exp.time;
-		std::cout << "Time : " << diff.count() << std::endl;
 		if (diff.count() > exp.timeout) {
 			e->getComponent<Graphic>().sceneNode->remove();
 			for (auto it = _allEntities->begin(); it != _allEntities->end(); ) {

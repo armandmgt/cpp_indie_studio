@@ -53,14 +53,12 @@ namespace ecs {
 	};
 
 	struct Explosion : public Component {
-		static comp const type = COMP_EXPLOSION;
-		Explosion(int p, std::size_t t, std::chrono::time_point<std::chrono::steady_clock> ti)
-			: power(p), timeout(t), time(ti)
+		Explosion(int p)
+			: power(p)
 		{};
 		~Explosion() = default;
+		static comp const type = COMP_EXPLOSION;
 		int power;
-		std::size_t timeout;
-		std::chrono::time_point<std::chrono::steady_clock> time;
 	};
 
 	struct Collectible : public Component {
@@ -144,7 +142,7 @@ namespace ecs {
 	};
 
 	struct Ephemere : public Component {
-		explicit Ephemere(std::size_t t, std::chrono::time_point<std::chrono::steady_clock> ti) :
+		Ephemere(std::size_t t, std::chrono::time_point<std::chrono::steady_clock> ti) :
 			timeout(t), time(ti)
 		{
 		};
