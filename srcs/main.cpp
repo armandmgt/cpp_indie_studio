@@ -8,7 +8,6 @@
 #include <string>
 #include <iostream>
 #include "engine/GameContainer.hpp"
-#include "../include/common/Music.hpp"
 
 int main()
 {

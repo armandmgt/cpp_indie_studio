@@ -9,7 +9,7 @@
 #define CPP_INDIE_STUDIO_SETTINGS_HPP
 
 #include "menu/AMenu.hpp"
-#include "common/Music.hpp"
+#include "music/Music.hpp"
 
 namespace ids { namespace menu {
 

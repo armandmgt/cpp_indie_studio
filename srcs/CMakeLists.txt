@@ -36,8 +36,8 @@ set(SOURCE_FILES
         ../include/menu/LoadGame.hpp
         ../include/menu/Pause.hpp
 
-        ../include/common/Music.hpp
-        Music/Music.cpp
+        ../include/music/Music.hpp
+        music/Music.cpp
 
         settingManager/settingManager.cpp
         ../include/settingManager/settingManager.hpp

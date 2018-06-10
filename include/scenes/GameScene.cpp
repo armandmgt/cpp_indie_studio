@@ -23,5 +23,5 @@ ids::IScene::sceneId ids::GameScene::run() {
 	while (_renderer->isRunning() && !_renderer->getEventReceiver().isKeyDown(irr::KEY_ESCAPE)) {
 		_renderer->render();
 	}
-	return MENU;
+	return PAUSE;
 }
