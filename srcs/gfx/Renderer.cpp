@@ -223,3 +223,15 @@ void gfx::Renderer::setSizeGround(vec3d<float> &sizeGround)
 {
 	_sizeGround = sizeGround;
 }
+
+void gfx::Renderer::addSkybox(irr::core::stringw const &filename)
+{
+	skybox = smgr->addSkyBoxSceneNode(
+		driver->getTexture(filename + "_up.tga"),
+		driver->getTexture(filename + "_dn.tga"),
+		driver->getTexture(filename + "_lf.tga"),
+		driver->getTexture(filename + "_rt.tga"),
+		driver->getTexture(filename + "_ft.tga"),
+		driver->getTexture(filename + "_bk.tga"));
+	driver->setTextureCreationFlag(irr::video::ETCF_CREATE_MIP_MAPS, false);
+}

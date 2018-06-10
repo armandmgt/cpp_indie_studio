@@ -23,6 +23,7 @@ ids::GameScene::GameScene(std::shared_ptr<gfx::Renderer> r) : _world{std::make_s
 	map.printMap();
 	_world->createGround(21, 19, "../assets/meshs/ground.obj");
 	_world->spawnEntitiesFromMap(std::move(map.getMap()));
+	_renderer->addSkybox("../assets/skybox/hell");
 }
 
 void ids::GameScene::_initSystem()

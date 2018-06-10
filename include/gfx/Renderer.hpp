@@ -54,6 +54,7 @@ namespace gfx {
 		void setCameraFPS();
 		void setSizeGround(vec3d<float> &sizeGround);
 		evt::MyEventReceiver &getEventReceiver();
+		void addSkybox(irr::core::stringw const &filename);
 
 	public:
 		evt::MyEventReceiver eventReceiver;
@@ -66,6 +67,7 @@ namespace gfx {
 		using animationMap = std::unordered_map<std::string, vec2d<int>>;
 		std::unordered_map<irr::scene::ISceneNode *, animationMap> animations;
 		vec3d<float> _sizeGround;
+		irr::scene::ISceneNode *skybox;
 
 	};
 };
