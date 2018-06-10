@@ -103,11 +103,18 @@ namespace ecs {
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Velocity>(0.f, 0.f);
-		ent.addComponent<Character>(false, 1, 1LU, 1LU, playerId++);
+		ent.addComponent<Character>(false, 2, 1LU, 1LU, playerId++);
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
 		ent.addComponent<Input>(false);
 		ent.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/ninja.b3d"), 2.f);
+
+		auto &gfx = ent.getComponent<Graphic>();
+		auto *animatedSceneNode = static_cast<irr::scene::IAnimatedMeshSceneNode *>(gfx.sceneNode);
+		_renderer->addAnimation(animatedSceneNode, "walk", {0, 10});
+		_renderer->addAnimation(animatedSceneNode, "stop", {5, 5});
+		_renderer->setAnimation(animatedSceneNode, "stop");
+		_renderer->setAnimationSpeed(animatedSceneNode, 0.f);
 	}
 
 	void World::spawnBombSystem(Entity *player) {
@@ -117,7 +124,7 @@ namespace ecs {
 			vec2d<int> posBomb = roundPos<int>(posPlayer.x, posPlayer.y);
 
 			ent.addComponent<Explosion>(player->getComponent<Character>().power);
-			ent.addComponent<Ephemere>(5LU, std::chrono::steady_clock::now());
+			ent.addComponent<Ephemere>(4LU, std::chrono::steady_clock::now());
 			ent.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/bomb.obj"));
 			ent.addComponent<Position>(static_cast<float>(posBomb.x), static_cast<float>(posBomb.y));
 
@@ -232,7 +239,7 @@ namespace ecs {
 		auto &e = createEntity();
 		e.addComponent<Orientation>(0.f);
 		e.addComponent<Position>(x, y);
-		e.addComponent<Ephemere>(3LU, std::chrono::steady_clock::now());
+		e.addComponent<Ephemere>(1LU, std::chrono::steady_clock::now());
 		e.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/flames.obj"));
 		e.addComponent<Damage>(true);
 		auto &posE = e.getComponent<Position>();

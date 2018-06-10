@@ -40,7 +40,7 @@ namespace ids {
 
 		std::vector<ecs::Entity *> _allEntities;
 		std::vector<ecs::Entity *> _players;
-		ecs::Entity * _myself;
+		ecs::Entity *_myself;
 		std::vector<ecs::Entity *> _bombs;
 		std::vector<std::vector<cellType>> _map;
 

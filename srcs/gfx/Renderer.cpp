@@ -108,15 +108,32 @@ void gfx::Renderer::addAnimation(irr::scene::IAnimatedMeshSceneNode *node, const
 	const vec2d<int> &range
 )
 {
-	auto &nodeAnimations = animations[node];
-	nodeAnimations[identifier] = range;
+	animationMap &nodeAnimations = animations[node];
+	nodeAnimations[identifier].range = range;
 }
 
 void gfx::Renderer::setAnimation(irr::scene::IAnimatedMeshSceneNode *node, const std::string &identifier)
 {
-	const auto &nodeAnimations = animations.at(node);
-	const auto &animation = nodeAnimations.at(identifier);
-	node->setFrameLoop(animation.x, animation.y);
+	animationMap &nodeAnimations = animations.at(node);
+	Animation &animation = nodeAnimations.at(identifier);
+	if (!animation.running) {
+		node->setAnimationSpeed(5.f);
+		animation.running = true;
+	}
+	if (!animation.set) {
+		node->setFrameLoop(animation.range.x, animation.range.y);
+		animation.set = true;
+	}
+}
+
+void gfx::Renderer::stopAnimation(irr::scene::IAnimatedMeshSceneNode *node, const std::string &identifier)
+{
+	animationMap &nodeAnimations = animations.at(node);
+	Animation &animation = nodeAnimations.at(identifier);
+	if (!animation.running)
+		return;
+	animation.running = false;
+	node->setAnimationSpeed(0.f);
 }
 
 bool gfx::Renderer::setAnimationSpeed(irr::scene::IAnimatedMeshSceneNode *node, float speed)

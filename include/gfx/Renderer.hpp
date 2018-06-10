@@ -19,6 +19,13 @@ namespace gfx {
 
 	using idSprite = long;
 
+	struct Animation {
+		vec2d<int> range;
+		bool set;
+		bool running;
+	};
+
+
 	class Renderer {
 	public:
 		Renderer();
@@ -38,6 +45,7 @@ namespace gfx {
 		);
 
 		void setAnimation(irr::scene::IAnimatedMeshSceneNode *node, const std::string &identifier);
+		void stopAnimation(irr::scene::IAnimatedMeshSceneNode *node, const std::string &identifier);
 		bool setAnimationSpeed(irr::scene::IAnimatedMeshSceneNode *node, float speed);
 		bool setPosition(irr::scene::ISceneNode *node, const vec3d<float> &pos);
 		bool setScale(irr::scene::ISceneNode *node, float scale);
@@ -64,7 +72,7 @@ namespace gfx {
 		irr::scene::ISceneManager *smgr;
 		irr::gui::IGUIEnvironment *guienv;
 		std::deque<gfx::Image2D> images;
-		using animationMap = std::unordered_map<std::string, vec2d<int>>;
+		using animationMap = std::unordered_map<std::string, Animation>;
 		std::unordered_map<irr::scene::ISceneNode *, animationMap> animations;
 		vec3d<float> _sizeGround;
 		irr::scene::ISceneNode *skybox;
