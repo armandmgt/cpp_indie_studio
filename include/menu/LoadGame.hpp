@@ -18,8 +18,9 @@ namespace ids {
 				vec2d<int> size;
 			};
 		public:
-			explicit LoadGame(gfx::Renderer *render, ids::Music *music);
+			LoadGame(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<Music> music);
 			~LoadGame() override;
+
 			sceneId run() override;
 		private:
 			void	itemEvent();

@@ -7,8 +7,8 @@
 
 #include "GameScene.hpp"
 
-ids::GameScene::GameScene(gfx::Renderer *r)
-		: _world{std::make_unique<ecs::World>(r)}, _renderer{r}, _event{r->getEventReceiver()} {
+ids::GameScene::GameScene(std::shared_ptr<gfx::Renderer> r) : _world{std::make_unique<ecs::World>(r)},
+	_renderer{r}, _event{r->getEventReceiver()} {
 	Map map(21, 20);
 
 	map.initMap(20);

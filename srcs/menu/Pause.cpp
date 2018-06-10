@@ -7,7 +7,8 @@
 
 #include "menu/Pause.hpp"
 
-ids::menu::Pause::Pause(gfx::Renderer *renderer, ids::Music *music) : AMenu{renderer, PAUSE, music}, _events{_rend->getEventReceiver()}
+ids::menu::Pause::Pause(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<ids::Music> music)
+	: AMenu{rend, music, PAUSE}, _events{_rend->getEventReceiver()}
 {
 	_infoButtons = {
 		{{950, 400}, {143, 53}, "../assets/menu/buttons/default/back-button.png",

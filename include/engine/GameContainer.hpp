@@ -16,8 +16,8 @@
 #include "common/Music.hpp"
 
 #ifdef _IRR_WINDOWS_
-#pragma comment(lib, "Irrlicht.lib")
-#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
+	#pragma comment(lib, "Irrlicht.lib")
+	#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #endif
 
 namespace ids {
@@ -30,9 +30,9 @@ namespace ids {
 		void start();
 
 	private:
+		std::shared_ptr<gfx::Renderer> _renderer;
+		std::shared_ptr<Music> _music;
 		ScenesManager _scenesManager;
-		gfx::Renderer _renderer;
-		ecs::World _ecs;
-		Music _music;
+		std::shared_ptr<ecs::World> _ecs;
 	};
 }

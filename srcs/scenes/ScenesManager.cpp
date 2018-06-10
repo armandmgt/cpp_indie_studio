@@ -12,13 +12,12 @@
 #include "menu/LoadGame.hpp"
 #include "menu/Pause.hpp"
 
-ids::ScenesManager::ScenesManager(gfx::Renderer *renderer, Music *music) : _renderer{renderer}, _music{music}
+ids::ScenesManager::ScenesManager(std::shared_ptr<gfx::Renderer> renderer, std::shared_ptr<ids::Music> music) : _renderer{renderer}, _music{music}
 {
 }
 
 std::unique_ptr<ids::IScene> ids::ScenesManager::makeScene(IScene::sceneId sceneId)
 {
-	//TODO: change all these .lock().get() by giving weak_ptr to AMenu and GameScene
 	switch (sceneId) {
 	case IScene::MENU:
 		return std::make_unique<ids::menu::Launch>(_renderer, _music);
