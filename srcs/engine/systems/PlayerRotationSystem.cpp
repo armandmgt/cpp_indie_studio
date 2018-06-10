@@ -14,7 +14,7 @@ ecs::PlayerRotationSystem::PlayerRotationSystem(entityVector allEntities, std::s
 {
 }
 
-void ecs::PlayerRotationSystem::update(double delta)
+void ecs::PlayerRotationSystem::update(double delta[[maybe_unused]])
 {
 	auto players = getEntities(COMP_CHARACTER, COMP_VELOCITY, COMP_GRAPHIC);
 
