@@ -29,25 +29,25 @@ namespace ecs {
 			for (auto itC = itR->begin(); itC != itR->end(); itC++) {
 				switch (*itC) {
 					case BREAKABLE_WALL:
-						spawnBWall(itC - itR->begin(), itR - gameMap.begin());
+						spawnEmptyBox(itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case UNBREAKABLE_WALL:
-						spawnUWall(itC - itR->begin(), itR - gameMap.begin());
+						spawnWall(itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case MAP_PLAYER:
 						spawnPlayer(itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case FIRE_UP:
-						spawnWall(POWER, itC - itR->begin(), itR - gameMap.begin());
+						spawnFilledBox(POWER, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case BOMB_UP:
-						spawnWall(MAX_BOMBS, itC - itR->begin(), itR - gameMap.begin());
+						spawnFilledBox(MAX_BOMBS, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case SPEED_UP:
-						spawnWall(SPEEDUP, itC - itR->begin(), itR - gameMap.begin());
+						spawnFilledBox(SPEEDUP, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case POWER_UP:
-						spawnWall(KICK, itC - itR->begin(), itR - gameMap.begin());
+						spawnFilledBox(KICK, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					default:
 						break;
@@ -56,7 +56,7 @@ namespace ecs {
 		}
 	}
 
-	void World::spawnWall(ActionTarget type, long posX, long posY) {
+	void World::spawnFilledBox(ActionTarget type, long posX, long posY) {
 		auto &ent = createEntity();
 
 		ent.addComponent<Destructible>(std::make_unique<Collectible>(type));
@@ -69,7 +69,20 @@ namespace ecs {
 		_renderer->addTexture(gfx.sceneNode, "../assets/textures/box.jpg");
 	}
 
-	void World::spawnUWall(long posX, long posY) {
+	void World::spawnEmptyBox(long posX, long posY)
+	{
+		auto &ent = createEntity();
+
+		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
+		ent.addComponent<Destructible>(nullptr);
+		ent.addComponent<Graphic>(_renderer->createElem("../assets/meshs/box.obj"));
+
+		auto const &gfx = ent.getComponent<Graphic>();
+		if (gfx.sceneNode == nullptr || !_renderer->addTexture(gfx.sceneNode, "../assets/textures/box.jpg"))
+			throw std::runtime_error("Cannot load wall asset");
+	}
+
+	void World::spawnWall(long posX, long posY) {
 		static int rand = 0;
 		auto &ent = createEntity();
 
@@ -81,19 +94,6 @@ namespace ecs {
 		auto const &gfx = ent.getComponent<Graphic>();
 		if (gfx.sceneNode == nullptr)
 			throw std::runtime_error("Could not load wall asset");
-	}
-
-	void World::spawnBWall(long posX, long posY)
-	{
-		auto &ent = createEntity();
-
-		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
-		ent.addComponent<Destructible>(nullptr);
-		ent.addComponent<Graphic>(_renderer->createElem("../assets/meshs/box.obj"));
-
-		auto const &gfx = ent.getComponent<Graphic>();
-		if (gfx.sceneNode == nullptr || !_renderer->addTexture(gfx.sceneNode, "../assets/textures/box.jpg"))
-			throw std::runtime_error("Cannot load wall asset");
 	}
 
 	void World::spawnPlayer(long posX, long posY)

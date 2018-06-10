@@ -35,7 +35,15 @@ namespace ecs {
 		}
 
 		template<class T>
-		bool hasComponent() {
+		const T &getComponent() const {
+			static_assert(std::is_base_of<Component, T>(), "T is not a component");
+			if (!bit[T::type])
+				throw std::runtime_error("Entity has no T component");
+			return static_cast<T&>(*componentArray[T::type]);
+		}
+
+		template<class T>
+		bool hasComponent() const {
 			static_assert(std::is_base_of<Component, T>(), "T is not a component");
 			return bit[T::type];
 		}

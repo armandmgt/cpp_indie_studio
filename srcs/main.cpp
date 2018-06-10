@@ -11,12 +11,12 @@
 
 int main()
 {
-	try {
+//	try {
 		ids::GameContainer gc;
 		gc.start();
-	} catch (const std::exception &e) {
-		std::cerr << e.what() << std::endl;
-		return 84;
-	}
+//	} catch (const std::exception &e) {
+//		std::cerr << e.what() << std::endl;
+//		return 84;
+//	}
 	return 0;
 }

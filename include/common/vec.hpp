@@ -44,28 +44,36 @@ public:
 	T z;
 };
 
-template<typename T>
-class vec2d {
-public:
-	vec2d() = default;
-	vec2d(T value1, T value2) : x(value1), y(value2)
-	{}
-	~vec2d() = default;
-	vec2d operator+(vec2d &v) {
-		return vec2d(x + v.x, y + v.y);
-	}
+	template<typename T>
+	class vec2d {
+	public:
+		vec2d() = default;
+		vec2d(T value1, T value2) : x(value1), y(value2)
+		{}
+		~vec2d() = default;
+	bool operator==(const vec2d &other) const
+		{
+			return x == other.x && y == other.y;
+		}
 
-	vec2d operator-(vec2d &v) {
+		bool operator!=(const vec2d &other) const
+		{
+			return !(other == *this);
+		}	vec2d operator+(const vec2d &v) {
+			return vec2d(x + v.x, y + v.y);
+		}
+
+	vec2d operator-(const vec2d &v) {
 		return vec2d(x - v.x, y - v.y);
 	}
 
-	vec2d& operator+=(vec2d& v) {
+	vec2d &operator+=(const vec2d &v) {
 		x += v.x;
 		y += v.y;
 		return *this;
 	}
 
-	vec2d& operator-=(vec2d& v) {
+	vec2d &operator-=(const vec2d &v) {
 		x -= v.x;
 		y -= v.y;
 		return *this;

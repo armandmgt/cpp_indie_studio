@@ -24,9 +24,9 @@ namespace ecs {
 
 		Entity &createEntity();
 		void spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
-		void spawnUWall(long posX, long posY);
-		void spawnWall(ActionTarget type, long posX, long posY);
-		void spawnBWall(long posX, long posY);
+		void spawnWall(long posX, long posY);
+		void spawnFilledBox(ActionTarget type, long posX, long posY);
+		void spawnEmptyBox(long posX, long posY);
 		void spawnPlayer(long posX, long posY);
 		void spawnFlames(Position, int);
 		void spawnFlameAtPosition(float x, float y);
