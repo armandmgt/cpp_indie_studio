@@ -29,7 +29,7 @@ namespace ecs {
 		void spawnBWall(long posX, long posY);
 		void spawnPlayer(long posX, long posY);
 		void spawnFlames(Position, int);
-		void spawnFlameatPosition(float x, float y);
+		void spawnFlameAtPosition(float x, float y);
 
 		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);
 		void drawEntities();

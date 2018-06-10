@@ -133,12 +133,18 @@ namespace ecs {
 	void World::spawnCollectibleFromBox(Entity *box) noexcept {
 		auto &ent = createEntity();
 		auto &col = box->getComponent<Destructible>();
+		auto &pos = box->getComponent<Position>();
 
 		ent.addComponent<Collectible>(col.item->action);
 		ent.addComponent<Position>(box->getComponent<Position>());
 		ent.addComponent<Graphic>(_renderer->createElem(
 			_queryMeshFromActionTarget(col.item->action)
 		));
+
+		auto const &gfx = ent.getComponent<Graphic>();
+		if (gfx.sceneNode == nullptr)
+			throw std::runtime_error("Cannot load wall asset");
+		_renderer->setPosition(gfx.sceneNode, {pos.x, 0, pos.y});
 	}
 
 	irr::core::stringw World::_queryMeshFromActionTarget(const ActionTarget act) const {
@@ -223,7 +229,7 @@ namespace ecs {
 		return true;
 	}
 
-	void World::spawnFlameatPosition(float x, float y) {
+	void World::spawnFlameAtPosition(float x, float y) {
 		auto &e = createEntity();
 		e.addComponent<Orientation>(0.f);
 		e.addComponent<Position>(x, y);
@@ -236,14 +242,14 @@ namespace ecs {
 	}
 
 	void World::spawnFlames(ecs::Position initialPos, int pwr) {
-		spawnFlameatPosition(initialPos.x, initialPos.y);
+		spawnFlameAtPosition(initialPos.x, initialPos.y);
 		for (auto i = 1; i <= pwr  && isValidPosition(initialPos.x, initialPos.y + i); i++)
-			spawnFlameatPosition(initialPos.x, initialPos.y + i);
+			spawnFlameAtPosition(initialPos.x, initialPos.y + i);
 		for (auto i = 1; i <= pwr  && isValidPosition(initialPos.x + 1, initialPos.y); i++)
-			spawnFlameatPosition(initialPos.x + i, initialPos.y);
+			spawnFlameAtPosition(initialPos.x + i, initialPos.y);
 		for (auto i = -1; i >= (pwr * -1)  && isValidPosition(initialPos.x, initialPos.y + i); i--)
-			spawnFlameatPosition(initialPos.x, initialPos.y + i);
+			spawnFlameAtPosition(initialPos.x, initialPos.y + i);
 		for (auto i = -1; i >= (pwr * -1) && isValidPosition(initialPos.x + i, initialPos.y); i--)
-			spawnFlameatPosition(initialPos.x + i, initialPos.y);
+			spawnFlameAtPosition(initialPos.x + i, initialPos.y);
 	}
 }
