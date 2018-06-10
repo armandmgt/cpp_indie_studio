@@ -5,6 +5,7 @@
 ** MovementSystem
 */
 
+#include <iostream>
 #include "engine/systems/MovementSystem.hpp"
 
 namespace ecs {
@@ -13,14 +14,33 @@ namespace ecs {
 	{
 	}
 
+	bool MovementSystem::_isValidPosition(float x, float y)
+	{
+		auto entities = getEntities(COMP_POSITION);
+
+		for (auto &entitie : entities) {
+			if (!entitie->hasComponent<Character>() && !entitie->hasComponent<Explosion>() &&
+			    !entitie->hasComponent<Collectible>()) {
+				auto &posE = entitie->getComponent<Position>();
+				auto posP = roundPos<int>(x, y);
+				auto posRounded = roundPos<int>(posE.x, posE.y);
+				if (posP.x == posRounded.x && posP.y == posRounded.y)
+					return false;
+			}
+		}
+		return true;
+	}
+
 	void MovementSystem::update(double delta[[maybe_unused]]) {
 		auto entities = getEntities(COMP_POSITION, COMP_VELOCITY);
 
 		for (auto &e : entities) {
 			auto &position = e->getComponent<Position>();
 			auto &velocity = e->getComponent<Velocity>();
-			position.x += velocity.x;
-			position.y += velocity.y;
+			if (_isValidPosition(position.x + velocity.x, position.y + velocity.y)) {
+				position.x += velocity.x;
+				position.y += velocity.y;
+			}
 			velocity.x = 0;
 			velocity.y = 0;
 			if (e->hasComponent<Graphic>()) {

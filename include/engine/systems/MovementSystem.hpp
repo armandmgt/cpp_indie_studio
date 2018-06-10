@@ -16,6 +16,7 @@ namespace ecs {
 
 		void update(double delta) override;
 	private:
+		bool _isValidPosition(float x, float y);
 		std::shared_ptr<gfx::Renderer> _renderer;
 	};
 };

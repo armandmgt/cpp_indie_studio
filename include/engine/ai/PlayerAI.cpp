@@ -54,22 +54,24 @@ ids::PlayerAI::PlayerAI(size_t _id, std::shared_ptr<ecs::World> _world, vec2d<st
 
 evt::Event ids::PlayerAI::computeAction()
 {
-	auto start = std::chrono::steady_clock::now();
+//	auto start = std::chrono::steady_clock::now();
 	_updateMap();
 //	_printMap();
 
+	if (_myself == nullptr)
+		return {evt::MOVEMENT, evt::NOTHING, evt::NONE};
 	const auto &positionComponent = _myself->getComponent<ecs::Position>();
 	vec2d<float> pos{positionComponent.x, positionComponent.y};
 	if (_willDie(pos)) {
 //		std::cout << "I'm gonna diiiiiee !" << std::endl;
 		evt::eventAction action = _findSafePlace(pos);
-		auto end = std::chrono::steady_clock::now();
+//		auto end = std::chrono::steady_clock::now();
 //		std::cout << "Calculation took " << std::chrono::duration<double>(end - start).count() <<
 //			" seconds" << std::endl;
 		return {evt::MOVEMENT, action, evt::NONE};
 	}
 //	std::cout << "I'm fine" << std::endl;
-	auto end = std::chrono::steady_clock::now();
+//	auto end = std::chrono::steady_clock::now();
 //	std::cout << "Calculation took " << std::chrono::duration<double>(end - start).count() <<
 //		" seconds" << std::endl;
 	return {evt::MOVEMENT, evt::NOTHING, evt::NONE};
@@ -82,9 +84,14 @@ void ids::PlayerAI::_updateMap()
 	_bombs.clear();
 	std::transform(_world->entities->begin(), _world->entities->end(), std::back_inserter(_allEntities),
 		[](auto &e) { return e.get(); });
-	_myself = *std::find_if(_allEntities.begin(), _allEntities.end(), [this](ecs::Entity *e) {
+	auto it = std::find_if(_allEntities.begin(), _allEntities.end(), [this](ecs::Entity *e) {
 		return e->hasComponent<ecs::Character>() && e->getComponent<ecs::Character>().id == _id;
 	});
+	if (it == _allEntities.end()) {
+		_myself = nullptr;
+		return;
+	}
+	_myself = *it;
 	std::copy_if(_allEntities.begin(), _allEntities.end(), std::back_inserter(_players),
 		[](const ecs::Entity *e) { return e->hasComponent<ecs::Character>(); });
 	std::copy_if(_allEntities.begin(), _allEntities.end(), std::back_inserter(_bombs),
@@ -180,10 +187,10 @@ evt::eventAction ids::PlayerAI::_findSafePlace(vec2d<float> &pos)
 	std::unique_ptr<PathTree> pathsLengths = std::make_unique<PathTree>(evt::NOTHING, 0);
 	std::list<vec2d<float>> visited;
 	_findSaferCell(pos, pathsLengths, visited);
-	for (std::size_t i = 0; pathsLengths->leafs[i]; i++) {
-		const auto &l = pathsLengths->leafs[i];
+//	for (std::size_t i = 0; pathsLengths->leafs[i]; i++) {
+//		const auto &l = pathsLengths->leafs[i];
 //		std::cout << "by going " << l->path << " we went through " << l->length << " nodes" << std::endl;
-	}
+//	}
 //	std::cout << "we went through:" << std::endl;
 //	std::for_each(visited.begin(), visited.end(), [](const vec2d<float> &v) {
 //		std::cout << "(" << v.x << ";" << v.y << ")" << std::endl;
