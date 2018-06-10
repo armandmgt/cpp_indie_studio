@@ -7,6 +7,10 @@
 
 #pragma once
 
+#include <array>
+#include <string>
+#include <ostream>
+
 namespace evt {
 	enum eventType {
 		MOVEMENT, ACTION
