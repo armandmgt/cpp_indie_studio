@@ -50,7 +50,6 @@ namespace ids {
 		void _constructTypesMap();
 		void _updateMap();
 		void _findCellType(const ecs::Entity *entity);
-		void _printMap();
 
 		bool _willDie(const vec2d<float> &pos);
 		evt::eventAction _findSafePlace(vec2d<float> &pos);

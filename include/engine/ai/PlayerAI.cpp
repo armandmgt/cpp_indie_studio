@@ -63,17 +63,9 @@ evt::Event ids::PlayerAI::computeAction()
 	const auto &positionComponent = _myself->getComponent<ecs::Position>();
 	vec2d<float> pos{positionComponent.x, positionComponent.y};
 	if (_willDie(pos)) {
-//		std::cout << "I'm gonna diiiiiee !" << std::endl;
 		evt::eventAction action = _findSafePlace(pos);
-//		auto end = std::chrono::steady_clock::now();
-//		std::cout << "Calculation took " << std::chrono::duration<double>(end - start).count() <<
-//			" seconds" << std::endl;
 		return {evt::MOVEMENT, action, evt::NONE};
 	}
-//	std::cout << "I'm fine" << std::endl;
-//	auto end = std::chrono::steady_clock::now();
-//	std::cout << "Calculation took " << std::chrono::duration<double>(end - start).count() <<
-//		" seconds" << std::endl;
 	return {evt::MOVEMENT, evt::NOTHING, evt::NONE};
 }
 
@@ -128,49 +120,16 @@ void ids::PlayerAI::_findCellType(const ecs::Entity *entity)
 	}
 }
 
-void ids::PlayerAI::_printMap()
-{
-	std::for_each(_map.begin(), _map.end(), [](const std::vector<cellType> &v) {
-		std::for_each(v.begin(), v.end(), [](cellType c) {
-			switch (c) {
-			case EMPTY:
-				std::cout << ' ';
-				break;
-			case WALL:
-				std::cout << '#';
-				break;
-			case BOX:
-				std::cout << 'o';
-				break;
-			case BOMB:
-				std::cout << 'x';
-				break;
-			case FLAME:
-				std::cout << '*';
-				break;
-			}
-		});
-		std::cout << std::endl;
-	});
-}
-
 bool ids::PlayerAI::_willDie(const vec2d<float> &pos)
 {
 	auto bombIt = std::find_if(_bombs.begin(), _bombs.end(), [&pos](const ecs::Entity *bomb) {
 		const auto &bombPosComponent = bomb->getComponent<ecs::Position>();
 		const auto &bombExplComponent = bomb->getComponent<ecs::Explosion>();
-//		std::cout << "bomb at (" << bombPosComponent.x << ";" << bombPosComponent.y << ")" << std::endl;
-//		std::cout << std::boolalpha << "same x ? " << aligned(pos.x, bombPosComponent.x, 0.5) <<
-//			" and in range ? " << inRange(pos.x, bombPosComponent.x, bombExplComponent.power) << std::endl;
-//		std::cout << std::boolalpha << "same y ? " << aligned(pos.y, bombPosComponent.y, 0.5) <<
-//			" and in range ? " << inRange(pos.y, bombPosComponent.y, bombExplComponent.power) << std::endl;
 		return (aligned(pos.x, bombPosComponent.x, 0.5) &&
 			inRange(pos.x, bombPosComponent.x, bombExplComponent.power)) ||
 			(aligned(pos.y, bombPosComponent.y, 0.5) &&
 			inRange(pos.y, bombPosComponent.y, bombExplComponent.power));
 	});
-//	std::cout << "(" << pos.x << ";" << pos.y << ") dying ? " <<
-//		std::boolalpha << (bombIt != _bombs.end()) << std::endl;
 	return bombIt != _bombs.end();
 }
 
@@ -181,20 +140,11 @@ evt::eventAction ids::PlayerAI::_findSafePlace(vec2d<float> &pos)
 		_road.pop_back();
 		return direction;
 	}
-//	std::cout << "Let's find a road to take..." << std::endl;
 	clear(_road);
 
 	std::unique_ptr<PathTree> pathsLengths = std::make_unique<PathTree>(evt::NOTHING, 0);
 	std::list<vec2d<float>> visited;
 	_findSaferCell(pos, pathsLengths, visited);
-//	for (std::size_t i = 0; pathsLengths->leafs[i]; i++) {
-//		const auto &l = pathsLengths->leafs[i];
-//		std::cout << "by going " << l->path << " we went through " << l->length << " nodes" << std::endl;
-//	}
-//	std::cout << "we went through:" << std::endl;
-//	std::for_each(visited.begin(), visited.end(), [](const vec2d<float> &v) {
-//		std::cout << "(" << v.x << ";" << v.y << ")" << std::endl;
-//	});
 	auto &bestPath = *std::min_element(pathsLengths->leafs.begin(), pathsLengths->leafs.end(),
 		[](const auto &p1, const auto &p2) {
 			return (p1 && p2 && p1->length < p2->length) || !p2;
@@ -218,12 +168,10 @@ bool ids::PlayerAI::_isSafeRoad(std::list<evt::eventAction> road)
 		auto path = road.back();
 		goDirection(currentPos, path);
 		if (_willDie(currentPos)) {
-			std::cout << "brr I don't want to go that way..." << std::endl;
 			return false;
 		}
 		road.pop_back();
 	}
-	std::cout << "road is safe, let's go that way !" << std::endl;
 	return true;
 }
 
@@ -233,20 +181,15 @@ void ids::PlayerAI::_findSaferCell(vec2d<float> &pos, std::unique_ptr<PathTree> 
 	if (!_willDie(pos))
 		return;
 	std::for_each(_directions.begin(), _directions.end(), [&](evt::eventAction dir) {
-		std::cout << "from (" << pos.x << ";" << pos.y << ") checking direction " << dir;
 		auto copyPos = pos;
 		goDirection(copyPos, dir);
 		auto integerPos = toIntegerPos<std::size_t>(copyPos);
 		if (_map.at(integerPos.x).at(integerPos.y) != EMPTY ||
 			std::find(visited.begin(), visited.end(), pos) != visited.end()) {
-			std::cout << " -> impossible: "
-				<< (_map.at(integerPos.x).at(integerPos.y) != EMPTY ? "there is something in the way" :
-					"we already visited this cell") << std::endl;
 			return;
 		}
-		visited.push_back(copyPos); //TODO: remove visited list and write '.' into map
+		visited.push_back(copyPos);
 		pathsLengths->leafs[dir - 1] = std::make_unique<PathTree>(dir, pathsLengths->length + 1);
-		std::cout << ", ok lets see if (" << copyPos.x << ";" << copyPos.y << ") is dangerous" << std::endl;
 		_findSaferCell(copyPos, pathsLengths->leafs[dir - 1], visited);
 	});
 }

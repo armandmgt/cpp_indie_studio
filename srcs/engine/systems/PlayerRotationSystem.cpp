@@ -25,17 +25,14 @@ void ecs::PlayerRotationSystem::update(double delta)
 				continue;
 			if (std::max(velocity.x, velocity.y) > 0) {
 				if (std::max(velocity.x, velocity.y) == velocity.x) {
-					std::cout << 1 << std::endl;
 					_renderer->rotate(gfx.sceneNode, {0, 90, 0});
 				} else {
-					std::cout << 2 << std::endl;
 					_renderer->rotate(gfx.sceneNode, {0, 0, 0});
 				}
 			} else {
 				if (std::max(velocity.x, velocity.y) == velocity.x) {
 					_renderer->rotate(gfx.sceneNode, {0, 180, 0});
 				} else {
-					std::cout << 4 << std::endl;
 					_renderer->rotate(gfx.sceneNode, {0, -90, 0});
 				}
 			}
