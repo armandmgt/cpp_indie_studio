@@ -22,15 +22,12 @@ namespace ids {
 	public:
 		Music() = default;
 		~Music() = default;
-		bool	getState(musicId);
 		musicId createMusic(std::string &file);
 		void playMusic(musicId music);
 		void destroyMusic(musicId music);
 		void pauseMusic(musicId music);
 		bool musicInit();
 	private:
-
-		//std::unordered_map<musicId, std::unique_ptr<sf::Music>> _music{};
 		std::vector<Info> _music;
 		musicId _musicId;
 	};

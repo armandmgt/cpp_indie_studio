@@ -33,8 +33,8 @@ ids::IScene::sceneId ids::menu::Pause::run()
 			_id = ids::IScene::QUIT;
 			return _id;
 		}
-		auto mousePos = _events.getMousePosition();
-		computeEvent(mousePos);
+		_mouseData= _events.getMousePosition();
+		buttonEvent();
 		_rend->render();
 	}
 	return _id;

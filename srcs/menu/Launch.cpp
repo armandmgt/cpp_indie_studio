@@ -29,9 +29,7 @@ ids::menu::Launch::Launch(gfx::Renderer *rend, ids::Music *music) : AMenu(rend, 
 	if (_musicManager->musicInit()) {
 		std::string audio = "../assets/MusicFiles/oyeah.wav";
 		auto sample = _musicManager->createMusic(audio);
-		if (!_musicManager->getState(sample)) {
-			_musicManager->playMusic(sample);
-		}
+		_musicManager->playMusic(sample);
 	}
 }
 
@@ -56,8 +54,8 @@ ids::IScene::sceneId ids::menu::Launch::run()
 			_id = ids::IScene::QUIT;
 			return _id;
 		}
-		auto mousePos = _events.getMousePosition();
-		computeEvent(mousePos);
+		_mouseData = _events.getMousePosition();
+		buttonEvent();
 		_rend->render();
 	}
 	if (!_rend->isRunning())

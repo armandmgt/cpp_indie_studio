@@ -34,20 +34,18 @@ namespace ids {
 
 			explicit AMenu(gfx::Renderer *rend, sceneId id, ids::Music *music);
 			~AMenu() override = default;
-
-			void computeEvent(evt::MyEventReceiver::MouseState &mouseData);
-
 		protected:
 			bool setWindow();
 			void buttonEvent();
-			bool inside_rect(vec2d<int> &pos, vec2d<int> &size);
+			bool insideRect(vec2d<int> &pos, vec2d<int> &size);
 			gfx::Renderer *_rend;
 			vec2d<int> _posBackground;
 			irr::core::stringw _backgroundImg;
 			std::vector<Button> _infoButtons;
 			sceneId	_id;
-			Mouse _mouse;
+			//Mouse _mouse;
 			Music *_musicManager;
+			evt::MyEventReceiver::MouseState _mouseData;
 		};
 	}
 }

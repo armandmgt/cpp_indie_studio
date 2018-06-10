@@ -7,12 +7,13 @@
 
 #include "menu/Settings.hpp"
 
-ids::menu::Settings::Settings(gfx::Renderer *rend, ids::Music *music) : AMenu(rend, SETTINGS, music), _events{rend->getEventReceiver()},
+ids::menu::Settings::Settings(gfx::Renderer *rend, ids::Music *music) :
+	AMenu(rend, SETTINGS, music), _events{rend->getEventReceiver()},
 	_music{ON},
 	_items{
 		{{64, 64}, ON, "../assets/menu/volume.png", "../assets/menu/mute.png", {950, 510}},
-		{{960, 720}, NONE, "../assets/menu/Items/score-board.png", "../assets/menu/Items/score-board.png",
-			{480, 180}}
+		{{960, 720}, NONE, "../assets/menu/Items/score-board.png",
+			"../assets/menu/Items/score-board.png", {480, 180}}
 	}
 {
 	_infoButtons = {
@@ -34,7 +35,7 @@ ids::menu::Settings::~Settings()
 void	ids::menu::Settings::itemEvent()
 {
 	std::size_t id = 0;
-	if (_mouse.state && inside_rect(_items[0].pos, _items[0].size)) {
+	if (_mouseData.leftButtonDown && insideRect(_items[0].pos, _items[0].size)) {
 		if (_items[0].state == ON) {
 			_items[0].state = OFF;
 			_musicManager->pauseMusic(id);
@@ -61,8 +62,8 @@ ids::IScene::sceneId ids::menu::Settings::run()
 			_id = ids::IScene::QUIT;
 			return _id;
 		}
-		auto mousePos = _events.getMousePosition();
-		computeEvent(mousePos);
+		_mouseData = _events.getMousePosition();
+		buttonEvent();
 		itemEvent();
 		_rend->render();
 	}

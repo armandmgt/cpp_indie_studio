@@ -7,7 +7,8 @@
 
 #include "menu/LoadGame.hpp"
 
-ids::menu::LoadGame::LoadGame(gfx::Renderer *rend, ids::Music *music) : AMenu(rend, LOAD, music), _events{rend->getEventReceiver()},
+ids::menu::LoadGame::LoadGame(gfx::Renderer *rend, ids::Music *music) :
+	AMenu(rend, LOAD, music), _events{rend->getEventReceiver()},
 	_items{
 		{"../assets/menu/trollol/trollol.png", {480, 100}, {991, 806}},
 		{"../assets/menu/trollol/trollol2.png", {480,100}, {991, 806}},
@@ -35,7 +36,8 @@ ids::menu::LoadGame::~LoadGame()
 
 void	ids::menu::LoadGame::itemEvent()
 {
-	if (_mouse.state && inside_rect(_items[_itemIndex].pos, _items[_itemIndex].size)) {
+	if (_mouseData.leftButtonDown && insideRect(_items[_itemIndex].pos,
+						    _items[_itemIndex].size)) {
 		_itemIndex++;
 		if (_itemIndex >= _items.size()) {
 			_itemIndex = 0;
@@ -54,9 +56,8 @@ ids::IScene::sceneId ids::menu::LoadGame::run()
 			_id = ids::IScene::QUIT;
 			return _id;
 		}
-		auto mouseData = _events.getMousePosition();
-		// _rend->isKeyPressed(irr::KEY_LBUTTON)
-		computeEvent(mouseData);
+		_mouseData = _events.getMousePosition();
+		buttonEvent();
 		itemEvent();
 		_rend->render();
 	}
