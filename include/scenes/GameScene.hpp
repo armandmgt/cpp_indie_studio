@@ -19,7 +19,7 @@ namespace ids {
 	class GameScene : public IScene {
 		public:
 			explicit GameScene(std::shared_ptr<gfx::Renderer>);
-			~GameScene() noexcept final = default;
+			~GameScene() noexcept final;
 
 			sceneId run() final;
 

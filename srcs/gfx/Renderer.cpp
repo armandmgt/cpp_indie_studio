@@ -70,7 +70,6 @@ irr::scene::ISceneNode *gfx::Renderer::createElem(irr::core::stringw const &file
 		return nullptr;
 	} else {
 		sceneNode->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
-//		sceneNode->setDebugDataVisible(irr::scene::EDS_NORMALS);
 		return sceneNode;
 	}
 }
@@ -192,9 +191,10 @@ void gfx::Renderer::load2D(irr::core::stringw const &filename, const vec2d<int> 
 
 void gfx::Renderer::remove2D(irr::core::stringw const &filename)
 {
-	std::remove_if(images.begin(), images.end(), [&filename](const Image2D &image) {
+	auto removeIt = std::remove_if(images.begin(), images.end(), [&filename](const Image2D &image) {
 		return filename == image.filename;
 	});
+	images.erase(removeIt, images.end());
 }
 
 void gfx::Renderer::addArchive(irr::core::stringw const &filename)

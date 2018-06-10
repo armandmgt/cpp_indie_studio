@@ -13,6 +13,16 @@ ids::menu::AMenu::AMenu(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<ids
 {
 }
 
+ids::menu::AMenu::~AMenu()
+{
+	_rend->remove2D(_backgroundImg);
+	std::for_each(_infoButtons.begin(), _infoButtons.end(), [this](Button &button) {
+		_rend->remove2D(button.inactive);
+		_rend->remove2D(button.active);
+		_rend->remove2D(button.active);
+	});
+}
+
 bool	ids::menu::AMenu::setWindow()
 {
 	_rend->load2D(_backgroundImg, _posBackground);
@@ -32,14 +42,15 @@ void ids::menu::AMenu::buttonEvent()
 {
 	for (auto &button : _infoButtons) {
 		if (insideRect(button.pos, button.size)) {
+			if (!button.hovered) {
 				_rend->remove2D(button.inactive);
 				_rend->load2D(button.active, button.pos);
-				if (_mouseData.leftButtonDown) {
-					_id = button.action;
-				}
 				button.hovered = true;
 			}
-		else if (button.hovered) {
+			if (_mouseData.leftButtonDown) {
+				_id = button.action;
+			}
+		} else if (button.hovered) {
 			button.hovered = false;
 			_rend->remove2D(button.active);
 			_rend->load2D(button.inactive, button.pos);

@@ -29,7 +29,7 @@ namespace ids {
 			};
 
 			AMenu(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<Music> music, sceneId id);
-			~AMenu() override = default;
+			~AMenu() override;
 
 		protected:
 			bool setWindow();

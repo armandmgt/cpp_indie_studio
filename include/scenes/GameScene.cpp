@@ -24,6 +24,14 @@ ids::GameScene::GameScene(std::shared_ptr<gfx::Renderer> r) : _world{std::make_s
 	_world->createGround(21, 19, "../assets/meshs/ground.obj");
 	_world->spawnEntitiesFromMap(std::move(map.getMap()));
 	_renderer->addSkybox("../assets/skybox/hell");
+	_initSystem();
+	_renderer->setCameraFPS();
+	_world->drawEntities();
+}
+
+ids::GameScene::~GameScene() noexcept
+{
+	_renderer->clearScene();
 }
 
 void ids::GameScene::_initSystem()
@@ -41,8 +49,8 @@ void ids::GameScene::_initSystem()
 bool ids::GameScene::_isWin()
 {
 	std::size_t countPlayer = 0;
-	for (auto &entitie : *_world->getEntities().get()) {
-		if (entitie->hasComponent<ecs::Character>()) {
+	for (auto &entity : *_world->getEntities()) {
+		if (entity->hasComponent<ecs::Character>()) {
 			countPlayer++;
 		}
 	}
@@ -50,9 +58,6 @@ bool ids::GameScene::_isWin()
 }
 
 ids::IScene::sceneId ids::GameScene::run() {
-	_initSystem();
-	_renderer->setCameraFPS();
-	_world->drawEntities();
 	while (_renderer->isRunning() && !_event.isKeyDown(irr::KEY_ESCAPE)) {
 		if (!_isWin()) {
 			_renderer->clearScene();
@@ -66,6 +71,5 @@ ids::IScene::sceneId ids::GameScene::run() {
 	}
 	if (!_renderer->isRunning())
 		return ids::IScene::QUIT;
-	_renderer->clearScene();
 	return PAUSE;
 }

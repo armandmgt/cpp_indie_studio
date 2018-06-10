@@ -23,12 +23,12 @@ ids::menu::Pause::Pause(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<ids
 
 ids::menu::Pause::~Pause()
 {
-	_rend->clearScene();
 }
 
 ids::IScene::sceneId ids::menu::Pause::run()
 {
 	setWindow();
+	while (_rend->isRunning() && _events.isKeyDown(irr::KEY_ESCAPE));
 	while (_rend->isRunning() && _id == PAUSE) {
 		if (_events.isKeyDown(irr::KEY_ESCAPE)) {
 			_id = ids::IScene::GAME;
