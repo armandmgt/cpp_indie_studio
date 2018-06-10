@@ -17,11 +17,11 @@
 
 ids::GameScene::GameScene(std::shared_ptr<gfx::Renderer> r) : _world{std::make_shared<ecs::World>(r)},
 	_renderer{r}, _event{r->getEventReceiver()} {
-	Map map(20, 20);
+	Map map(21, 19);
 
 	map.initMap(20);
 	map.printMap();
-	_world->createGround(20, 20, "../assets/meshs/ground.obj");
+	_world->createGround(21, 19, "../assets/meshs/ground.obj");
 	_world->spawnEntitiesFromMap(std::move(map.getMap()));
 }
 
@@ -41,7 +41,7 @@ ids::IScene::sceneId ids::GameScene::run() {
 	_initSystem();
 	_renderer->setCameraFPS();
 	_world->drawEntities();
-	PlayerAI ai1{0LU, _world, {20, 20}};
+	PlayerAI ai1{0LU, _world, {21, 19}};
 	auto e = ai1.computeAction();
 	std::cout << "Best AI in the world computed: " << e.action << " and " << e.key << std::endl;
 	while (_renderer->isRunning() && !_event.isKeyDown(irr::KEY_ESCAPE)) {
@@ -51,5 +51,8 @@ ids::IScene::sceneId ids::GameScene::run() {
 			it->update(1);
 		}
 	}
+	if (!_renderer->isRunning())
+		return ids::IScene::QUIT;
+	_renderer->clearScene();
 	return PAUSE;
 }

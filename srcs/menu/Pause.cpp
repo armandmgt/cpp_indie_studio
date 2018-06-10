@@ -31,7 +31,7 @@ ids::IScene::sceneId ids::menu::Pause::run()
 	setWindow();
 	while (_rend->isRunning() && _id == PAUSE) {
 		if (_events.isKeyDown(irr::KEY_ESCAPE)) {
-			_id = ids::IScene::QUIT;
+			_id = ids::IScene::GAME;
 			return _id;
 		}
 		_mouseData= _events.getMousePosition();

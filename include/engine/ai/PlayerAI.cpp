@@ -52,7 +52,7 @@ ids::PlayerAI::PlayerAI(size_t _id, std::shared_ptr<ecs::World> _world, vec2d<st
 {
 }
 
-evt::eventType ids::PlayerAI::computeAction()
+evt::Event ids::PlayerAI::computeAction()
 {
 	auto start = std::chrono::steady_clock::now();
 	_updateMap();
@@ -66,13 +66,13 @@ evt::eventType ids::PlayerAI::computeAction()
 		auto end = std::chrono::steady_clock::now();
 		std::cout << "Calculation took " << std::chrono::duration<double>(end - start).count() <<
 			" seconds" << std::endl;
-		return {action, evt::NONE};
+		return {evt::MOVEMENT, action, evt::NONE};
 	}
 	std::cout << "I'm fine" << std::endl;
 	auto end = std::chrono::steady_clock::now();
 	std::cout << "Calculation took " << std::chrono::duration<double>(end - start).count() <<
 		" seconds" << std::endl;
-	return {evt::NOTHING, evt::NONE};
+	return {evt::MOVEMENT, evt::NOTHING, evt::NONE};
 }
 
 void ids::PlayerAI::_updateMap()
@@ -80,8 +80,8 @@ void ids::PlayerAI::_updateMap()
 	_allEntities.clear();
 	_players.clear();
 	_bombs.clear();
-	std::transform(_world->entities.begin(), _world->entities.end(), std::back_inserter(_allEntities),
-		[](auto &e) { return &e; });
+	std::transform(_world->entities->begin(), _world->entities->end(), std::back_inserter(_allEntities),
+		[](auto &e) { return e.get(); });
 	_myself = *std::find_if(_allEntities.begin(), _allEntities.end(), [this](ecs::Entity *e) {
 		return e->hasComponent<ecs::Character>() && e->getComponent<ecs::Character>().id == _id;
 	});

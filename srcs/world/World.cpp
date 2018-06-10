@@ -75,10 +75,10 @@ namespace ecs {
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Destructible>(nullptr);
-		ent.addComponent<Graphic>(renderer->createElem("../assets/meshs/box.obj"));
+		ent.addComponent<Graphic>(_renderer->createElem("../assets/meshs/box.obj"));
 
 		auto const &gfx = ent.getComponent<Graphic>();
-		if (gfx.sceneNode == nullptr || !renderer->addTexture(gfx.sceneNode, "../assets/textures/box.jpg"))
+		if (gfx.sceneNode == nullptr || !_renderer->addTexture(gfx.sceneNode, "../assets/textures/box.jpg"))
 			throw std::runtime_error("Cannot load wall asset");
 	}
 
@@ -103,7 +103,7 @@ namespace ecs {
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Velocity>(0.f, 0.f);
-		ent.addComponent<Character>(playerCount++, false, 1, 1LU, 1LU, playerId++);
+		ent.addComponent<Character>(false, 1, 1LU, 1LU, playerId++);
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
 		ent.addComponent<Input>(false);

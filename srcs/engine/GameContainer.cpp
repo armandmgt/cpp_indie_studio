@@ -15,7 +15,7 @@ ids::GameContainer::GameContainer() : _renderer{std::make_shared<gfx::Renderer>(
 
 void ids::GameContainer::start()
 {
-	IScene::sceneId sceneId = IScene::GAME;
+	IScene::sceneId sceneId = IScene::MENU;
 
 	while (sceneId != IScene::QUIT) {
 		std::unique_ptr<IScene> scene{_scenesManager.makeScene(sceneId)};

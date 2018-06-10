@@ -31,7 +31,7 @@ namespace ids {
 		PlayerAI(size_t _id, std::shared_ptr<ecs::World> _world, vec2d<std::size_t> _mapSize);
 		~PlayerAI() = default;
 
-		evt::eventType computeAction();
+		evt::Event computeAction();
 
 		private:
 		std::size_t _id;

@@ -59,7 +59,7 @@ public:
 		bool operator!=(const vec2d &other) const
 		{
 			return !(other == *this);
-		}	vec2d operator+(constvec2d &v) {
+		}	vec2d operator+(const vec2d &v) {
 			return vec2d(x + v.x, y + v.y);
 		}
 

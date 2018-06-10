@@ -40,12 +40,11 @@ namespace ecs {
 	};
 
 	struct Character : public Component {
-		Character(std::size_t id, bool footPowerUp, int power, size_t speed, size_t maxBombs, std::size_t i)
-			: id(id), footPowerUp(footPowerUp), power(power), speed(speed), maxBombs(maxBombs), id(i)
+		Character(bool footPowerUp, int power, size_t speed, size_t maxBombs, std::size_t i)
+			: footPowerUp(footPowerUp), power(power), speed(speed), maxBombs(maxBombs), id(i)
 		{};
 		~Character() = default;
 		static comp const type = COMP_CHARACTER;
-		std::size_t id;
 		bool footPowerUp;
 		int power;
 		std::size_t speed;

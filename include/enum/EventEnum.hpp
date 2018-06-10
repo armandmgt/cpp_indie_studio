@@ -8,6 +8,10 @@
 #pragma once
 
 namespace evt {
+	enum eventType {
+		MOVEMENT, ACTION
+	};
+
 	enum eventKey
 	{
 		NONE, UP, DOWN, RIGHT, LEFT, A, B, C, D, E, F, G, H,
@@ -15,14 +19,11 @@ namespace evt {
 		SPACE, DELETE, ESCAPE, MOUSE, MAX_KEY
 	};
 
-		enum eventType {
-			MOVEMENT, ACTION
-		};enum eventAction
-		{
-			NOTHING, MOVEUP, MOVEDOWN,  MOVELEFT, MOVERIGHT, PUTBOMB,
-			PAUSE, RESTART, MENU, QUIT, CLICK, MAX_ACTION
-		};
-	}
+	enum eventAction {
+		NOTHING, MOVEUP, MOVEDOWN,  MOVELEFT, MOVERIGHT, PUTBOMB,
+		PAUSE, RESTART, MENU, QUIT, CLICK, MAX_ACTION
+	};
+}
 
 inline std::ostream &operator<<(std::ostream &os, evt::eventKey e) {
 	static const std::array<std::string, evt::MAX_KEY> association = {
@@ -42,4 +43,3 @@ inline std::ostream &operator<<(std::ostream &os, evt::eventAction e) {
 
 	return os << association[e];
 }
-
