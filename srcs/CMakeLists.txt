@@ -80,12 +80,10 @@ endif()
 add_executable(bomberman ${SOURCE_FILES})
 	
 if (WIN32)
-   LINK_DIRECTORIES("../")
-   target_link_libraries(bomberman "../../srcs/Irrlicht")
-   target_link_libraries(bomberman "../../srcs/sfml-audio")
-	add_custom_command(TARGET bomberman POST_BUILD
-	COMMAND cmd /c "start ${CMAKE_SOURCE_DIR}/WinSetupDirectory.bat")
+    link_directories("../")
+    target_link_libraries(bomberman "../../srcs/Irrlicht" "../../srcs/sfml-audio")
+    add_custom_command(TARGET bomberman POST_BUILD
+        COMMAND cmd /c "start ${CMAKE_SOURCE_DIR}/WinSetupDirectory.bat")
 else ()
     target_link_libraries(bomberman Irrlicht sfml-audio)
-   include_directories("../irrlicht/")
 endif()
