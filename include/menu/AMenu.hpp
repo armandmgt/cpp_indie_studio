@@ -12,7 +12,7 @@
 #include <memory>
 #include "gfx/Renderer.hpp"
 #include "scenes/IScene.hpp"
-#include "common/Music.hpp"
+#include "music/Music.hpp"
 
 namespace ids {
 	namespace menu {

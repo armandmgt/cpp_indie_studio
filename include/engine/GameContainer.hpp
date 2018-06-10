@@ -13,7 +13,7 @@
 #include "world/World.hpp"
 #include "event/Event.hpp"
 #include "scenes/ScenesManager.hpp"
-#include "common/Music.hpp"
+#include "music/Music.hpp"
 
 #ifdef _IRR_WINDOWS_
 	#pragma comment(lib, "Irrlicht.lib")

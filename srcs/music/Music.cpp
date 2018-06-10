@@ -5,7 +5,7 @@
 ** Music
 */
 
-#include "common/Music.hpp"
+#include "music/Music.hpp"
 
 bool ids::Music::musicInit()
 {
