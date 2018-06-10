@@ -9,8 +9,9 @@
 #include "PlayerMovement.hpp"
 
 namespace ecs {
-	PlayerMovement::PlayerMovement(std::shared_ptr<std::vector<Entity>> allEntities) :
-		System(allEntities) {}
+	PlayerMovement::PlayerMovement(entityVector allEntities) : System(allEntities)
+	{
+	}
 
 	void PlayerMovement::update(double delta[[maybe_unused]]) {
 		auto &entities = getEntities(COMP_CHARACTER, COMP_VELOCITY, COMP_INPUT);

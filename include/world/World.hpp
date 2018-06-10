@@ -15,6 +15,8 @@
 
 namespace ecs {
 
+	using entityVector = std::shared_ptr<std::vector<std::unique_ptr<Entity>>>;
+
 	class World {
 	public:
 		explicit World(gfx::Renderer *renderer);
@@ -28,21 +30,16 @@ namespace ecs {
 		void spawnPlayer(long posX, long posY);
 		void spawnFlames(Position, int);
 
-		Entity &getEntity(entityId id);
-		void debug();
-
 		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);
 		void drawEntities();
 		void destroyEntity(std::size_t &id);
 		void spawnBombSystem(Entity *);
 		void spawnCollectibleFromBoxSystem(entityId) noexcept;
 
-		std::shared_ptr<std::vector<Entity>> getEntities();
-		void update(long delta);
+		entityVector getEntities();
 
 	public:
-		std::vector<std::unique_ptr<System>> systems;
-		std::vector<Entity> entities;
+		entityVector entities;
 
 	private:
 		std::size_t _currId = 0;

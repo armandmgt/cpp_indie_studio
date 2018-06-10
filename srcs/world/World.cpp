@@ -14,15 +14,15 @@
 
 namespace ecs {
 
-	World::World(gfx::Renderer *render) : entities{}, renderer{render}
+	using entityVectorType = std::vector<std::unique_ptr<Entity>>;
+	World::World(gfx::Renderer *render) : entities{std::make_shared<entityVectorType>()}, renderer{render}
 	{
-		systems.push_back(std::make_unique<MovementSystem>(getEntities(), render));
 	}
 
 	Entity &World::createEntity(std::size_t _currId)
 	{
-		entities.emplace_back(_currId);
-		return entities.back();
+		entities->push_back(std::make_unique<Entity>(_currId));
+		return *entities->back();
 	}
 
 	void World::spawnEntitiesFromMap(std::vector<std::string> &&gameMap) {
@@ -104,7 +104,7 @@ namespace ecs {
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Velocity>(0.f, 0.f);
-		ent.addComponent<Character>(false, 1LU, 1LU, 1LU, playerId++);
+		ent.addComponent<Character>(false, 1, 1LU, 1LU, playerId++);
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
 		ent.addComponent<Input>(false);
@@ -112,13 +112,11 @@ namespace ecs {
 	}
 
 	void World::spawnFlames(ecs::Position initialPos, int pwr) {
-		//std::cout << "[SPAWN] flammes at [" << initialPos.x << ":" << initialPos.y << "] with power (" << pwr << ")" << std::endl;
-
 		for (auto i = pwr * (-1); i <= pwr; i++) {
 			auto &e = createEntity(_currId++);
 			e.addComponent<Orientation>(0.f);
 			e.addComponent<Position>(initialPos.x, initialPos.y - i);
-			e.addComponent<Ephemere>(3, std::chrono::steady_clock::now());
+			e.addComponent<Ephemere>(3LU, std::chrono::steady_clock::now());
 			e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
 			auto &posE = e.getComponent<Position>();
 			renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
@@ -126,8 +124,8 @@ namespace ecs {
 		for (auto i = pwr * (-1); i <= pwr; i++) {
 			auto &e = createEntity(_currId++);
 			e.addComponent<Orientation>(0.f);
-			e.addComponent<Position>(initialPos.x - 1, initialPos.y);
-			e.addComponent<Ephemere>(3, std::chrono::steady_clock::now());
+			e.addComponent<Position>(initialPos.x - i, initialPos.y);
+			e.addComponent<Ephemere>(3LU, std::chrono::steady_clock::now());
 			e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
 			auto &posE = e.getComponent<Position>();
 			renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
@@ -135,23 +133,13 @@ namespace ecs {
 
 	}
 
-	void World::debug()
-	{
-		for (auto &it : entities) {
-			if (it.hasComponent<Position>())
-				std::cout << "Position : [" << it.getComponent<Position>().x << ", " << it.getComponent<Position>().y << "]"
-										     << std::endl;
-			if (it.hasComponent<Velocity>())
-				std::cout << "Velocity : [" << it.getComponent<Velocity>().x << ", " << it
-					.getComponent<Velocity>().y << "]" << std::endl;
-		}
 	}
 
 	void World::spawnBombSystem(Entity *player) {
 		if (player->hasComponent<Character>()) {
 			auto &ent = createEntity(_currId++);
 
-			ent.addComponent<Explosion>(player->getComponent<Character>().power, 5,
+			ent.addComponent<Explosion>(player->getComponent<Character>().power, 5LU,
 						    std::chrono::steady_clock::now());
 			ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/bomb.obj"));
 			ent.addComponent<Position>(player->getComponent<Position>());
@@ -166,17 +154,17 @@ namespace ecs {
 
 
 	void World::spawnCollectibleFromBoxSystem(entityId id) noexcept {
-		if (entities.at(id).hasComponent<Destructible>()) {
-			auto &box = this->entities.at(id);
+		if (entities->at(id)->hasComponent<Destructible>()) {
+			auto &box = this->entities->at(id);
 			auto &ent = createEntity(_currId++);
 
-			ent.addComponent<Collectible>(box.getComponent<Collectible>());
-			ent.addComponent<Position>(box.getComponent<Position>());
+			ent.addComponent<Collectible>(box->getComponent<Collectible>());
+			ent.addComponent<Position>(box->getComponent<Position>());
 			ent.addComponent<Graphic>(renderer->createElem(
-				_queryMeshFromActionTarget(box.getComponent<Collectible>().action)
+				_queryMeshFromActionTarget(box->getComponent<Collectible>().action)
 			));
 
-			box.getComponent<Graphic>().sceneNode->remove();
+			box->getComponent<Graphic>().sceneNode->remove();
 			destroyEntity(id);
 		}
 	}
@@ -219,41 +207,30 @@ namespace ecs {
 	}
 
 	void World::drawEntities() {
-		for (auto &elem : entities) {
-			if (elem.hasComponent<Position>() && elem.hasComponent<Graphic>()) {
+		for (auto &elem : *entities) {
+			if (elem->hasComponent<Position>() && elem->hasComponent<Graphic>()) {
 				vec3d<float> pos {
-					elem.getComponent<Position>().x,
+					elem->getComponent<Position>().x,
 					0,
-					elem.getComponent<Position>().y
+					elem->getComponent<Position>().y
 				};
-				renderer->setPosition(elem.getComponent<Graphic>().sceneNode, pos);
-				if (elem.hasComponent<Character>() && elem.hasComponent<Graphic>()) {
-					auto comp = elem.getComponent<Graphic>();
+				renderer->setPosition(elem->getComponent<Graphic>().sceneNode, pos);
+				if (elem->hasComponent<Character>() && elem->hasComponent<Graphic>()) {
+					auto comp = elem->getComponent<Graphic>();
 					renderer->setScale(comp.sceneNode, comp.scale);
 				}
 			}
 		}
 	}
 
-	Entity &World::getEntity(entityId id) {
-		return entities.at(id);
-	}
-
-	void World::update(long delta) {
-		for (auto &s : systems) {
-			s->update(delta);
-		}
-	}
-
 	void World::destroyEntity(std::size_t &id) {
-		std::remove_if(entities.begin(), entities.end(),
-			       [id] (Entity const &e) {
-			return e.id == id ;
+		std::remove_if(entities->begin(), entities->end(), [id] (const std::unique_ptr<Entity> &e) {
+			return e->id == id;
 		});
 	}
 
-	std::shared_ptr<std::vector<Entity>> World::getEntities()
+	entityVector World::getEntities()
 	{
-		return std::shared_ptr<std::vector<Entity>>(&entities);
+		return entities;
 	}
 }

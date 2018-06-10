@@ -8,10 +8,11 @@
 #include <iostream>
 #include "ExplosionSystem.hpp"
 
-ecs::ExplosionSystem::ExplosionSystem(std::shared_ptr<std::vector<Entity>> allEntities, gfx::Renderer *render,
-std::shared_ptr<ecs::World>
-        world)
-		: System(allEntities), _renderer(render), _world(world) {}
+ecs::ExplosionSystem::ExplosionSystem(entityVector allEntities, gfx::Renderer *render,
+	std::shared_ptr<ecs::World> world
+) : System(allEntities), _renderer(render), _world(world)
+{
+}
 
 void ecs::ExplosionSystem::update(double delta[[maybe_unused]]) {
 	auto &entities = getEntities(COMP_POSITION, COMP_EXPLOSION);
@@ -24,7 +25,7 @@ void ecs::ExplosionSystem::update(double delta[[maybe_unused]]) {
 			e->getComponent<Graphic>().sceneNode->remove();
 			_world->spawnFlames(e->getComponent<Position>(), e->getComponent<Explosion>().power);
 			for (auto it = _allEntities->begin(); it != _allEntities->end(); ) {
-				if (it->id == e->id)
+				if ((*it)->id == e->id)
 					it = _allEntities->erase(it);
 				else
 					++it;

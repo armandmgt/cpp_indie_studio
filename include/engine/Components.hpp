@@ -40,13 +40,13 @@ namespace ecs {
 	};
 
 	struct Character : public Component {
-		Character(bool footPowerUp, size_t power, size_t speed, size_t maxBombs, std::size_t i)
+		Character(bool footPowerUp, int power, size_t speed, size_t maxBombs, std::size_t i)
 			: footPowerUp(footPowerUp), power(power), speed(speed), maxBombs(maxBombs), id(i)
 		{};
 		~Character() = default;
 		static comp const type = COMP_CHARACTER;
 		bool footPowerUp;
-		std::size_t power;
+		int power;
 		std::size_t speed;
 		std::size_t maxBombs;
 		std::size_t id;
@@ -147,7 +147,6 @@ namespace ecs {
 		explicit Ephemere(std::size_t t, std::chrono::time_point<std::chrono::steady_clock> ti) :
 			timeout(t), time(ti)
 		{
-			std::cout << "Hi! I'm in Ephemere" << std::endl;
 		};
 		~Ephemere() = default;
 		static comp const type = COMP_EPHEMERE;

@@ -6,7 +6,7 @@
 */
 
 #include <engine/systems/ExplosionSystem.hpp>
-#include <engine/systems/DisparitionFlammeSystem.hpp>
+#include <engine/systems/DespawnSystem.hpp>
 #include "engine/systems/PlayerMovement.hpp"
 #include "engine/systems/MovementSystem.hpp"
 #include "engine/systems/ParseInputSystem.hpp"
@@ -32,7 +32,7 @@ void ids::GameScene::_initSystem()
 	std::unique_ptr<ecs::PutBombSystem> bomSys = std::make_unique<ecs::PutBombSystem>(_world->getEntities(), _world);
 	std::unique_ptr<ecs::ExplosionSystem> expSys = std::make_unique<ecs::ExplosionSystem>(_world->getEntities(),
 		_renderer, _world);
-	std::unique_ptr<ecs::DisparitionFlammeSystem> dispFlammes = std::make_unique<ecs::DisparitionFlammeSystem>
+	std::unique_ptr<ecs::DespawnSystem> dispFlammes = std::make_unique<ecs::DespawnSystem>
 	        (_world->getEntities(), _renderer, _world);
 
 	_systemList.push_back(std::move(parseSys));

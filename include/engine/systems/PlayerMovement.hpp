@@ -13,7 +13,7 @@
 namespace ecs {
 	class PlayerMovement : public System {
 	public:
-		explicit PlayerMovement(std::shared_ptr<std::vector<Entity>>);
+		explicit PlayerMovement(entityVector);
 
 		void update(double delta) override;
 	};

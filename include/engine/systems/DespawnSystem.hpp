@@ -11,11 +11,9 @@
 #include "Systems.hpp"
 
 namespace ecs {
-	class DisparitionFlammeSystem : public System {
+	class DespawnSystem : public System {
 	public:
-		explicit DisparitionFlammeSystem(std::shared_ptr<std::vector<Entity>> , gfx::Renderer *,
-		std::shared_ptr<ecs::World>
-		        world);
+		explicit DespawnSystem(entityVector, gfx::Renderer *, std::shared_ptr<ecs::World> world);
 
 		void update(double) override;
 

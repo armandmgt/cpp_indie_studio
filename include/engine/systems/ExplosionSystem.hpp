@@ -13,8 +13,7 @@
 namespace ecs {
 	class ExplosionSystem : public System {
 	public:
-		explicit ExplosionSystem(std::shared_ptr<std::vector<Entity>> , gfx::Renderer *, std::shared_ptr<ecs::World>
-		        world);
+		explicit ExplosionSystem(entityVector, gfx::Renderer *, std::shared_ptr<ecs::World> world);
 
 		void update(double) override;
 
