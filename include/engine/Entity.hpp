@@ -18,8 +18,9 @@ namespace ecs {
 
 	class Entity {
 	public:
-		Entity() : bit{0}, componentArray{nullptr}
-		{};
+		Entity() : bit{0}, id{nextId++}, componentArray{nullptr}
+		{
+		};
 		Entity(Entity &) = delete;
 		Entity &operator=(Entity &) = delete;
 		Entity(Entity &&) = default;
@@ -63,7 +64,9 @@ namespace ecs {
 
 	public:
 		std::bitset<MAX_COMPONENTS> bit;
+		std::size_t id;
 	private:
+		static std::size_t nextId;
 		std::array<std::unique_ptr<Component>, MAX_COMPONENTS> componentArray;
 	};
 }

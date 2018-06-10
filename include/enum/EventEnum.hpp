@@ -15,12 +15,14 @@ namespace evt {
 		SPACE, DELETE, ESCAPE, MOUSE, MAX_KEY
 	};
 
-	enum eventAction
-	{
-		NOTHING, MOVEUP, MOVEDOWN, MOVELEFT, MOVERIGHT, PUTBOMB,
-		PAUSE, RESTART, MENU, QUIT, CLICK, MAX_ACTION
-	};
-}
+		enum eventType {
+			MOVEMENT, ACTION
+		};enum eventAction
+		{
+			NOTHING, MOVEUP, MOVEDOWN,  MOVELEFT, MOVERIGHT, PUTBOMB,
+			PAUSE, RESTART, MENU, QUIT, CLICK, MAX_ACTION
+		};
+	}
 
 inline std::ostream &operator<<(std::ostream &os, evt::eventKey e) {
 	static const std::array<std::string, evt::MAX_KEY> association = {

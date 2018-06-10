@@ -132,7 +132,7 @@ bool gfx::Renderer::setPosition(irr::scene::ISceneNode *node, const vec3d<float>
 {
 	if (!node)
 		return false;
-	node->setPosition({pos.x, pos.y, pos.z});
+	node->setPosition({pos.x * _sizeGround.x, pos.y, pos.z * _sizeGround.z});
 	return true;
 }
 
@@ -217,4 +217,9 @@ void gfx::Renderer::setCameraFPS()
 evt::MyEventReceiver &gfx::Renderer::getEventReceiver()
 {
 	return eventReceiver;
+}
+
+void gfx::Renderer::setSizeGround(vec3d<float> &sizeGround)
+{
+	_sizeGround = sizeGround;
 }

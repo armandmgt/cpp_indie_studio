@@ -9,6 +9,7 @@
 
 #include <irrlicht/irrlicht.h>
 #include <memory>
+#include <chrono>
 
 namespace ecs {
 	enum ActionTarget {
@@ -29,6 +30,8 @@ namespace ecs {
 		COMP_DESTRUCTIBLE,
 		COMP_GRAPHIC,
 		COMP_ORIENTATION,
+		COMP_EPHEMERE,
+		COMP_DAMAGE,
 		MAX_COMPONENTS
 	};
 
@@ -37,29 +40,31 @@ namespace ecs {
 	};
 
 	struct Character : public Component {
-		Character(std::size_t id, bool footPowerUp, size_t power, size_t speed, size_t maxBombs)
-			: id(id), footPowerUp(footPowerUp), power(power), speed(speed), maxBombs(maxBombs)
+		Character(std::size_t id, bool footPowerUp, int power, size_t speed, size_t maxBombs, std::size_t i)
+			: id(id), footPowerUp(footPowerUp), power(power), speed(speed), maxBombs(maxBombs), id(i)
 		{};
 		~Character() = default;
 		static comp const type = COMP_CHARACTER;
 		std::size_t id;
 		bool footPowerUp;
-		std::size_t power;
+		int power;
 		std::size_t speed;
 		std::size_t maxBombs;
+		std::size_t id;
 	};
 
 	struct Explosion : public Component {
-		static comp const type = COMP_EXPLOSION;
-		Explosion(std::size_t p, std::size_t t) : power(p), timeout(t)
+		Explosion(int p)
+			: power(p)
 		{};
 		~Explosion() = default;
-		std::size_t power;
-		std::size_t timeout;
+		static comp const type = COMP_EXPLOSION;
+		int power;
 	};
 
 	struct Collectible : public Component {
-		explicit Collectible(ActionTarget at) : action(at)
+		explicit Collectible(ActionTarget at) :
+			action(at)
 		{};
 		~Collectible() = default;
 		static comp const type = COMP_COLLECTIBLE;
@@ -93,8 +98,8 @@ namespace ecs {
 	};
 
 	struct Input : public Component {
-		Input(bool l, bool r, bool u, bool d, bool b)
-			: goLeft(l), goRight(r), goUp(u), goDown(d), putBomb(b)
+		Input(bool ai)
+			: goLeft(false), goRight(false), goUp(false), goDown(false), putBomb(false), isAi(ai)
 		{};
 		~Input() = default;
 		static comp const type = COMP_INPUT;
@@ -103,6 +108,7 @@ namespace ecs {
 		bool goUp;
 		bool goDown;
 		bool putBomb;
+		bool isAi;
 	};
 
 	struct AiInput : public Component {
@@ -126,6 +132,15 @@ namespace ecs {
 		std::unique_ptr<Collectible> item;
 	};
 
+	struct Damage : public Component {
+		explicit Damage(bool d)
+		: isDamage(d)
+		{};
+		~Damage() = default;
+		static comp const type = COMP_DAMAGE;
+		bool isDamage;
+	};
+
 	struct Graphic : public Component {
 		explicit Graphic(irr::scene::ISceneNode *s, float scalling = 1.f) :
 				sceneNode(s), scale(scalling)
@@ -135,4 +150,16 @@ namespace ecs {
 		irr::scene::ISceneNode *sceneNode;
 		float scale;
 	};
+
+	struct Ephemere : public Component {
+		Ephemere(std::size_t t, std::chrono::time_point<std::chrono::steady_clock> ti) :
+			timeout(t), time(ti)
+		{
+		};
+		~Ephemere() = default;
+		static comp const type = COMP_EPHEMERE;
+		std::size_t timeout;
+		std::chrono::time_point<std::chrono::steady_clock> time;
+	};
+
 }

@@ -15,38 +15,37 @@
 
 namespace ecs {
 
-	enum entityType {
-		PLAYER, POWERUP, BOMB, WALL, U_WALL, FLAMME,
-	};
+	using entityVector = std::shared_ptr<std::vector<std::unique_ptr<Entity>>>;
 
 	class World {
 	public:
-		explicit World(gfx::Renderer *renderer);
+		explicit World(std::shared_ptr<gfx::Renderer> renderer);
 		~World() = default;
 
 		Entity &createEntity();
-		void destroyEntity(entityId id);
 		void spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
 		void spawnWall(long posX, long posY);
 		void spawnFilledBox(ActionTarget type, long posX, long posY);
 		void spawnEmptyBox(long posX, long posY);
 		void spawnPlayer(long posX, long posY);
-		void spawnFlames(Position, size_t);
-
-		Entity &getEntity(entityId id);
-		void debug();
+		void spawnFlames(Position, int);
+		void spawnFlameAtPosition(float x, float y);
 
 		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);
 		void drawEntities();
-		void spawnBombSystem(entityId);
-		void spawnCollectibleFromBoxSystem(entityId) noexcept;
+		void destroyEntity(std::size_t &id);
+		void spawnBombSystem(Entity *);
+		void spawnCollectibleFromBox(Entity *) noexcept;
+		bool isValidPosition(float x, float y);
+
+		entityVector getEntities();
 
 	public:
-		std::vector<Entity> entities;
+		entityVector entities;
 
 	private:
-		gfx::Renderer *renderer;
-		vec3d<float> sizeGround;
+		vec3d<float> _sizeGround;
+		std::shared_ptr<gfx::Renderer> _renderer;
 		irr::core::stringw _queryMeshFromActionTarget(ActionTarget) const;
 	};
 }

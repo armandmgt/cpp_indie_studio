@@ -12,8 +12,10 @@
 namespace ecs {
 	class MovementSystem : public System {
 	public:
-		explicit MovementSystem(std::vector<Entity> *);
+		MovementSystem(entityVector, std::shared_ptr<gfx::Renderer>);
 
 		void update(double delta) override;
+	private:
+		std::shared_ptr<gfx::Renderer> _renderer;
 	};
 };

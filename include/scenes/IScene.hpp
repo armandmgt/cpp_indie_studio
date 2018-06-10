@@ -12,7 +12,7 @@ namespace ids {
 		class IScene {
 		public:
 			enum sceneId {
-				GAME, QUIT, MENU, SETTINGS, SCORE, PAUSE, BACK
+				GAME, QUIT, MENU, SETTINGS, LOAD, PAUSE, BACK
 			};
 			virtual ~IScene() = default;
 
