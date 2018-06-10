@@ -15,10 +15,6 @@
 
 namespace ecs {
 
-	enum entityType {
-		PLAYER, POWERUP, BOMB, WALL, U_WALL, FLAMME,
-	};
-
 	class World {
 	public:
 		explicit World(gfx::Renderer *renderer);

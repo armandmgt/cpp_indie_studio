@@ -36,8 +36,9 @@ namespace ecs {
 			});
 		}
 
-	private:
+	protected:
 		std::vector<Entity> *_allEntities;
+	private:
 		std::vector<Entity *> _entities;
 	};
 };

@@ -122,6 +122,7 @@ namespace ecs {
 			e.addComponent<Position>(initialPos.x, initialPos.y - i);
 		}
 		e.addComponent<Orientation>(0.f);
+		e.addComponent<Ephemere>(3U, std::chrono::steady_clock::now());
 		e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
 	}
 
@@ -238,7 +239,6 @@ namespace ecs {
 	void World::destroyEntity(std::size_t &id) {
 		std::remove_if(entities.begin(), entities.end(),
 			       [id] (Entity const &e) {
-			std::cout << std::boolalpha << (e.id == id) << std::endl;
 			return e.id == id ;
 		});
 	}

@@ -22,7 +22,15 @@ void ecs::ExplosionSystem::update(double delta[[maybe_unused]]) {
 		std::chrono::duration<double> diff = now - exp.time;
 		std::cout << "Time : " << diff.count() << std::endl;
 		if (diff.count() > exp.timeout) {
+			std::cout << "Check value = " << e->id << std::endl;
 			e->getComponent<Graphic>().sceneNode->remove();
+			for (auto it = _allEntities->begin(); it != _allEntities->end(); ) {
+				if (it->id == e->id) {
+					it = _allEntities->erase(it);
+				} else {
+					++it;
+				}
+			}
 			_world->destroyEntity(e->id);
 		}
 	}

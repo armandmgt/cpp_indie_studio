@@ -30,6 +30,7 @@ namespace ecs {
 		COMP_DESTRUCTIBLE,
 		COMP_GRAPHIC,
 		COMP_ORIENTATION,
+		COMP_EPHEMERE,
 		MAX_COMPONENTS
 	};
 
@@ -62,11 +63,22 @@ namespace ecs {
 	};
 
 	struct Collectible : public Component {
-		explicit Collectible(ActionTarget at) : action(at)
+		explicit Collectible(ActionTarget at) :
+			action(at)
 		{};
 		~Collectible() = default;
 		static comp const type = COMP_COLLECTIBLE;
 		ActionTarget action;
+	};
+
+	struct Ephemere : public Component {
+		explicit Ephemere(std::size_t t, std::chrono::time_point<std::chrono::steady_clock> ti) :
+		timeout(t), time(ti)
+		{};
+		~Ephemere() = default;
+		static comp const type = COMP_EPHEMERE;
+		std::size_t timeout;
+		std::chrono::time_point<std::chrono::steady_clock> time;
 	};
 
 	struct Velocity : public Component {
