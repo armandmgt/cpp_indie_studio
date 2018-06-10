@@ -21,8 +21,8 @@ namespace ecs {
 		virtual void update(double delta) = 0;
 
 		template<class... Types>
-		std::vector<Entity *> &getEntities(Types... types) {
-			_entities.clear();
+		std::vector<Entity *> getEntities(Types... types) {
+			std::vector<Entity *> _entities;
 			for (const auto &e : *_allEntities) {
 				if (passFilter<Types...>(e, types...))
 					_entities.push_back(e.get());
@@ -40,7 +40,5 @@ namespace ecs {
 
 	protected:
 		entityVector _allEntities;
-	private:
-		std::vector<Entity *> _entities;
 	};
 };

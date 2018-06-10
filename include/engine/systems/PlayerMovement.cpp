@@ -14,7 +14,7 @@ namespace ecs {
 	}
 
 	void PlayerMovement::update(double delta[[maybe_unused]]) {
-		auto &entities = getEntities(COMP_CHARACTER, COMP_VELOCITY, COMP_INPUT);
+		auto entities = getEntities(COMP_CHARACTER, COMP_VELOCITY, COMP_INPUT);
 
 		for (auto &player : entities) {
 			auto &input = player->getComponent<Input>();

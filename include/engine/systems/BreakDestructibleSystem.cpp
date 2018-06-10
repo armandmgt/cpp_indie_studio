@@ -15,28 +15,21 @@ ecs::BreakDestructibleSystem::BreakDestructibleSystem(entityVector allEntities, 
 }
 
 void ecs::BreakDestructibleSystem::update(double delta[[maybe_unused]]) {
-	auto &boxes = getEntities(COMP_DESTRUCTIBLE, COMP_POSITION);
-	auto &flames = getEntities(COMP_DAMAGE, COMP_POSITION);
+	auto destructibles = getEntities(COMP_DESTRUCTIBLE, COMP_POSITION);
+	auto flames = getEntities(COMP_DAMAGE, COMP_POSITION);
 
-	for (auto it = boxes.begin(); it != boxes.end(); it++) {
-		std::cout << "Box found : " << (*it)->id << std::endl;
-	}
-	std::cout << "boxes size : " << boxes.size() << std::endl;
 	for (auto &flame : flames) {
 		auto &posFlame = flame->getComponent<Position>();
-		for (auto &box : boxes) {
-			auto &posBox = box->getComponent<Position>();
-			if (posBox.x == posFlame.x && posBox.y == posFlame.y) {
-				std::cout << "I'm flamme on box" << std::endl;
-				_world->spawnCollectibleFromBoxSystem(box);
-				for (auto it = _allEntities->begin(); it != _allEntities->end(); ) {
-					if ((*it)->id == box->id)
-						it = _allEntities->erase(it);
-					else
-						++it;
-				}
-				_world->destroyEntity(box->id);
-
+		for (auto &destructible : destructibles) {
+			auto &posDestructible = destructible->getComponent<Position>();
+			vec2d<float> roundedPos = roundPos<float>(posDestructible.x, posDestructible.y);
+			if (roundedPos.x == posFlame.x && roundedPos.y == posFlame.y) {
+				std::cout << "flame on box at (" << posDestructible.x << ";" << posDestructible.y << ")" << std::endl;
+				if (destructible->getComponent<Destructible>().item)
+					_world->spawnCollectibleFromBox(destructible);
+				_world->destroyEntity(destructible->id);
+				destructibles.erase(std::remove(destructibles.begin(), destructibles.end(),
+					destructible));
 			}
 		}
 	}
