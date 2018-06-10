@@ -9,6 +9,7 @@
 #define CPP_INDIE_STUDIO_SETTINGS_HPP
 
 #include "menu/AMenu.hpp"
+#include "music/Music.hpp"
 
 namespace ids { namespace menu {
 
@@ -18,19 +19,19 @@ namespace ids { namespace menu {
 			ON, OFF, NONE
 		};
 		struct Items {
-			std::string name;
+			vec2d<int> size;
 			musicState state;
 			irr::core::stringw soundOn;
 			irr::core::stringw soundOff;
 			vec2d<int> pos;
 		};
-		explicit Settings(gfx::Renderer *rend);
+
+		Settings(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<Music> music);
 		~Settings() override;
+
 		sceneId run() override;
 	private:
-
-		void settingsItems();
-		void setMusicLevel();
+		void	itemEvent();
 		evt::MyEventReceiver &_events;
 		musicState _music;
 		std::vector<Items> _items;

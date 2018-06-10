@@ -5,7 +5,6 @@
 ** World
 */
 
-#include <ctime>
 #include <chrono>
 #include "engine/systems/MovementSystem.hpp"
 #include "engine/systems/ExplosionSystem.hpp"
@@ -15,7 +14,7 @@
 namespace ecs {
 
 	using entityVectorType = std::vector<std::unique_ptr<Entity>>;
-	World::World(gfx::Renderer *render) : entities{std::make_shared<entityVectorType>()}, _renderer{render}
+	World::World(std::shared_ptr<gfx::Renderer> render) : entities{std::make_shared<entityVectorType>()}, _renderer{render}
 	{
 	}
 

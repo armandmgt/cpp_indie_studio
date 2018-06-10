@@ -7,8 +7,8 @@ set(SOURCE_FILES
         ../include/engine/Entity.hpp
         ../include/engine/systems/Systems.hpp
         ../include/engine/systems/MovementSystem.hpp
-        ../include/engine/systems/MovementSystem.cpp
-        ../include/engine/systems/ExplosionSystem.cpp
+		engine/systems/MovementSystem.cpp
+		engine/systems/ExplosionSystem.cpp
         ../include/engine/systems/ExplosionSystem.hpp
 
         world/World.cpp
@@ -28,9 +28,16 @@ set(SOURCE_FILES
         menu/AMenu.cpp
         menu/Launch.cpp
         menu/Settings.cpp
+        menu/LoadGame.cpp
+        menu/Pause.cpp
         ../include/menu/AMenu.hpp
         ../include/menu/Launch.hpp
         ../include/menu/Settings.hpp
+        ../include/menu/LoadGame.hpp
+        ../include/menu/Pause.hpp
+
+        ../include/music/Music.hpp
+        music/Music.cpp
 
         settingManager/settingManager.cpp
         ../include/settingManager/settingManager.hpp
@@ -38,9 +45,9 @@ set(SOURCE_FILES
         scenes/ScenesManager.cpp
         ../include/gfx/Image2D.hpp
         ../include/engine/systems/Systems.hpp
-        ../include/engine/systems/MovementSystem.cpp
+		engine/systems/MovementSystem.cpp
         ../include/engine/systems/MovementSystem.hpp
-        ../include/engine/systems/ExplosionSystem.cpp
+		engine/systems/ExplosionSystem.cpp
         ../include/engine/systems/ExplosionSystem.hpp
         ../include/scenes/GameScene.cpp
         ../include/scenes/GameScene.hpp
@@ -67,4 +74,7 @@ if (WIN32)
    target_link_libraries(bomberman "../../srcs/sfml-audio")
 	add_custom_command(TARGET bomberman POST_BUILD
 	COMMAND cmd /c "start ${CMAKE_SOURCE_DIR}/WinSetupDirectory.bat")
+else ()
+    target_link_libraries(bomberman Irrlicht sfml-audio)
+   include_directories("../irrlicht/")
 endif()

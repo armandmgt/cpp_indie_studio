@@ -8,7 +8,8 @@
 #include <iostream>
 #include "menu/Launch.hpp"
 
-ids::menu::Launch::Launch(gfx::Renderer *rend) : AMenu(rend, MENU), _events{rend->getEventReceiver()},
+ids::menu::Launch::Launch(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<ids::Music> music)
+	: AMenu(rend, music, MENU), _events{rend->getEventReceiver()},
 	_items{
 		{"bomberman", 0, "../assets/menu/Items/bomber-man.png", {600, 400}},
 		{"speak-bubble", 5, "../assets/menu/Items/speak-bubble.png", {1350, 450}},
@@ -18,14 +19,19 @@ ids::menu::Launch::Launch(gfx::Renderer *rend) : AMenu(rend, MENU), _events{rend
 	_infoButtons = {
 		{{1570, 670}, {107, 55}, "../assets/menu/buttons/default/play-button.png",
 		        "../assets/menu/buttons/active/a-play-button.png", GAME, false},
-		{{1520, 750}, {195, 53}, "../assets/menu/buttons/default/scores-button.png",
-		        "../assets/menu/buttons/active/a-scores-button.png", SCORE, false},
+		{{1490, 740}, {270, 66}, "../assets/menu/buttons/default/loadgame-button.png",
+		        "../assets/menu/buttons/active/a-loadgame-button.png", LOAD, false},
 		{{1500, 820}, {235, 64}, "../assets/menu/buttons/default/settings-button.png",
 		        "../assets/menu/buttons/active/a-settings-button.png", SETTINGS, false},
 		{{1570, 900}, {101, 63}, "../assets/menu/buttons/default/quit-button.png",
 		        "../assets/menu/buttons/active/a-quit-button.png", QUIT, false}
 	};
 	_backgroundImg = "../assets/menu/background/menu-background.png";
+	if (_musicManager->musicInit()) {
+		std::string audio = "../assets/MusicFiles/oyeah.wav";
+		auto sample = _musicManager->createMusic(audio);
+		_musicManager->playMusic(sample);
+	}
 }
 
 ids::menu::Launch::~Launch()
@@ -49,10 +55,8 @@ ids::IScene::sceneId ids::menu::Launch::run()
 			_id = ids::IScene::QUIT;
 			return _id;
 		}
-		auto mousePos = _events.getMousePosition();
-		//if (_rend->isKeyPressed(irr::KEY_LBUTTON)) {
-
-		computeEvent(mousePos);
+		_mouseData = _events.getMousePosition();
+		buttonEvent();
 		_rend->render();
 	}
 	if (!_rend->isRunning())

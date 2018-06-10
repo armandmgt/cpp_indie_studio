@@ -14,8 +14,8 @@
 #include "engine/systems/PutBombSystem.hpp"
 #include "GameScene.hpp"
 
-ids::GameScene::GameScene(gfx::Renderer *r)
-		: _world{std::make_shared<ecs::World>(r)}, _renderer{r}, _event{r->getEventReceiver()} {
+ids::GameScene::GameScene(std::shared_ptr<gfx::Renderer> r) : _world{std::make_shared<ecs::World>(r)},
+	_renderer{r}, _event{r->getEventReceiver()} {
 	Map map(21, 20);
 
 	map.initMap(20);
@@ -47,5 +47,5 @@ ids::IScene::sceneId ids::GameScene::run() {
 			it->update(1);
 		}
 	}
-	return MENU;
+	return PAUSE;
 }

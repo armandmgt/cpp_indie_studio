@@ -5,7 +5,6 @@
 ** ExplosionSystem
 */
 
-#include <iostream>
 #include "ExplosionSystem.hpp"
 
 ecs::ExplosionSystem::ExplosionSystem(entityVector allEntities, gfx::Renderer *render,
