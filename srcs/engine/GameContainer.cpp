@@ -14,7 +14,7 @@ ids::GameContainer::GameContainer() : _scenesManager{&_renderer}, _renderer{}, _
 
 void ids::GameContainer::start()
 {
-	IScene::sceneId sceneId = IScene::MENU;
+	IScene::sceneId sceneId = IScene::GAME;
 
 	while (sceneId != IScene::QUIT) {
 		std::unique_ptr<IScene> scene{_scenesManager.makeScene(sceneId)};

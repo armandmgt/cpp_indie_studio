@@ -21,7 +21,7 @@ namespace ids {
 			sceneId run() final;
 
 		private:
-			std::unique_ptr<ecs::World> _world;
+			std::shared_ptr<ecs::World> _world;
 			gfx::Renderer *_renderer;
 			evt::MyEventReceiver &_event;
 	};

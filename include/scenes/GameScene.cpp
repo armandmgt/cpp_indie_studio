@@ -5,22 +5,30 @@
 ** gamescene
 */
 
+#include "engine/ai/PlayerAI.hpp"
 #include "GameScene.hpp"
 
 ids::GameScene::GameScene(gfx::Renderer *r)
-		: _world{std::make_unique<ecs::World>(r)}, _renderer{r}, _event{r->getEventReceiver()} {
-	Map map(21, 20);
+		: _world{std::make_shared<ecs::World>(r)}, _renderer{r}, _event{r->getEventReceiver()} {
+	Map map(20, 20);
 
 	map.initMap(20);
 	map.printMap();
-	_world->createGround(21, 20, "../assets/meshs/ground.obj");
+	_world->createGround(20, 20, "../assets/meshs/ground.obj");
 	_world->spawnEntitiesFromMap(std::move(map.getMap()));
+	auto &e = _world->createEntity();
+	e.addComponent<ecs::Position>(1.1f, 2.2f);
+	e.addComponent<ecs::Explosion>(3LU, 5LU);
+	e.addComponent<ecs::Graphic>(_renderer->createElem("../assets/meshs/bomb.obj"));
 }
 
 ids::IScene::sceneId ids::GameScene::run() {
 	_renderer->setCameraFPS();
 	_world->drawEntities();
-	while (_renderer->isRunning() && !_renderer->getEventReceiver().isKeyDown(irr::KEY_ESCAPE)) {
+	PlayerAI ai1{0LU, _world, {20, 20}};
+	auto e = ai1.computeAction();
+	std::cout << "Best AI in the world computed: " << e.action << " and " << e.key << std::endl;
+	while (_renderer->isRunning() && !_event.isKeyDown(irr::KEY_ESCAPE)) {
 		_renderer->render();
 	}
 	return MENU;

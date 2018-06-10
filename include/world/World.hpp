@@ -27,9 +27,9 @@ namespace ecs {
 		Entity &createEntity();
 		void destroyEntity(entityId id);
 		void spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
-		void spawnUWall(long posX, long posY);
-		void spawnWall(ActionTarget type, long posX, long posY);
-		void spawnBWall(long posX, long posY);
+		void spawnWall(long posX, long posY);
+		void spawnFilledBox(ActionTarget type, long posX, long posY);
+		void spawnEmptyBox(long posX, long posY);
 		void spawnPlayer(long posX, long posY);
 		void spawnFlames(Position, size_t);
 
@@ -41,11 +41,8 @@ namespace ecs {
 		void spawnBombSystem(entityId);
 		void spawnCollectibleFromBoxSystem(entityId) noexcept;
 
-		void update(long delta);
-
 	public:
 		std::vector<Entity> entities;
-		std::vector<std::unique_ptr<System>> systems;
 
 	private:
 		gfx::Renderer *renderer;

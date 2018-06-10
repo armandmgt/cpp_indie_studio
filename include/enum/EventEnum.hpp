@@ -5,22 +5,39 @@
 ** none
 */
 
-#ifndef ENUM_HPP_
-	#define ENUM_HPP_
+#pragma once
 
-	namespace evt {
-		enum eventKey
-		{
-			UP, DOWN, RIGHT, LEFT, A, B, C, D, E, F, G, H,
-			I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
-			SPACE, DELETE, ESCAPE, MOUSE
-		};
+namespace evt {
+	enum eventKey
+	{
+		NONE, UP, DOWN, RIGHT, LEFT, A, B, C, D, E, F, G, H,
+		I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
+		SPACE, DELETE, ESCAPE, MOUSE, MAX_KEY
+	};
 
-		enum eventAction
-		{
-			PUTBOMB, MOVEUP, MOVEDOWN, MOVERIGHT, MOVELEFT,
-			PAUSE, RESTART, MENU, QUIT, CLICK
-		};
-	}
+	enum eventAction
+	{
+		NOTHING, PUTBOMB, MOVEUP, MOVEDOWN, MOVERIGHT, MOVELEFT,
+		PAUSE, RESTART, MENU, QUIT, CLICK, MAX_ACTION
+	};
+}
 
-#endif
+inline std::ostream &operator<<(std::ostream &os, evt::eventKey e) {
+	static const std::array<std::string, evt::MAX_KEY> association = {
+		"NONE", "UP", "DOWN", "RIGHT", "LEFT", "A", "B", "C", "D", "E", "F", "G", "H",
+		"I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+		"SPACE", "DELETE", "ESCAPE", "MOUSE"
+	};
+
+	return os << association[e];
+}
+
+inline std::ostream &operator<<(std::ostream &os, evt::eventAction e) {
+	static const std::array<std::string, evt::MAX_ACTION> association = {
+		"NOTHING", "PUTBOMB", "MOVEUP", "MOVEDOWN", "MOVERIGHT", "MOVELEFT",
+		"PAUSE", "RESTART", "MENU", "QUIT", "CLICK"
+	};
+
+	return os << association[e];
+}
+

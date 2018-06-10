@@ -11,6 +11,9 @@ set(SOURCE_FILES
         ../include/engine/systems/ExplosionSystem.cpp
         ../include/engine/systems/ExplosionSystem.hpp
 
+        ../include/engine/ai/PlayerAI.cpp
+        ../include/engine/ai/PlayerAI.hpp
+
         world/World.cpp
         ../include/world/World.hpp
 

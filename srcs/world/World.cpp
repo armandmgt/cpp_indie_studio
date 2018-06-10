@@ -14,7 +14,6 @@ namespace ecs {
 
 	World::World(gfx::Renderer *render) : entities{}, renderer{render}
 	{
-		systems.push_back(std::make_unique<MovementSystem>(&entities));
 	}
 
 	Entity &World::createEntity()
@@ -32,25 +31,25 @@ namespace ecs {
 			for (auto itC = itR->begin(); itC != itR->end(); itC++) {
 				switch (*itC) {
 					case BREAKABLE_WALL:
-						spawnBWall(itC - itR->begin(), itR - gameMap.begin());
+						spawnEmptyBox(itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case UNBREAKABLE_WALL:
-						spawnUWall(itC - itR->begin(), itR - gameMap.begin());
+						spawnWall(itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case MAP_PLAYER:
 						spawnPlayer(itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case FIRE_UP:
-						spawnWall(POWER, itC - itR->begin(), itR - gameMap.begin());
+						spawnFilledBox(POWER, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case BOMB_UP:
-						spawnWall(MAX_BOMBS, itC - itR->begin(), itR - gameMap.begin());
+						spawnFilledBox(MAX_BOMBS, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case SPEED_UP:
-						spawnWall(SPEEDUP, itC - itR->begin(), itR - gameMap.begin());
+						spawnFilledBox(SPEEDUP, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					case POWER_UP:
-						spawnWall(KICK, itC - itR->begin(), itR - gameMap.begin());
+						spawnFilledBox(KICK, itC - itR->begin(), itR - gameMap.begin());
 						break;
 					default:
 						break;
@@ -59,7 +58,7 @@ namespace ecs {
 		}
 	}
 
-	void World::spawnWall(ActionTarget type, long posX, long posY) {
+	void World::spawnFilledBox(ActionTarget type, long posX, long posY) {
 		auto &ent = createEntity();
 
 		ent.addComponent<Destructible>(std::make_unique<Collectible>(type));
@@ -72,7 +71,20 @@ namespace ecs {
 		renderer->addTexture(gfx.sceneNode, "../assets/textures/box.jpg");
 	}
 
-	void World::spawnUWall(long posX, long posY) {
+	void World::spawnEmptyBox(long posX, long posY)
+	{
+		auto &ent = createEntity();
+
+		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
+		ent.addComponent<Destructible>(nullptr);
+		ent.addComponent<Graphic>(renderer->createElem("../assets/meshs/box.obj"));
+
+		auto const &gfx = ent.getComponent<Graphic>();
+		if (gfx.sceneNode == nullptr || !renderer->addTexture(gfx.sceneNode, "../assets/textures/box.jpg"))
+			throw std::runtime_error("Cannot load wall asset");
+	}
+
+	void World::spawnWall(long posX, long posY) {
 		static int rand = 0;
 		auto &ent = createEntity();
 
@@ -86,29 +98,18 @@ namespace ecs {
 			throw std::runtime_error("Could not load wall asset");
 	}
 
-	void World::spawnBWall(long posX, long posY)
-	{
-		auto &ent = createEntity();
-
-		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
-		ent.addComponent<Destructible>(nullptr);
-		ent.addComponent<Graphic>(renderer->createElem("../assets/meshs/box.obj"));
-
-		auto const &gfx = ent.getComponent<Graphic>();
-		if (gfx.sceneNode == nullptr || !renderer->addTexture(gfx.sceneNode, "../assets/textures/box.jpg"))
-			throw std::runtime_error("Cannot load wall asset");
-	}
-
 	void World::spawnPlayer(long posX, long posY)
 	{
+		static std::size_t playerCount = 0;
 		auto &ent = createEntity();
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Velocity>(0.f, 0.f);
-		ent.addComponent<Character>(false, 1LU, 1LU, 1LU);
+		ent.addComponent<Character>(playerCount++, false, 1LU, 1LU, 1LU);
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
-		ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"), 2);
+		ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"),
+			playerCount == 1 ? 2.f : 0.5f);
 	}
 
 	void World::spawnFlames(ecs::Position initialPos, size_t pwr) {
@@ -122,7 +123,7 @@ namespace ecs {
 			e.addComponent<Position>(initialPos.x, initialPos.y - i);
 		}
 		e.addComponent<Orientation>(0.f);
-		e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
+		e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/flames.obj"));
 	}
 
 	void World::debug()
@@ -222,11 +223,5 @@ namespace ecs {
 
 	Entity &World::getEntity(entityId id) {
 		return entities.at(id);
-	}
-
-	void World::update(long delta) {
-		for (auto &s : systems) {
-			s->update(delta);
-		}
 	}
 }
