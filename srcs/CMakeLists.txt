@@ -69,7 +69,9 @@ set(SOURCE_FILES
         ../include/engine/systems/DespawnSystem.hpp
         engine/systems/BreakDestructibleSystem.cpp
         ../include/engine/systems/BreakDestructibleSystem.hpp
-        engine/Entity.cpp engine/systems/MovementSystem.cpp)
+        engine/Entity.cpp engine/systems/MovementSystem.cpp
+        engine/systems/PlayerRotationSystem.cpp
+        ../include/engine/systems/PlayerRotationSystem.hpp)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4 /permissive")

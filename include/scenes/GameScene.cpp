@@ -5,6 +5,7 @@
 ** gamescene
 */
 
+#include "engine/systems/PlayerRotationSystem.hpp"
 #include "engine/systems/ExplosionSystem.hpp"
 #include "engine/systems/DespawnSystem.hpp"
 #include "engine/systems/BreakDestructibleSystem.hpp"
@@ -39,6 +40,7 @@ void ids::GameScene::_initSystem()
 	_systemList.emplace_back(
 		new ecs::ParseInput(_world->getEntities(), _renderer->getEventReceiver(), _ai1, _ai2));
 	_systemList.emplace_back(new ecs::PlayerMovement(_world->getEntities()));
+	_systemList.emplace_back(new ecs::PlayerRotationSystem(_world->getEntities(), _renderer));
 	_systemList.emplace_back(new ecs::MovementSystem(_world->getEntities(), _renderer));
 	_systemList.emplace_back(new ecs::PutBombSystem(_world->getEntities(), _world));
 	_systemList.emplace_back(new ecs::ExplosionSystem(_world->getEntities(), _renderer, _world));
