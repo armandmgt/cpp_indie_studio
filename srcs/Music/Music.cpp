@@ -26,23 +26,24 @@ ids::Music::musicId ids::Music::createMusic(std::string &file)
 
 void ids::Music::playMusic(ids::Music::musicId music)
 {
-	if (&_music.at(music)) {
-		_music[music].sfMusic->play();
-		_music[music].active = true;
+	if (music < _music.size()) {
+		_music.at(music).sfMusic->play();
+		_music.at(music).sfMusic->play();
+		_music.at(music).active = true;
 	}
 }
 
 void ids::Music::destroyMusic(ids::Music::musicId music)
 {
-	if (&_music.at(music)) {
+	if (music < _music.size()) {
 		_music.erase(_music.begin() + music);
 	}
 }
 
 void ids::Music::pauseMusic(ids::Music::musicId music)
 {
-	if (&_music.at(music)) {
-		_music[music].sfMusic->pause();
-		_music[music].active = false;
+	if (music < _music.size()) {
+		_music.at(music).sfMusic->pause();
+		_music.at(music).active = false;
 	}
 }
