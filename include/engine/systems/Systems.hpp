@@ -13,7 +13,7 @@
 
 namespace ecs {
 	using entityVector = std::shared_ptr<std::vector<std::unique_ptr<Entity>>>;
-
+	
 	class System {
 	public:
 		explicit System(entityVector allEntities) : _allEntities(allEntities)

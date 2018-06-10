@@ -118,6 +118,7 @@ namespace ecs {
 			e.addComponent<Position>(initialPos.x, initialPos.y - i);
 			e.addComponent<Ephemere>(3LU, std::chrono::steady_clock::now());
 			e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
+			e.addComponent<Damage>(true);
 			auto &posE = e.getComponent<Position>();
 			renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
 		}
@@ -127,20 +128,22 @@ namespace ecs {
 			e.addComponent<Position>(initialPos.x - i, initialPos.y);
 			e.addComponent<Ephemere>(3LU, std::chrono::steady_clock::now());
 			e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
+			e.addComponent<Damage>(true);
 			auto &posE = e.getComponent<Position>();
 			renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
 		}
-
 	}
 
 	void World::spawnBombSystem(Entity *player) {
 		if (player->hasComponent<Character>()) {
 			auto &ent = createEntity(_currId++);
+			auto &posPlayer = player->getComponent<Position>();
+			vec2d<int> posBomb = toIntegerPos<int>(posPlayer.x, posPlayer.y);
 
 			ent.addComponent<Explosion>(player->getComponent<Character>().power);
 			ent.addComponent<Ephemere>(5LU, std::chrono::steady_clock::now());
 			ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/bomb.obj"));
-			ent.addComponent<Position>(player->getComponent<Position>());
+			ent.addComponent<Position>(static_cast<float>(posBomb.x), static_cast<float>(posBomb.y));
 
 			auto const &gfx= ent.getComponent<Graphic>();
 			if (gfx.sceneNode == nullptr)
@@ -150,20 +153,21 @@ namespace ecs {
 		}
 	}
 
-
-	void World::spawnCollectibleFromBoxSystem(entityId id) noexcept {
-		if (entities->at(id)->hasComponent<Destructible>()) {
-			auto &box = this->entities->at(id);
+	void World::spawnCollectibleFromBoxSystem(Entity *box) noexcept {
+		if (box->hasComponent<Destructible>() && box->getComponent<Destructible>().item != nullptr) {
 			auto &ent = createEntity(_currId++);
 
+			std::cerr << "Get Collectible on box : " << box->id << std::endl;
 			ent.addComponent<Collectible>(box->getComponent<Collectible>());
+			std::cerr << "Get Position on box : " << box->id << std::endl;
 			ent.addComponent<Position>(box->getComponent<Position>());
+			std::cerr << "Get Destructible on box : " << box->id << std::endl;
 			ent.addComponent<Graphic>(renderer->createElem(
-				_queryMeshFromActionTarget(box->getComponent<Collectible>().action)
+				_queryMeshFromActionTarget(box->getComponent<Destructible>().item->action)
 			));
 
 			box->getComponent<Graphic>().sceneNode->remove();
-			destroyEntity(id);
+			destroyEntity(box->id);
 		}
 	}
 

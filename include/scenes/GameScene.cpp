@@ -7,6 +7,7 @@
 
 #include <engine/systems/ExplosionSystem.hpp>
 #include <engine/systems/DespawnSystem.hpp>
+#include <engine/systems/BreakDestructibleSystem.hpp>
 #include "engine/systems/PlayerMovement.hpp"
 #include "engine/systems/MovementSystem.hpp"
 #include "engine/systems/ParseInputSystem.hpp"
@@ -25,22 +26,13 @@ ids::GameScene::GameScene(gfx::Renderer *r)
 
 void ids::GameScene::_initSystem()
 {
-	std::unique_ptr<ecs::PlayerMovement> movPlayerSys = std::make_unique<ecs::PlayerMovement>(_world->getEntities());
-	std::unique_ptr<ecs::MovementSystem> movSys = std::make_unique<ecs::MovementSystem>(_world->getEntities(), _renderer);
-	std::unique_ptr<ecs::ParseInput> parseSys = std::make_unique<ecs::ParseInput>(_world->getEntities(),
-		_renderer->getEventReceiver());
-	std::unique_ptr<ecs::PutBombSystem> bomSys = std::make_unique<ecs::PutBombSystem>(_world->getEntities(), _world);
-	std::unique_ptr<ecs::ExplosionSystem> expSys = std::make_unique<ecs::ExplosionSystem>(_world->getEntities(),
-		_renderer, _world);
-	std::unique_ptr<ecs::DespawnSystem> dispFlammes = std::make_unique<ecs::DespawnSystem>
-	        (_world->getEntities(), _renderer, _world);
-
-	_systemList.push_back(std::move(parseSys));
-	_systemList.push_back(std::move(movPlayerSys));
-	_systemList.push_back(std::move(movSys));
-	_systemList.push_back(std::move(bomSys));
-	_systemList.push_back(std::move(expSys));
-	_systemList.push_back(std::move(dispFlammes));
+	_systemList.push_back(std::make_unique<ecs::ParseInput>(_world->getEntities(), _renderer->getEventReceiver()));
+	_systemList.push_back(std::make_unique<ecs::PlayerMovement>(_world->getEntities()));
+	_systemList.push_back(std::make_unique<ecs::MovementSystem>(_world->getEntities(), _renderer));
+	_systemList.push_back(std::make_unique<ecs::PutBombSystem>(_world->getEntities(), _world));
+	_systemList.push_back(std::make_unique<ecs::ExplosionSystem>(_world->getEntities(), _renderer, _world));
+	_systemList.push_back(std::make_unique<ecs::DespawnSystem>(_world->getEntities(), _renderer, _world));
+	_systemList.push_back(std::make_unique<ecs::BreakDestructibleSystem>(_world->getEntities(), _renderer, _world));
 }
 
 

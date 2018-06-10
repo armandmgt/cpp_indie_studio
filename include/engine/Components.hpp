@@ -32,6 +32,7 @@ namespace ecs {
 		COMP_GRAPHIC,
 		COMP_ORIENTATION,
 		COMP_EPHEMERE,
+		COMP_DAMAGE,
 		MAX_COMPONENTS
 	};
 
@@ -129,6 +130,15 @@ namespace ecs {
 		~Destructible() = default;
 		static comp const type = COMP_DESTRUCTIBLE;
 		std::unique_ptr<Collectible> item;
+	};
+
+	struct Damage : public Component {
+		explicit Damage(bool d)
+		: isDamage(d)
+		{};
+		~Damage() = default;
+		static comp const type = COMP_DAMAGE;
+		bool isDamage;
 	};
 
 	struct Graphic : public Component {

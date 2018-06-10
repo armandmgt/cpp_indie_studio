@@ -17,6 +17,18 @@ namespace ecs {
 
 	using entityVector = std::shared_ptr<std::vector<std::unique_ptr<Entity>>>;
 
+	template<class T>
+	vec2d<T> toIntegerPos(const vec2d<float> &pos) {
+		return {static_cast<T>(std::lround(pos.x)),
+			static_cast<T>(std::lround(pos.y))};
+	}
+
+	template<class T>
+	vec2d<T> toIntegerPos(float x, float y) {
+		return {static_cast<T>(std::lround(x)),
+			static_cast<T>(std::lround(y))};
+	}
+
 	class World {
 	public:
 		explicit World(gfx::Renderer *renderer);
@@ -34,7 +46,7 @@ namespace ecs {
 		void drawEntities();
 		void destroyEntity(std::size_t &id);
 		void spawnBombSystem(Entity *);
-		void spawnCollectibleFromBoxSystem(entityId) noexcept;
+		void spawnCollectibleFromBoxSystem(Entity *) noexcept;
 
 		entityVector getEntities();
 
