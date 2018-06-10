@@ -5,7 +5,7 @@
 ** ExplosionSystem
 */
 
-#include "ExplosionSystem.hpp"
+#include "engine/systems/ExplosionSystem.hpp"
 
 ecs::ExplosionSystem::ExplosionSystem(std::vector<ecs::Entity> *allEntities)
 		: System(allEntities) {}

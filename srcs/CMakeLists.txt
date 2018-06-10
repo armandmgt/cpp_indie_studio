@@ -7,8 +7,8 @@ set(SOURCE_FILES
         ../include/engine/Entity.hpp
         ../include/engine/systems/Systems.hpp
         ../include/engine/systems/MovementSystem.hpp
-        ../include/engine/systems/MovementSystem.cpp
-        ../include/engine/systems/ExplosionSystem.cpp
+		engine/systems/MovementSystem.cpp
+		engine/systems/ExplosionSystem.cpp
         ../include/engine/systems/ExplosionSystem.hpp
 
         world/World.cpp
@@ -38,9 +38,9 @@ set(SOURCE_FILES
         scenes/ScenesManager.cpp
         ../include/gfx/Image2D.hpp
         ../include/engine/systems/Systems.hpp
-        ../include/engine/systems/MovementSystem.cpp
+		engine/systems/MovementSystem.cpp
         ../include/engine/systems/MovementSystem.hpp
-        ../include/engine/systems/ExplosionSystem.cpp
+		engine/systems/ExplosionSystem.cpp
         ../include/engine/systems/ExplosionSystem.hpp
         ../include/scenes/GameScene.cpp
         ../include/scenes/GameScene.hpp
