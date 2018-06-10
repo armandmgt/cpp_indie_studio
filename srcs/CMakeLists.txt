@@ -44,10 +44,6 @@ set(SOURCE_FILES
         ../include/settingManager/settingManager.hpp
 
         scenes/ScenesManager.cpp
-        ../include/gfx/Image2D.hpp
-        ../include/engine/systems/Systems.hpp
-        ../include/engine/systems/MovementSystem.hpp
-        ../include/engine/systems/ExplosionSystem.hpp
         ../include/scenes/GameScene.cpp
         ../include/scenes/GameScene.hpp
         ../include/scenes/IScene.hpp
@@ -57,11 +53,11 @@ set(SOURCE_FILES
         ../include/enum/AnimationType.hpp
         ../include/enum/EventEnum.hpp
 
-        ../include/common/vec.hpp engine/systems/PlayerMovement.cpp
+        ../include/common/vec.hpp
+        engine/systems/PlayerMovement.cpp
         ../include/engine/systems/PlayerMovement.hpp
         engine/systems/ParseInputSystem.cpp
         engine/systems/ExplosionSystem.cpp
-        engine/systems/
         ../include/engine/systems/ParseInputSystem.hpp
         engine/systems/PutBombSystem.cpp
         ../include/engine/systems/PutBombSystem.hpp
@@ -69,7 +65,8 @@ set(SOURCE_FILES
         ../include/engine/systems/DespawnSystem.hpp
         engine/systems/BreakDestructibleSystem.cpp
         ../include/engine/systems/BreakDestructibleSystem.hpp
-        engine/Entity.cpp engine/systems/MovementSystem.cpp
+        engine/Entity.cpp
+        engine/systems/MovementSystem.cpp
         engine/systems/PlayerRotationSystem.cpp
         ../include/engine/systems/PlayerRotationSystem.hpp)
 
@@ -80,7 +77,7 @@ else()
 endif()
 
 add_executable(bomberman ${SOURCE_FILES})
-	
+
 if (WIN32)
     link_directories("../")
     target_link_libraries(bomberman "../../srcs/Irrlicht" "../../srcs/sfml-audio")
