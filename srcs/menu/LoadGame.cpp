@@ -7,8 +7,8 @@
 
 #include "menu/LoadGame.hpp"
 
-ids::menu::LoadGame::LoadGame(gfx::Renderer *rend, ids::Music *music) :
-	AMenu(rend, LOAD, music), _events{rend->getEventReceiver()},
+ids::menu::LoadGame::LoadGame(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<ids::Music> music)
+	: AMenu(rend, music, LOAD), _events{rend->getEventReceiver()},
 	_items{
 		{"../assets/menu/trollol/trollol.png", {480, 100}, {991, 806}},
 		{"../assets/menu/trollol/trollol2.png", {480,100}, {991, 806}},

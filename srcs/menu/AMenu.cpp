@@ -8,7 +8,8 @@
 #include "menu/AMenu.hpp"
 #include "common/vec.hpp"
 
-ids::menu::AMenu::AMenu(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<ids::Music> music, sceneId id) : _rend(rend), _musicManager(music), _posBackground(0,0), _id(id), _mouseData()
+ids::menu::AMenu::AMenu(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<ids::Music> music, sceneId id)
+	: _rend(rend), _musicManager(music), _posBackground(0,0), _id(id), _mouseData()
 {
 }
 

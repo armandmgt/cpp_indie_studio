@@ -21,7 +21,7 @@ namespace ids {
 				vec2d<int> pos;
 			};
 
-			explicit Launch(std::shared_ptr<gfx::Renderer> rend, ids::Music *music);
+			Launch(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<Music> music);
 			~Launch() override;
 			sceneId run() override;
 		private:

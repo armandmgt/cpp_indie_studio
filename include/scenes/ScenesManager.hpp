@@ -15,12 +15,12 @@
 namespace ids {
 	class ScenesManager {
 	public:
-		explicit ScenesManager(std::shared_ptr<gfx::Renderer> renderer, Music *music);
+		explicit ScenesManager(std::shared_ptr<gfx::Renderer> renderer, std::shared_ptr<ids::Music> music);
 
 		std::unique_ptr<ids::IScene> makeScene(IScene::sceneId sceneId);
 
 	private:
 		std::shared_ptr<gfx::Renderer> _renderer;
-		Music *_music;
+		std::shared_ptr<ids::Music> _music;
 	};
 }

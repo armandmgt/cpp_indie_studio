@@ -7,7 +7,8 @@
 
 #include "menu/Settings.hpp"
 
-ids::menu::Settings::Settings(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<ids::Music> music) : AMenu(rend, music, SETTINGS), _events{rend->getEventReceiver()},
+ids::menu::Settings::Settings(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<ids::Music> music)
+	: AMenu(rend, music, SETTINGS), _events{rend->getEventReceiver()},
 	_music{ON},
 	_items{
 		{{64, 64}, ON, "../assets/menu/volume.png", "../assets/menu/mute.png", {950, 510}},

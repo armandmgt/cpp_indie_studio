@@ -14,8 +14,9 @@ namespace ids {
 	namespace menu {
 		class Pause : public AMenu {
 		public:
-			Pause(gfx::Renderer *renderer, Music *music);
+			Pause(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<Music> music);
 			~Pause();
+
 			sceneId run() override;
 		private:
 			evt::MyEventReceiver &_events;
