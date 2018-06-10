@@ -13,7 +13,7 @@
 namespace ecs {
 	class ParseInput : public System {
 	public:
-		ParseInput(std::vector<ecs::Entity> *allEntities, evt::MyEventReceiver &e);
+		ParseInput(std::shared_ptr<std::vector<ecs::Entity>> allEntities, evt::MyEventReceiver &e);
 
 		void update(double delta) override;
 

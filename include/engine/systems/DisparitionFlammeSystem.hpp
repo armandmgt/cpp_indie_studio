@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2018
 ** cpp_indie_studio
 ** File description:
-** ExplosionSystem
+** DisparitionFlammeSystem
 */
 
 #pragma once
@@ -11,9 +11,10 @@
 #include "Systems.hpp"
 
 namespace ecs {
-	class ExplosionSystem : public System {
+	class DisparitionFlammeSystem : public System {
 	public:
-		explicit ExplosionSystem(std::shared_ptr<std::vector<Entity>> , gfx::Renderer *, std::shared_ptr<ecs::World>
+		explicit DisparitionFlammeSystem(std::shared_ptr<std::vector<Entity>> , gfx::Renderer *,
+		std::shared_ptr<ecs::World>
 		        world);
 
 		void update(double) override;

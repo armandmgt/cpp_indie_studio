@@ -8,7 +8,7 @@
 
 #include "ParseInputSystem.hpp"
 
-ecs::ParseInput::ParseInput(std::vector<ecs::Entity> *allEntities, evt::MyEventReceiver &e)
+ecs::ParseInput::ParseInput(std::shared_ptr<std::vector<ecs::Entity>> allEntities, evt::MyEventReceiver &e)
 	: System(allEntities), event(e) {}
 
 void ecs::ParseInput::update(double delta[[maybe_unused]]) {

@@ -37,11 +37,12 @@ namespace ecs {
 		void spawnBombSystem(Entity *);
 		void spawnCollectibleFromBoxSystem(entityId) noexcept;
 
+		std::shared_ptr<std::vector<Entity>> getEntities();
 		void update(long delta);
 
 	public:
-		std::vector<Entity> entities;
 		std::vector<std::unique_ptr<System>> systems;
+		std::vector<Entity> entities;
 
 	private:
 		std::size_t _currId = 0;

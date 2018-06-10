@@ -10,6 +10,7 @@
 #include <irrlicht/irrlicht.h>
 #include <memory>
 #include <chrono>
+#include <iostream>
 
 namespace ecs {
 	enum ActionTarget {
@@ -69,16 +70,6 @@ namespace ecs {
 		~Collectible() = default;
 		static comp const type = COMP_COLLECTIBLE;
 		ActionTarget action;
-	};
-
-	struct Ephemere : public Component {
-		explicit Ephemere(std::size_t t, std::chrono::time_point<std::chrono::steady_clock> ti) :
-		timeout(t), time(ti)
-		{};
-		~Ephemere() = default;
-		static comp const type = COMP_EPHEMERE;
-		std::size_t timeout;
-		std::chrono::time_point<std::chrono::steady_clock> time;
 	};
 
 	struct Velocity : public Component {
@@ -151,4 +142,17 @@ namespace ecs {
 		irr::scene::ISceneNode *sceneNode;
 		float scale;
 	};
+
+	struct Ephemere : public Component {
+		explicit Ephemere(std::size_t t, std::chrono::time_point<std::chrono::steady_clock> ti) :
+			timeout(t), time(ti)
+		{
+			std::cout << "Hi! I'm in Ephemere" << std::endl;
+		};
+		~Ephemere() = default;
+		static comp const type = COMP_EPHEMERE;
+		std::size_t timeout;
+		std::chrono::time_point<std::chrono::steady_clock> time;
+	};
+
 }

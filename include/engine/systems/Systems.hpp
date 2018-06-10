@@ -14,7 +14,7 @@
 namespace ecs {
 	class System {
 	public:
-		explicit System(std::vector<Entity> *allEntities) : _allEntities(allEntities)
+		explicit System(std::shared_ptr<std::vector<Entity>> allEntities) : _allEntities(allEntities)
 		{};
 		virtual void update(double delta) = 0;
 
@@ -37,7 +37,7 @@ namespace ecs {
 		}
 
 	protected:
-		std::vector<Entity> *_allEntities;
+		std::shared_ptr<std::vector<Entity>> _allEntities;
 	private:
 		std::vector<Entity *> _entities;
 	};

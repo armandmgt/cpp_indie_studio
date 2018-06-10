@@ -9,7 +9,7 @@
 #include "PlayerMovement.hpp"
 
 namespace ecs {
-	PlayerMovement::PlayerMovement(std::vector<Entity> *allEntities) :
+	PlayerMovement::PlayerMovement(std::shared_ptr<std::vector<Entity>> allEntities) :
 		System(allEntities) {}
 
 	void PlayerMovement::update(double delta[[maybe_unused]]) {

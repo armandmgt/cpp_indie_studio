@@ -13,7 +13,7 @@
 namespace ecs {
 	class PutBombSystem : public System {
 	public:
-		explicit PutBombSystem(std::vector<Entity> *allEntities, std::shared_ptr<ecs::World> world);
+		explicit PutBombSystem(std::shared_ptr<std::vector<Entity>> allEntities, std::shared_ptr<ecs::World> world);
 
 		void update(double delta) override;
 	private:

@@ -10,7 +10,7 @@
 #include "PutBombSystem.hpp"
 
 namespace ecs {
-	PutBombSystem::PutBombSystem(std::vector<Entity> *allEntities, std::shared_ptr<ecs::World> world) :
+	PutBombSystem::PutBombSystem(std::shared_ptr<std::vector<Entity>> allEntities, std::shared_ptr<ecs::World> world) :
 		System(allEntities), _world(world) {}
 
 	void PutBombSystem::update(double delta[[maybe_unused]]) {

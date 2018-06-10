@@ -16,7 +16,7 @@ namespace ecs {
 
 	World::World(gfx::Renderer *render) : entities{}, renderer{render}
 	{
-		systems.push_back(std::make_unique<MovementSystem>(&entities, render));
+		systems.push_back(std::make_unique<MovementSystem>(getEntities(), render));
 	}
 
 	Entity &World::createEntity(std::size_t _currId)
@@ -114,20 +114,20 @@ namespace ecs {
 	void World::spawnFlames(ecs::Position initialPos, int pwr) {
 		//std::cout << "[SPAWN] flammes at [" << initialPos.x << ":" << initialPos.y << "] with power (" << pwr << ")" << std::endl;
 
-		for (auto i = static_cast<int>(pwr * (-1)); i < pwr; i++) {
+		for (auto i = pwr * (-1); i <= pwr; i++) {
 			auto &e = createEntity(_currId++);
 			e.addComponent<Orientation>(0.f);
 			e.addComponent<Position>(initialPos.x, initialPos.y - i);
-			e.addComponent<Ephemere>(3U, std::chrono::steady_clock::now());
+			e.addComponent<Ephemere>(3, std::chrono::steady_clock::now());
 			e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
 			auto &posE = e.getComponent<Position>();
 			renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
 		}
-		for (auto i = static_cast<int>(pwr * (-1)); i < pwr; i++) {
+		for (auto i = pwr * (-1); i <= pwr; i++) {
 			auto &e = createEntity(_currId++);
 			e.addComponent<Orientation>(0.f);
 			e.addComponent<Position>(initialPos.x - 1, initialPos.y);
-			e.addComponent<Ephemere>(3U, std::chrono::steady_clock::now());
+			e.addComponent<Ephemere>(3, std::chrono::steady_clock::now());
 			e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
 			auto &posE = e.getComponent<Position>();
 			renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
@@ -250,5 +250,10 @@ namespace ecs {
 			       [id] (Entity const &e) {
 			return e.id == id ;
 		});
+	}
+
+	std::shared_ptr<std::vector<Entity>> World::getEntities()
+	{
+		return std::shared_ptr<std::vector<Entity>>(&entities);
 	}
 }
