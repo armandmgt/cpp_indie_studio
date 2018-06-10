@@ -51,7 +51,7 @@ const evt::MyEventReceiver::MouseState &evt::MyEventReceiver::getMousePosition()
 	return mouseState;
 }
 
-bool evt::MyEventReceiver::_fillKey(irr::EKEY_CODE &keyCode)
+bool evt::MyEventReceiver::_fillKey()
 {
 	static std::unordered_map<irr::EKEY_CODE, evt::PlayerEvent> const mapEvent {
 		{irr::KEY_KEY_O, {1, {evt::MOVEMENT, evt::MOVEUP, evt::UP}}},
@@ -70,12 +70,14 @@ bool evt::MyEventReceiver::_fillKey(irr::EKEY_CODE &keyCode)
 		{irr::KEY_SPACE, {1, {evt::MOVEMENT, evt::PAUSE, evt::SPACE}}}
 	};
 
-	auto playerEvent = mapEvent.find(keyCode);
-	if (playerEvent == mapEvent.end())
-		return false;
-	auto &event = playerEvent->second;
-	buffer.emplace(event.id, event.event);
-	return true;
+	for (auto &keyCode : keyboardPressed) {
+		auto playerEvent = mapEvent.find(keyCode);
+		if (playerEvent != mapEvent.end()) {
+			auto &event = playerEvent->second;
+			buffer.emplace(event.id, event.event);
+		}
+	}
+	return !keyboardPressed.empty();
 }
 
 std::queue<evt::Event> evt::MyEventReceiver::getPlayerEvent(std::size_t id)
@@ -102,19 +104,20 @@ bool evt::MyEventReceiver::hasEvent()
 	irr::EKEY_CODE  keyCode;
 
 	if (getKeyPressed(keyCode)) {
-		_fillKey(keyCode);
+		_fillKey();
 		return !buffer.empty();
 	}
 	return false;
 }
 
-bool evt::MyEventReceiver::getKeyPressed(irr::EKEY_CODE &keyCode) const
+bool evt::MyEventReceiver::getKeyPressed(irr::EKEY_CODE &keyCode)
 {
+	keyboardPressed.clear();
 	for (int i = 0; i < irr::KEY_KEY_CODES_COUNT; i++) {
 		if (isKeyDown(static_cast<irr::EKEY_CODE>(i))) {
+			keyboardPressed.push_back(static_cast<irr::EKEY_CODE>(i));
 			keyCode = static_cast<irr::EKEY_CODE>(i);
-			return true;
 		}
 	}
-	return false;
+	return !keyboardPressed.empty();
 }

@@ -45,15 +45,16 @@ namespace evt {
 
 		bool isKeyDown(irr::EKEY_CODE keyCode) const;
 		const MouseState &getMousePosition() const;
-		bool getKeyPressed(irr::EKEY_CODE &keyCode) const;
+		bool getKeyPressed(irr::EKEY_CODE &keyCode);
 
 		bool hasEvent();
 		std::queue<evt::Event> getPlayerEvent(std::size_t id);
 
 	private:
-		bool _fillKey(irr::EKEY_CODE &keyCode);
+		bool _fillKey();
 
 		std::multimap<playerId, Event> buffer;
+		std::vector<irr::EKEY_CODE> keyboardPressed;
 		bool keyIsDown[irr::KEY_KEY_CODES_COUNT];
 	};
 }

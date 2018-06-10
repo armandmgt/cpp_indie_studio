@@ -21,6 +21,7 @@ void ecs::BreakDestructibleSystem::update(double delta[[maybe_unused]]) {
 	for (auto it = boxes.begin(); it != boxes.end(); it++) {
 		std::cout << "Box found : " << (*it)->id << std::endl;
 	}
+	std::cout << "boxes size : " << boxes.size() << std::endl;
 	for (auto &flame : flames) {
 		auto &posFlame = flame->getComponent<Position>();
 		for (auto &box : boxes) {

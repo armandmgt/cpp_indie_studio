@@ -154,7 +154,7 @@ namespace ecs {
 	}
 
 	void World::spawnCollectibleFromBoxSystem(Entity *box) noexcept {
-		if (box->hasComponent<Destructible>() && box->getComponent<Destructible>().item != nullptr) {
+		if (box->hasComponent<Destructible>()) {
 			auto &ent = createEntity();
 
 			std::cerr << "Get Collectible on box : " << box->id << std::endl;
