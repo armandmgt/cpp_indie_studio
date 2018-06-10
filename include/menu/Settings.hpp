@@ -25,7 +25,8 @@ namespace ids { namespace menu {
 			irr::core::stringw soundOff;
 			vec2d<int> pos;
 		};
-		explicit Settings(gfx::Renderer *rend, ids::Music *music);
+
+    explicit Settings(std::shared_ptr<gfx::Renderer> rend, ids::Music *music);
 		~Settings() override;
 		sceneId run() override;
 	private:

@@ -7,7 +7,7 @@
 
 #include "engine/GameContainer.hpp"
 
-ids::GameContainer::GameContainer() : _renderer{}, _ecs{&_renderer}, _music{}, _scenesManager{&_renderer, &_music}
+ids::GameContainer::GameContainer() : _renderer{}, _music{}, _scenesManager{_renderer, _music}, _ecs{_renderer}
 {
 }
 

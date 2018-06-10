@@ -9,6 +9,7 @@
 #define AMENU_HPP
 
 #include <string>
+#include <memory>
 #include "gfx/Renderer.hpp"
 #include "scenes/IScene.hpp"
 #include "common/Music.hpp"
@@ -26,13 +27,15 @@ namespace ids {
 				sceneId	action;
 				bool hovered;
 			};
-			explicit AMenu(gfx::Renderer *rend, sceneId id, ids::Music *music);
+
+      explicit AMenu(std::shared_ptr<gfx::Renderer> rend, sceneId id, ids::Music *music);
 			~AMenu() override = default;
-		protected:
+
+    protected:
 			bool setWindow();
 			void buttonEvent();
 			bool insideRect(vec2d<int> &pos, vec2d<int> &size);
-			gfx::Renderer *_rend;
+			std::shared_ptr<gfx::Renderer> _rend;
 			vec2d<int> _posBackground;
 			irr::core::stringw _backgroundImg;
 			std::vector<Button> _infoButtons;
