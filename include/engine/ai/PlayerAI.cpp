@@ -47,7 +47,7 @@ namespace {
 
 ids::PlayerAI::PlayerAI(size_t _id, std::shared_ptr<ecs::World> _world, vec2d<std::size_t> _mapSize)
 	: _id{_id}, _world{_world}, _allEntities{}, _players{}, _bombs{},
-	_map{_mapSize.x, std::vector<CellType>{_mapSize.y}}, _road{},
+	_map{_mapSize.x, std::vector<cellType>{_mapSize.y}}, _road{},
 	_directions{evt::MOVEUP, evt::MOVEDOWN, evt::MOVELEFT, evt::MOVERIGHT}
 {
 }
@@ -94,7 +94,7 @@ void ids::PlayerAI::_updateMap()
 
 void ids::PlayerAI::_constructTypesMap()
 {
-	std::for_each(_map.begin(), _map.end(), [this](std::vector<CellType> &row) {
+	std::for_each(_map.begin(), _map.end(), [this](std::vector<cellType> &row) {
 		std::fill(row.begin(), row.end(), EMPTY);
 	});
 	std::for_each(_allEntities.begin(), _allEntities.end(), [this](const ecs::Entity *entity) {
@@ -123,8 +123,8 @@ void ids::PlayerAI::_findCellType(const ecs::Entity *entity)
 
 void ids::PlayerAI::_printMap()
 {
-	std::for_each(_map.begin(), _map.end(), [](const std::vector<CellType> &v) {
-		std::for_each(v.begin(), v.end(), [](CellType c) {
+	std::for_each(_map.begin(), _map.end(), [](const std::vector<cellType> &v) {
+		std::for_each(v.begin(), v.end(), [](cellType c) {
 			switch (c) {
 			case EMPTY:
 				std::cout << ' ';
@@ -177,21 +177,29 @@ evt::eventAction ids::PlayerAI::_findSafePlace(vec2d<float> &pos)
 	std::cout << "Let's find a road to take..." << std::endl;
 	clear(_road);
 
-	std::map<evt::eventAction, std::size_t> pathsLengths{
-		{evt::MOVEUP, 0}, {evt::MOVEDOWN, 0}, {evt::MOVELEFT, 0}, {evt::MOVERIGHT, 0}
-	};
+	std::unique_ptr<PathTree> pathsLengths = std::make_unique<PathTree>(evt::NOTHING, 0);
 	std::list<vec2d<float>> visited;
 	_findSaferCell(pos, pathsLengths, visited);
-	std::for_each(pathsLengths.begin(), pathsLengths.end(), [](const std::pair<evt::eventAction, size_t> &p) {
-		std::cout << "by going " << p.first << " we went through " << p.second << " nodes" << std::endl;
-	});
+	for (std::size_t i = 0; pathsLengths->leafs[i]; i++) {
+		const auto &l = pathsLengths->leafs[i];
+		std::cout << "by going " << l->path << " we went through " << l->length << " nodes" << std::endl;
+	}
 	std::cout << "we went through:" << std::endl;
 	std::for_each(visited.begin(), visited.end(), [](const vec2d<float> &v) {
 		std::cout << "(" << v.x << ";" << v.y << ")" << std::endl;
 	});
-	return std::max_element(pathsLengths.begin(), pathsLengths.end(), [](const auto &p1, const auto &p2) {
-		return p1.second < p2.second;
-	})->first;
+	auto &bestPath = *std::min_element(pathsLengths->leafs.begin(), pathsLengths->leafs.end(),
+		[](const auto &p1, const auto &p2) {
+			return (p1 && p2 && p1->length < p2->length) || !p2;
+		});
+	while (bestPath && bestPath->length) {
+		_road.push_front(bestPath->path);
+		bestPath = std::move(*std::min_element(pathsLengths->leafs.begin(), pathsLengths->leafs.end(),
+			[](const auto &p1, const auto &p2) {
+				return (p1 && p2 && p1->length < p2->length) || p2;
+			}));
+	}
+	return _road.front();
 }
 
 bool ids::PlayerAI::_isSafeRoad(std::list<evt::eventAction> road)
@@ -212,31 +220,26 @@ bool ids::PlayerAI::_isSafeRoad(std::list<evt::eventAction> road)
 	return true;
 }
 
-void ids::PlayerAI::_findSaferCell(vec2d<float> &pos, std::map<evt::eventAction, size_t> &pathsLengths,
-	std::list<vec2d<float>> &visited
-)
+void ids::PlayerAI::_findSaferCell(vec2d<float> &pos, std::unique_ptr<PathTree> &pathsLengths,
+	std::list<vec2d<float>> &visited)
 {
 	if (!_willDie(pos))
 		return;
-	std::for_each(_directions.begin(), _directions.end(),
-		std::bind(&PlayerAI::_checkCell, this, pos, pathsLengths, visited, std::placeholders::_1));
-}
-
-void ids::PlayerAI::_checkCell(vec2d<float> pos, std::map<evt::eventAction, size_t> &pathsLengths,
-	std::list<vec2d<float>> &visited, evt::eventAction dir
-)
-{
-	std::cout << "from (" << pos.x << ";" << pos.y << ") checking direction " << dir;
-	goDirection(pos, dir);
-	auto integerPos = toIntegerPos<std::size_t>(pos);
-	if (_map.at(integerPos.x).at(integerPos.y) != EMPTY ||
-		std::find(visited.begin(), visited.end(), pos) != visited.end()) {
-		std::cout << " -> impossible: " << (_map.at(integerPos.x).at(integerPos.y) != EMPTY ?
-			"there is something in the way" : "we already visited this cell") << std::endl;
-		return;
-	}
-	visited.push_back(pos);
-	pathsLengths[dir] += 1;
-	std::cout << ", ok lets see if (" << pos.x << ";" << pos.y << ") is dangerous" << std::endl;
-	_findSaferCell(pos, pathsLengths, visited);
+	std::for_each(_directions.begin(), _directions.end(), [&](evt::eventAction dir) {
+		std::cout << "from (" << pos.x << ";" << pos.y << ") checking direction " << dir;
+		auto copyPos = pos;
+		goDirection(copyPos, dir);
+		auto integerPos = toIntegerPos<std::size_t>(copyPos);
+		if (_map.at(integerPos.x).at(integerPos.y) != EMPTY ||
+			std::find(visited.begin(), visited.end(), pos) != visited.end()) {
+			std::cout << " -> impossible: "
+				<< (_map.at(integerPos.x).at(integerPos.y) != EMPTY ? "there is something in the way" :
+					"we already visited this cell") << std::endl;
+			return;
+		}
+		visited.push_back(copyPos); //TODO: remove visited list and write '.' into map
+		pathsLengths->leafs[dir - 1] = std::make_unique<PathTree>(dir, pathsLengths->length + 1);
+		std::cout << ", ok lets see if (" << copyPos.x << ";" << copyPos.y << ") is dangerous" << std::endl;
+		_findSaferCell(copyPos, pathsLengths->leafs[dir - 1], visited);
+	});
 }

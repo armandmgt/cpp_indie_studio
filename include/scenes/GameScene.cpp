@@ -17,7 +17,7 @@ ids::GameScene::GameScene(gfx::Renderer *r)
 	_world->createGround(20, 20, "../assets/meshs/ground.obj");
 	_world->spawnEntitiesFromMap(std::move(map.getMap()));
 	auto &e = _world->createEntity();
-	e.addComponent<ecs::Position>(1.1f, 2.2f);
+	e.addComponent<ecs::Position>(2.1f, 1.2f);
 	e.addComponent<ecs::Explosion>(3LU, 5LU);
 	e.addComponent<ecs::Graphic>(_renderer->createElem("../assets/meshs/bomb.obj"));
 }

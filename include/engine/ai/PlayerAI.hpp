@@ -12,8 +12,18 @@
 #include "event/EventReceiver.hpp"
 
 namespace ids {
-	enum CellType {
+	enum cellType {
 		EMPTY, WALL, BOX, BOMB, FLAME
+	};
+
+	struct PathTree {
+		PathTree(evt::eventAction path, size_t length) : path(path), length(length)
+		{
+		}
+
+		evt::eventAction path;
+		std::size_t length;
+		std::array<std::unique_ptr<PathTree>, 4> leafs{};
 	};
 
 	class PlayerAI {
@@ -31,7 +41,7 @@ namespace ids {
 		std::vector<ecs::Entity *> _players;
 		ecs::Entity * _myself;
 		std::vector<ecs::Entity *> _bombs;
-		std::vector<std::vector<CellType>> _map;
+		std::vector<std::vector<cellType>> _map;
 
 		std::list<evt::eventAction> _road;
 		std::array<evt::eventAction, 4> _directions;
@@ -45,11 +55,8 @@ namespace ids {
 		evt::eventAction _findSafePlace(vec2d<float> &pos);
 		bool _isSafeRoad(std::list<evt::eventAction> road);
 
-		void _findSaferCell(vec2d<float> &pos, std::map<evt::eventAction, size_t> &pathsLengths,
+		void _findSaferCell(vec2d<float> &pos, std::unique_ptr<PathTree> &pathsLengths,
 			std::list<vec2d<float>> &visited
-		);
-		void _checkCell(vec2d<float> pos, std::map<evt::eventAction, size_t> &pathsLengths,
-			std::list<vec2d<float>> &visited, evt::eventAction dir
 		);
 	};
 }

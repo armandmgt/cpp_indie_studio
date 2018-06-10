@@ -17,7 +17,7 @@ namespace evt {
 
 	enum eventAction
 	{
-		NOTHING, PUTBOMB, MOVEUP, MOVEDOWN, MOVERIGHT, MOVELEFT,
+		NOTHING, MOVEUP, MOVEDOWN, MOVELEFT, MOVERIGHT, PUTBOMB,
 		PAUSE, RESTART, MENU, QUIT, CLICK, MAX_ACTION
 	};
 }
@@ -34,7 +34,7 @@ inline std::ostream &operator<<(std::ostream &os, evt::eventKey e) {
 
 inline std::ostream &operator<<(std::ostream &os, evt::eventAction e) {
 	static const std::array<std::string, evt::MAX_ACTION> association = {
-		"NOTHING", "PUTBOMB", "MOVEUP", "MOVEDOWN", "MOVERIGHT", "MOVELEFT",
+		"NOTHING", "MOVEUP", "MOVEDOWN", "MOVELEFT", "MOVERIGHT", "PUTBOMB",
 		"PAUSE", "RESTART", "MENU", "QUIT", "CLICK"
 	};
 
