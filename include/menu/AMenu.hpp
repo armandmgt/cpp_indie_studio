@@ -26,12 +26,6 @@ namespace ids {
 				sceneId	action;
 				bool hovered;
 			};
-
-			struct Mouse {
-				vec2d<int> pos;
-				bool state;
-			};
-
 			explicit AMenu(gfx::Renderer *rend, sceneId id, ids::Music *music);
 			~AMenu() override = default;
 		protected:
@@ -43,7 +37,6 @@ namespace ids {
 			irr::core::stringw _backgroundImg;
 			std::vector<Button> _infoButtons;
 			sceneId	_id;
-			//Mouse _mouse;
 			Music *_musicManager;
 			evt::MyEventReceiver::MouseState _mouseData;
 		};
