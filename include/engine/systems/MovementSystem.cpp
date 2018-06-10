@@ -14,7 +14,7 @@ namespace ecs {
 	}
 
 	void MovementSystem::update(double delta[[maybe_unused]]) {
-		auto &entities = getEntities(COMP_POSITION, COMP_VELOCITY);
+		auto entities = getEntities(COMP_POSITION, COMP_VELOCITY);
 
 		for (auto &e : entities) {
 			auto &position = e->getComponent<Position>();

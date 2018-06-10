@@ -15,22 +15,15 @@ ecs::ExplosionSystem::ExplosionSystem(entityVector allEntities, gfx::Renderer *r
 }
 
 void ecs::ExplosionSystem::update(double delta[[maybe_unused]]) {
-	auto &entities = getEntities(COMP_POSITION, COMP_EXPLOSION);
+	auto bombs = getEntities(COMP_POSITION, COMP_EXPLOSION);
 
-	for (auto &e : entities) {
-		auto &exp = e->getComponent<Ephemere>();
+	for (auto &bomb : bombs) {
+		auto &ephemereComp = bomb->getComponent<Ephemere>();
 		auto now = std::chrono::steady_clock::now();
-		std::chrono::duration<double> diff = now - exp.time;
-		if (diff.count() > exp.timeout) {
-			e->getComponent<Graphic>().sceneNode->remove();
-			_world->spawnFlames(e->getComponent<Position>(), e->getComponent<Explosion>().power);
-			for (auto it = _allEntities->begin(); it != _allEntities->end(); ) {
-				if ((*it)->id == e->id)
-					it = _allEntities->erase(it);
-				else
-					++it;
-			}
-			_world->destroyEntity(e->id);
+		std::chrono::duration<double> diff = now - ephemereComp.time;
+		if (diff.count() > ephemereComp.timeout) {
+			_world->spawnFlames(bomb->getComponent<Position>(), bomb->getComponent<Explosion>().power);
+			_world->destroyEntity(bomb->id);
 		}
 	}
 }

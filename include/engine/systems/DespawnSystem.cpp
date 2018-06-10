@@ -14,21 +14,14 @@ ecs::DespawnSystem::DespawnSystem(entityVector allEntities, gfx::Renderer *rende
 }
 
 void ecs::DespawnSystem::update(double delta[[maybe_unused]]) {
-	auto &entities = getEntities(COMP_EPHEMERE, COMP_GRAPHIC);
+	auto ephemereEntities = getEntities(COMP_EPHEMERE, COMP_GRAPHIC);
 
-	for (auto &e : entities) {
-		auto &exp = e->getComponent<Ephemere>();
+	for (auto &ephemere : ephemereEntities) {
+		auto &ephemereComp = ephemere->getComponent<Ephemere>();
 		auto now = std::chrono::steady_clock::now();
-		std::chrono::duration<double> diff = now - exp.time;
-		if (diff.count() > exp.timeout) {
-			e->getComponent<Graphic>().sceneNode->remove();
-			for (auto it = _allEntities->begin(); it != _allEntities->end(); ) {
-				if ((*it)->id == e->id)
-					it = _allEntities->erase(it);
-				else
-					++it;
-			}
-			_world->destroyEntity(e->id);
+		std::chrono::duration<double> diff = now - ephemereComp.time;
+		if (diff.count() > ephemereComp.timeout) {
+			_world->destroyEntity(ephemere->id);
 		}
 
 	}

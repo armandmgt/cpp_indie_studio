@@ -13,7 +13,7 @@ ecs::ParseInput::ParseInput(entityVector allEntities, evt::MyEventReceiver &e) :
 }
 
 void ecs::ParseInput::update(double delta[[maybe_unused]]) {
-	auto &entities = getEntities(COMP_CHARACTER, COMP_INPUT);
+	auto entities = getEntities(COMP_CHARACTER, COMP_INPUT);
 
 	for (auto &e : entities) {
 		auto &InputPlayer = e->getComponent<Input>();

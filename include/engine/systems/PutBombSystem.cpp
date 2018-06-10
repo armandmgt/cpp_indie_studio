@@ -16,7 +16,7 @@ namespace ecs {
 	}
 
 	void PutBombSystem::update(double delta[[maybe_unused]]) {
-		auto &entities = getEntities(COMP_CHARACTER, COMP_INPUT);
+		auto entities = getEntities(COMP_CHARACTER, COMP_INPUT);
 
 		for (auto &player : entities) {
 			auto &input = player->getComponent<Input>();

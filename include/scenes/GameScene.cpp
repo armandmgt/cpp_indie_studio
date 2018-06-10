@@ -26,13 +26,13 @@ ids::GameScene::GameScene(gfx::Renderer *r)
 
 void ids::GameScene::_initSystem()
 {
-	_systemList.push_back(std::make_unique<ecs::ParseInput>(_world->getEntities(), _renderer->getEventReceiver()));
-	_systemList.push_back(std::make_unique<ecs::PlayerMovement>(_world->getEntities()));
-	_systemList.push_back(std::make_unique<ecs::MovementSystem>(_world->getEntities(), _renderer));
-	_systemList.push_back(std::make_unique<ecs::PutBombSystem>(_world->getEntities(), _world));
-	_systemList.push_back(std::make_unique<ecs::ExplosionSystem>(_world->getEntities(), _renderer, _world));
-	_systemList.push_back(std::make_unique<ecs::DespawnSystem>(_world->getEntities(), _renderer, _world));
-	_systemList.push_back(std::make_unique<ecs::BreakDestructibleSystem>(_world->getEntities(), _renderer, _world));
+	_systemList.emplace_back(new ecs::ParseInput(_world->getEntities(), _renderer->getEventReceiver()));
+	_systemList.emplace_back(new ecs::PlayerMovement(_world->getEntities()));
+	_systemList.emplace_back(new ecs::MovementSystem(_world->getEntities(), _renderer));
+	_systemList.emplace_back(new ecs::PutBombSystem(_world->getEntities(), _world));
+	_systemList.emplace_back(new ecs::ExplosionSystem(_world->getEntities(), _renderer, _world));
+	_systemList.emplace_back(new ecs::DespawnSystem(_world->getEntities(), _renderer, _world));
+	_systemList.emplace_back(new ecs::BreakDestructibleSystem(_world->getEntities(), _renderer, _world));
 }
 
 

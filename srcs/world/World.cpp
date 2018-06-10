@@ -15,7 +15,7 @@
 namespace ecs {
 
 	using entityVectorType = std::vector<std::unique_ptr<Entity>>;
-	World::World(gfx::Renderer *render) : entities{std::make_shared<entityVectorType>()}, renderer{render}
+	World::World(gfx::Renderer *render) : entities{std::make_shared<entityVectorType>()}, _renderer{render}
 	{
 	}
 
@@ -62,12 +62,12 @@ namespace ecs {
 
 		ent.addComponent<Destructible>(std::make_unique<Collectible>(type));
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
-		ent.addComponent<Graphic>(renderer->createElem("../assets/meshs/box.obj"));
+		ent.addComponent<Graphic>(_renderer->createElem("../assets/meshs/box.obj"));
 
 		auto const &gfx= ent.getComponent<Graphic>();
 		if (gfx.sceneNode == nullptr)
 			throw std::runtime_error("Cannot load box asset");
-		renderer->addTexture(gfx.sceneNode, "../assets/textures/box.jpg");
+		_renderer->addTexture(gfx.sceneNode, "../assets/textures/box.jpg");
 	}
 
 	void World::spawnUWall(long posX, long posY) {
@@ -75,7 +75,7 @@ namespace ecs {
 		auto &ent = createEntity();
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
-		ent.addComponent<Graphic>(renderer->createElem(
+		ent.addComponent<Graphic>(_renderer->createElem(
 			rand % 2 ? "../assets/meshs/wallBlue.obj" : "../assets/meshs/wallGreen.obj"));
 		rand++;
 
@@ -90,10 +90,10 @@ namespace ecs {
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Destructible>(nullptr);
-		ent.addComponent<Graphic>(renderer->createElem("../assets/meshs/box.obj"));
+		ent.addComponent<Graphic>(_renderer->createElem("../assets/meshs/box.obj"));
 
 		auto const &gfx = ent.getComponent<Graphic>();
-		if (gfx.sceneNode == nullptr || !renderer->addTexture(gfx.sceneNode, "../assets/textures/box.jpg"))
+		if (gfx.sceneNode == nullptr || !_renderer->addTexture(gfx.sceneNode, "../assets/textures/box.jpg"))
 			throw std::runtime_error("Cannot load wall asset");
 	}
 
@@ -108,7 +108,7 @@ namespace ecs {
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
 		ent.addComponent<Input>(false);
-		ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"), 2.f);
+		ent.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/ninja.b3d"), 2.f);
 	}
 
 	void World::spawnFlames(ecs::Position initialPos, int pwr) {
@@ -117,20 +117,20 @@ namespace ecs {
 			e.addComponent<Orientation>(0.f);
 			e.addComponent<Position>(initialPos.x, initialPos.y - i);
 			e.addComponent<Ephemere>(3LU, std::chrono::steady_clock::now());
-			e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
+			e.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
 			e.addComponent<Damage>(true);
 			auto &posE = e.getComponent<Position>();
-			renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
+			_renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
 		}
 		for (auto i = pwr * (-1); i <= pwr; i++) {
 			auto &e = createEntity();
 			e.addComponent<Orientation>(0.f);
 			e.addComponent<Position>(initialPos.x - i, initialPos.y);
 			e.addComponent<Ephemere>(3LU, std::chrono::steady_clock::now());
-			e.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
+			e.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
 			e.addComponent<Damage>(true);
 			auto &posE = e.getComponent<Position>();
-			renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
+			_renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
 		}
 	}
 
@@ -138,37 +138,29 @@ namespace ecs {
 		if (player->hasComponent<Character>()) {
 			auto &ent = createEntity();
 			auto &posPlayer = player->getComponent<Position>();
-			vec2d<int> posBomb = toIntegerPos<int>(posPlayer.x, posPlayer.y);
+			vec2d<int> posBomb = roundPos<int>(posPlayer.x, posPlayer.y);
 
 			ent.addComponent<Explosion>(player->getComponent<Character>().power);
 			ent.addComponent<Ephemere>(5LU, std::chrono::steady_clock::now());
-			ent.addComponent<Graphic>(renderer->createAnimatedElem("../assets/meshs/bomb.obj"));
+			ent.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/bomb.obj"));
 			ent.addComponent<Position>(static_cast<float>(posBomb.x), static_cast<float>(posBomb.y));
 
 			auto const &gfx= ent.getComponent<Graphic>();
 			if (gfx.sceneNode == nullptr)
 				throw std::runtime_error("Cannot load bomb asset");
 			auto &pos = ent.getComponent<Position>();
-			renderer->setPosition(gfx.sceneNode, {pos.x, 0, pos.y});
+			_renderer->setPosition(gfx.sceneNode, {pos.x, 0, pos.y});
 		}
 	}
 
-	void World::spawnCollectibleFromBoxSystem(Entity *box) noexcept {
-		if (box->hasComponent<Destructible>() && box->getComponent<Destructible>().item != nullptr) {
-			auto &ent = createEntity();
+	void World::spawnCollectibleFromBox(Entity *box) noexcept {
+		auto &ent = createEntity();
 
-			std::cerr << "Get Collectible on box : " << box->id << std::endl;
-			ent.addComponent<Collectible>(box->getComponent<Collectible>());
-			std::cerr << "Get Position on box : " << box->id << std::endl;
-			ent.addComponent<Position>(box->getComponent<Position>());
-			std::cerr << "Get Destructible on box : " << box->id << std::endl;
-			ent.addComponent<Graphic>(renderer->createElem(
-				_queryMeshFromActionTarget(box->getComponent<Destructible>().item->action)
-			));
-
-			box->getComponent<Graphic>().sceneNode->remove();
-			destroyEntity(box->id);
-		}
+		ent.addComponent<Collectible>(box->getComponent<Collectible>());
+		ent.addComponent<Position>(box->getComponent<Position>());
+		ent.addComponent<Graphic>(_renderer->createElem(
+			_queryMeshFromActionTarget(box->getComponent<Destructible>().item->action)
+		));
 	}
 
 	irr::core::stringw World::_queryMeshFromActionTarget(const ActionTarget act) const {
@@ -193,13 +185,13 @@ namespace ecs {
 		for (size_t x = 0; x < xSize; x++) {
 			for (size_t z = 0; z < zSize; z++) {
 				irr::scene::ISceneNode *node;
-				if (!(node = renderer->createElem(assetPath))) {
+				if (!(node = _renderer->createElem(assetPath))) {
 					return;
 				}
-				renderer->setPosition(node, pos);
+				_renderer->setPosition(node, pos);
 				if (x == 0) {
-					sizeGround = renderer->getSize(node);
-					renderer->setSizeGround(sizeGround);
+					_sizeGround = _renderer->getSize(node);
+					_renderer->setSizeGround(_sizeGround);
 				}
 				pos.z += 1;
 			}
@@ -216,19 +208,24 @@ namespace ecs {
 					0,
 					elem->getComponent<Position>().y
 				};
-				renderer->setPosition(elem->getComponent<Graphic>().sceneNode, pos);
+				_renderer->setPosition(elem->getComponent<Graphic>().sceneNode, pos);
 				if (elem->hasComponent<Character>() && elem->hasComponent<Graphic>()) {
 					auto comp = elem->getComponent<Graphic>();
-					renderer->setScale(comp.sceneNode, comp.scale);
+					_renderer->setScale(comp.sceneNode, comp.scale);
 				}
 			}
 		}
 	}
 
 	void World::destroyEntity(std::size_t &id) {
-		std::remove_if(entities->begin(), entities->end(), [id] (const std::unique_ptr<Entity> &e) {
+		auto it = std::find_if(entities->begin(), entities->end(), [id] (const std::unique_ptr<Entity> &e) {
 			return e->id == id;
 		});
+		if ((*it)->hasComponent<Graphic>()) {
+			auto &gfxComp = (*it)->getComponent<Graphic>();
+			gfxComp.sceneNode->remove();
+		}
+		entities->erase(it);
 	}
 
 	entityVector World::getEntities()
