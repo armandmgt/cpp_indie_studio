@@ -10,7 +10,7 @@
 #include "menu/Launch.hpp"
 #include "menu/Settings.hpp"
 
-ids::ScenesManager::ScenesManager(gfx::Renderer *renderer) : _renderer{renderer}
+ids::ScenesManager::ScenesManager(std::shared_ptr<gfx::Renderer> &&renderer) : _renderer{renderer}
 {
 }
 

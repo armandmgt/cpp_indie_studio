@@ -8,8 +8,7 @@
 #include "engine/GameContainer.hpp"
 
 //TODO: remove this .get() and make ecs::World take a weak_ptr
-ids::GameContainer::GameContainer() : _scenesManager{&_renderer}, _renderer{}, _ecs{&_renderer}
-{
+ids::GameContainer::GameContainer() : _scenesManager{std::make_shared<gfx::Renderer>()}, _renderer{}, _ecs{&_renderer} {
 }
 
 void ids::GameContainer::start()

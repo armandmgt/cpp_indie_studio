@@ -9,6 +9,7 @@
 #define AMENU_HPP
 
 #include <string>
+#include <memory>
 #include "gfx/Renderer.hpp"
 #include "scenes/IScene.hpp"
 
@@ -26,7 +27,7 @@ namespace ids {
 				bool hovered;
 			};
 
-			explicit AMenu(gfx::Renderer *rend, sceneId id);
+			explicit AMenu(std::shared_ptr<gfx::Renderer> rend, sceneId id);
 			~AMenu() override = default;
 
 			void computeEvent(evt::MyEventReceiver::MouseState &mouseData);
@@ -34,7 +35,7 @@ namespace ids {
 		protected:
 			bool setWindow();
 			void buttonEvent();
-			gfx::Renderer *_rend;
+			std::shared_ptr<gfx::Renderer> _rend;
 			vec2d<int> _posBackground;
 			irr::core::stringw _backgroundImg;
 			std::vector<Button> _infoButtons;

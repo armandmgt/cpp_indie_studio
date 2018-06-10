@@ -8,7 +8,7 @@
 #include <iostream>
 #include "menu/Launch.hpp"
 
-ids::menu::Launch::Launch(gfx::Renderer *rend) : AMenu(rend, MENU), _events{rend->getEventReceiver()},
+ids::menu::Launch::Launch(std::shared_ptr<gfx::Renderer> rend) : AMenu(rend, MENU), _events{rend->getEventReceiver()},
 	_items{
 		{"bomberman", 0, "../assets/menu/Items/bomber-man.png", {600, 400}},
 		{"speak-bubble", 5, "../assets/menu/Items/speak-bubble.png", {1350, 450}},

@@ -15,14 +15,14 @@
 namespace ids {
 	class GameScene : public IScene {
 		public:
-			explicit GameScene(gfx::Renderer *);
+			explicit GameScene(std::shared_ptr<gfx::Renderer>);
 			~GameScene() noexcept final = default;
 
 			sceneId run() final;
 
 		private:
 			std::unique_ptr<ecs::World> _world;
-			gfx::Renderer *_renderer;
+			std::shared_ptr<gfx::Renderer> _renderer;
 			evt::MyEventReceiver &_event;
 	};
 }

@@ -21,7 +21,7 @@ namespace ids {
 				vec2d<int> pos;
 			};
 
-			explicit Launch(gfx::Renderer *rend);
+			explicit Launch(std::shared_ptr<gfx::Renderer> rend);
 			~Launch() override;
 			sceneId run() override;
 		private:
