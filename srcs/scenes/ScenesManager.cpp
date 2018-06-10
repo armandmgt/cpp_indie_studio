@@ -16,7 +16,6 @@ ids::ScenesManager::ScenesManager(std::shared_ptr<gfx::Renderer> &&renderer) : _
 
 std::unique_ptr<ids::IScene> ids::ScenesManager::makeScene(IScene::sceneId sceneId)
 {
-	//TODO: change all these .lock().get() by giving weak_ptr to AMenu and GameScene
 	switch (sceneId) {
 	case IScene::MENU:
 		return std::make_unique<ids::menu::Launch>(_renderer);
