@@ -24,7 +24,6 @@ void ecs::BreakDestructibleSystem::update(double delta[[maybe_unused]]) {
 			auto &posDestructible = destructible->getComponent<Position>();
 			vec2d<float> roundedPos = roundPos<float>(posDestructible.x, posDestructible.y);
 			if (roundedPos.x == posFlame.x && roundedPos.y == posFlame.y) {
-				std::cout << "flame on box at (" << posDestructible.x << ";" << posDestructible.y << ")" << std::endl;
 				if (destructible->getComponent<Destructible>().item)
 					_world->spawnCollectibleFromBox(destructible);
 				_world->destroyEntity(destructible->id);

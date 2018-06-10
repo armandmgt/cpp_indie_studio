@@ -30,11 +30,6 @@ void ecs::ParseInput::update(double delta[[maybe_unused]]) {
 				InputPlayer.goRight = true;
 			if (event.action == evt::PUTBOMB)
 				InputPlayer.putBomb = true;
-			std::cout << "InputPlayer : \n\tGo Up : " << InputPlayer.goUp << "\n\tGo Down : " << InputPlayer
-				.goDown <<
-				  "\n\tGo Left : " << InputPlayer.goLeft << "\n\tGo Right : " << InputPlayer.goRight <<
-				  "\n\tPut bomb : " << InputPlayer.putBomb <<
-				  std::endl;
 			events.pop();
 		}
 	}

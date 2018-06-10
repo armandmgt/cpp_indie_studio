@@ -111,29 +111,6 @@ namespace ecs {
 		ent.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/ninja.b3d"), 2.f);
 	}
 
-	void World::spawnFlames(ecs::Position initialPos, int pwr) {
-		for (auto i = pwr * (-1); i <= pwr; i++) {
-			auto &e = createEntity();
-			e.addComponent<Orientation>(0.f);
-			e.addComponent<Position>(initialPos.x, initialPos.y - i);
-			e.addComponent<Ephemere>(3LU, std::chrono::steady_clock::now());
-			e.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
-			e.addComponent<Damage>(true);
-			auto &posE = e.getComponent<Position>();
-			_renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
-		}
-		for (auto i = pwr * (-1); i <= pwr; i++) {
-			auto &e = createEntity();
-			e.addComponent<Orientation>(0.f);
-			e.addComponent<Position>(initialPos.x - i, initialPos.y);
-			e.addComponent<Ephemere>(3LU, std::chrono::steady_clock::now());
-			e.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
-			e.addComponent<Damage>(true);
-			auto &posE = e.getComponent<Position>();
-			_renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
-		}
-	}
-
 	void World::spawnBombSystem(Entity *player) {
 		if (player->hasComponent<Character>()) {
 			auto &ent = createEntity();
@@ -155,11 +132,12 @@ namespace ecs {
 
 	void World::spawnCollectibleFromBox(Entity *box) noexcept {
 		auto &ent = createEntity();
+		auto &col = box->getComponent<Destructible>();
 
-		ent.addComponent<Collectible>(box->getComponent<Collectible>());
+		ent.addComponent<Collectible>(col.item->action);
 		ent.addComponent<Position>(box->getComponent<Position>());
 		ent.addComponent<Graphic>(_renderer->createElem(
-			_queryMeshFromActionTarget(box->getComponent<Destructible>().item->action)
+			_queryMeshFromActionTarget(col.item->action)
 		));
 	}
 
@@ -231,5 +209,41 @@ namespace ecs {
 	entityVector World::getEntities()
 	{
 		return entities;
+	}
+
+	bool World::isValidPosition(float x, float y)
+	{
+		for (auto &entitie : *entities) {
+			if (entitie->hasComponent<Position>() && !entitie->hasComponent<Destructible>()) {
+				auto &posE = entitie->getComponent<Position>();
+				if (posE.x == x && posE.y == y)
+					return false;
+			}
+		}
+		return true;
+	}
+
+	void World::spawnFlameatPosition(float x, float y) {
+		auto &e = createEntity();
+		e.addComponent<Orientation>(0.f);
+		e.addComponent<Position>(x, y);
+		e.addComponent<Ephemere>(3LU, std::chrono::steady_clock::now());
+		e.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
+		e.addComponent<Damage>(true);
+		auto &posE = e.getComponent<Position>();
+		_renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
+
+	}
+
+	void World::spawnFlames(ecs::Position initialPos, int pwr) {
+		spawnFlameatPosition(initialPos.x, initialPos.y);
+		for (auto i = 1; i <= pwr  && isValidPosition(initialPos.x, initialPos.y + i); i++)
+			spawnFlameatPosition(initialPos.x, initialPos.y + i);
+		for (auto i = 1; i <= pwr  && isValidPosition(initialPos.x + 1, initialPos.y); i++)
+			spawnFlameatPosition(initialPos.x + i, initialPos.y);
+		for (auto i = -1; i >= (pwr * -1)  && isValidPosition(initialPos.x, initialPos.y + i); i--)
+			spawnFlameatPosition(initialPos.x, initialPos.y + i);
+		for (auto i = -1; i >= (pwr * -1) && isValidPosition(initialPos.x + i, initialPos.y); i--)
+			spawnFlameatPosition(initialPos.x + i, initialPos.y);
 	}
 }

@@ -29,12 +29,14 @@ namespace ecs {
 		void spawnBWall(long posX, long posY);
 		void spawnPlayer(long posX, long posY);
 		void spawnFlames(Position, int);
+		void spawnFlameatPosition(float x, float y);
 
 		void createGround(size_t xSize, size_t zSize, irr::core::stringw const &assetPath);
 		void drawEntities();
 		void destroyEntity(std::size_t &id);
 		void spawnBombSystem(Entity *);
 		void spawnCollectibleFromBox(Entity *) noexcept;
+		bool isValidPosition(float x, float y);
 
 		entityVector getEntities();
 
