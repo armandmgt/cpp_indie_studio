@@ -7,7 +7,8 @@
 
 #include "engine/systems/ParseInputSystem.hpp"
 
-ecs::ParseInput::ParseInput(entityVector allEntities, evt::MyEventReceiver &e) : System(allEntities), event(e)
+ecs::ParseInput::ParseInput(entityVector allEntities, evt::MyEventReceiver &e, ids::PlayerAI &ai1, ids::PlayerAI &ai2)
+	: System(allEntities), event(e), _ai1(ai1), _ai2(ai2 )
 {
 }
 
@@ -17,6 +18,10 @@ void ecs::ParseInput::update(double delta[[maybe_unused]]) {
 	for (auto &e : entities) {
 		auto &InputPlayer = e->getComponent<Input>();
 		auto events = event.getPlayerEvent(e->getComponent<Character>().id);
+		if (events.empty()) {
+			events.push(_ai1.computeAction());
+			events.push(_ai2.computeAction());
+		}
 		while (!events.empty()) {
 			auto &event = events.front();
 			if (event.action == evt::MOVEUP)

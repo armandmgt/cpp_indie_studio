@@ -13,6 +13,7 @@
 #include "gfx/Renderer.hpp"
 #include "world/World.hpp"
 #include "engine/systems/Systems.hpp"
+#include "engine/ai/PlayerAI.hpp"
 
 namespace ids {
 	class GameScene : public IScene {
@@ -23,6 +24,7 @@ namespace ids {
 			sceneId run() final;
 
 		private:
+			bool _isWin();
 			void _initSystem();
 
 		private:
@@ -30,5 +32,8 @@ namespace ids {
 			std::shared_ptr<gfx::Renderer> _renderer;
 			evt::MyEventReceiver &_event;
 			std::list<std::unique_ptr<ecs::System>> _systemList{};
+			PlayerAI _ai1;
+			PlayerAI _ai2;
+
 	};
 }

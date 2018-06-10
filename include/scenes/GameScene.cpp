@@ -12,11 +12,11 @@
 #include "engine/systems/MovementSystem.hpp"
 #include "engine/systems/ParseInputSystem.hpp"
 #include "engine/systems/PutBombSystem.hpp"
-#include "engine/ai/PlayerAI.hpp"
+#include "engine/Components.hpp"
 #include "GameScene.hpp"
 
 ids::GameScene::GameScene(std::shared_ptr<gfx::Renderer> r) : _world{std::make_shared<ecs::World>(r)},
-	_renderer{r}, _event{r->getEventReceiver()} {
+	_renderer{r}, _event{r->getEventReceiver()}, _ai1{0LU, _world, {21, 19}}, _ai2{3LU, _world, {21, 19}} {
 	Map map(21, 19);
 
 	map.initMap(20);
@@ -27,7 +27,8 @@ ids::GameScene::GameScene(std::shared_ptr<gfx::Renderer> r) : _world{std::make_s
 
 void ids::GameScene::_initSystem()
 {
-	_systemList.emplace_back(new ecs::ParseInput(_world->getEntities(), _renderer->getEventReceiver()));
+	_systemList.emplace_back(
+		new ecs::ParseInput(_world->getEntities(), _renderer->getEventReceiver(), _ai1, _ai2));
 	_systemList.emplace_back(new ecs::PlayerMovement(_world->getEntities()));
 	_systemList.emplace_back(new ecs::MovementSystem(_world->getEntities(), _renderer));
 	_systemList.emplace_back(new ecs::PutBombSystem(_world->getEntities(), _world));
@@ -36,15 +37,26 @@ void ids::GameScene::_initSystem()
 	_systemList.emplace_back(new ecs::BreakDestructibleSystem(_world->getEntities(), _renderer, _world));
 }
 
+bool ids::GameScene::_isWin()
+{
+	std::size_t countPlayer = 0;
+	for (auto &entitie : *_world->getEntities().get()) {
+		if (entitie->hasComponent<ecs::Character>()) {
+			countPlayer++;
+		}
+	}
+	return !(countPlayer == 1 || countPlayer == 0);
+}
 
 ids::IScene::sceneId ids::GameScene::run() {
 	_initSystem();
 	_renderer->setCameraFPS();
 	_world->drawEntities();
-	PlayerAI ai1{0LU, _world, {21, 19}};
-	auto e = ai1.computeAction();
-	std::cout << "Best AI in the world computed: " << e.action << " and " << e.key << std::endl;
 	while (_renderer->isRunning() && !_event.isKeyDown(irr::KEY_ESCAPE)) {
+		if (!_isWin()) {
+			_renderer->clearScene();
+			return MENU;
+		}
 		_renderer->render();
 		_event.hasEvent();
 		for (auto &it : _systemList) {

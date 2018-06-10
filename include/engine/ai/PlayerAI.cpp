@@ -56,22 +56,22 @@ evt::Event ids::PlayerAI::computeAction()
 {
 	auto start = std::chrono::steady_clock::now();
 	_updateMap();
-	_printMap();
+//	_printMap();
 
 	const auto &positionComponent = _myself->getComponent<ecs::Position>();
 	vec2d<float> pos{positionComponent.x, positionComponent.y};
 	if (_willDie(pos)) {
-		std::cout << "I'm gonna diiiiiee !" << std::endl;
+//		std::cout << "I'm gonna diiiiiee !" << std::endl;
 		evt::eventAction action = _findSafePlace(pos);
 		auto end = std::chrono::steady_clock::now();
-		std::cout << "Calculation took " << std::chrono::duration<double>(end - start).count() <<
-			" seconds" << std::endl;
+//		std::cout << "Calculation took " << std::chrono::duration<double>(end - start).count() <<
+//			" seconds" << std::endl;
 		return {evt::MOVEMENT, action, evt::NONE};
 	}
-	std::cout << "I'm fine" << std::endl;
+//	std::cout << "I'm fine" << std::endl;
 	auto end = std::chrono::steady_clock::now();
-	std::cout << "Calculation took " << std::chrono::duration<double>(end - start).count() <<
-		" seconds" << std::endl;
+//	std::cout << "Calculation took " << std::chrono::duration<double>(end - start).count() <<
+//		" seconds" << std::endl;
 	return {evt::MOVEMENT, evt::NOTHING, evt::NONE};
 }
 
@@ -152,18 +152,18 @@ bool ids::PlayerAI::_willDie(const vec2d<float> &pos)
 	auto bombIt = std::find_if(_bombs.begin(), _bombs.end(), [&pos](const ecs::Entity *bomb) {
 		const auto &bombPosComponent = bomb->getComponent<ecs::Position>();
 		const auto &bombExplComponent = bomb->getComponent<ecs::Explosion>();
-		std::cout << "bomb at (" << bombPosComponent.x << ";" << bombPosComponent.y << ")" << std::endl;
-		std::cout << std::boolalpha << "same x ? " << aligned(pos.x, bombPosComponent.x, 0.5) <<
-			" and in range ? " << inRange(pos.x, bombPosComponent.x, bombExplComponent.power) << std::endl;
-		std::cout << std::boolalpha << "same y ? " << aligned(pos.y, bombPosComponent.y, 0.5) <<
-			" and in range ? " << inRange(pos.y, bombPosComponent.y, bombExplComponent.power) << std::endl;
+//		std::cout << "bomb at (" << bombPosComponent.x << ";" << bombPosComponent.y << ")" << std::endl;
+//		std::cout << std::boolalpha << "same x ? " << aligned(pos.x, bombPosComponent.x, 0.5) <<
+//			" and in range ? " << inRange(pos.x, bombPosComponent.x, bombExplComponent.power) << std::endl;
+//		std::cout << std::boolalpha << "same y ? " << aligned(pos.y, bombPosComponent.y, 0.5) <<
+//			" and in range ? " << inRange(pos.y, bombPosComponent.y, bombExplComponent.power) << std::endl;
 		return (aligned(pos.x, bombPosComponent.x, 0.5) &&
 			inRange(pos.x, bombPosComponent.x, bombExplComponent.power)) ||
 			(aligned(pos.y, bombPosComponent.y, 0.5) &&
 			inRange(pos.y, bombPosComponent.y, bombExplComponent.power));
 	});
-	std::cout << "(" << pos.x << ";" << pos.y << ") dying ? " <<
-		std::boolalpha << (bombIt != _bombs.end()) << std::endl;
+//	std::cout << "(" << pos.x << ";" << pos.y << ") dying ? " <<
+//		std::boolalpha << (bombIt != _bombs.end()) << std::endl;
 	return bombIt != _bombs.end();
 }
 
@@ -174,7 +174,7 @@ evt::eventAction ids::PlayerAI::_findSafePlace(vec2d<float> &pos)
 		_road.pop_back();
 		return direction;
 	}
-	std::cout << "Let's find a road to take..." << std::endl;
+//	std::cout << "Let's find a road to take..." << std::endl;
 	clear(_road);
 
 	std::unique_ptr<PathTree> pathsLengths = std::make_unique<PathTree>(evt::NOTHING, 0);
@@ -182,12 +182,12 @@ evt::eventAction ids::PlayerAI::_findSafePlace(vec2d<float> &pos)
 	_findSaferCell(pos, pathsLengths, visited);
 	for (std::size_t i = 0; pathsLengths->leafs[i]; i++) {
 		const auto &l = pathsLengths->leafs[i];
-		std::cout << "by going " << l->path << " we went through " << l->length << " nodes" << std::endl;
+//		std::cout << "by going " << l->path << " we went through " << l->length << " nodes" << std::endl;
 	}
-	std::cout << "we went through:" << std::endl;
-	std::for_each(visited.begin(), visited.end(), [](const vec2d<float> &v) {
-		std::cout << "(" << v.x << ";" << v.y << ")" << std::endl;
-	});
+//	std::cout << "we went through:" << std::endl;
+//	std::for_each(visited.begin(), visited.end(), [](const vec2d<float> &v) {
+//		std::cout << "(" << v.x << ";" << v.y << ")" << std::endl;
+//	});
 	auto &bestPath = *std::min_element(pathsLengths->leafs.begin(), pathsLengths->leafs.end(),
 		[](const auto &p1, const auto &p2) {
 			return (p1 && p2 && p1->length < p2->length) || !p2;

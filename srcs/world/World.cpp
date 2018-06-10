@@ -233,7 +233,7 @@ namespace ecs {
 		e.addComponent<Orientation>(0.f);
 		e.addComponent<Position>(x, y);
 		e.addComponent<Ephemere>(3LU, std::chrono::steady_clock::now());
-		e.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/ninja.b3d"));
+		e.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/flames.obj"));
 		e.addComponent<Damage>(true);
 		auto &posE = e.getComponent<Position>();
 		_renderer->setPosition(e.getComponent<Graphic>().sceneNode, {posE.x, 0, posE.y});
