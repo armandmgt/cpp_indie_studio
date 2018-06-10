@@ -12,6 +12,7 @@
 #include <memory>
 #include "gfx/Renderer.hpp"
 #include "scenes/IScene.hpp"
+#include "common/Music.hpp"
 
 namespace ids {
 	namespace menu {
@@ -27,21 +28,21 @@ namespace ids {
 				bool hovered;
 			};
 
-			explicit AMenu(std::shared_ptr<gfx::Renderer> rend, sceneId id);
+			AMenu(std::shared_ptr<gfx::Renderer> rend, std::shared_ptr<Music> music, sceneId id);
 			~AMenu() override = default;
-
-			void computeEvent(evt::MyEventReceiver::MouseState &mouseData);
 
 		protected:
 			bool setWindow();
 			void buttonEvent();
+			bool insideRect(vec2d<int> &pos, vec2d<int> &size);
+
 			std::shared_ptr<gfx::Renderer> _rend;
+			std::shared_ptr<Music> _musicManager;
 			vec2d<int> _posBackground;
+			sceneId	_id;
+			evt::MyEventReceiver::MouseState _mouseData;
 			irr::core::stringw _backgroundImg;
 			std::vector<Button> _infoButtons;
-			sceneId	_id;
-			std::pair<vec2d<int>, bool> _mousePos;
-
 		};
 	}
 }

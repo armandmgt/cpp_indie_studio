@@ -21,7 +21,7 @@ namespace ecs {
 
 	class World {
 	public:
-		explicit World(gfx::Renderer *renderer);
+		explicit World(std::shared_ptr<gfx::Renderer> renderer);
 		~World() = default;
 
 		Entity &createEntity();
@@ -48,7 +48,7 @@ namespace ecs {
 		std::vector<std::unique_ptr<System>> systems;
 
 	private:
-		gfx::Renderer *renderer;
+		std::shared_ptr<gfx::Renderer> renderer;
 		vec3d<float> sizeGround;
 		irr::core::stringw _queryMeshFromActionTarget(ActionTarget) const;
 	};

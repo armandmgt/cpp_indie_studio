@@ -12,7 +12,7 @@
 
 namespace ecs {
 
-	World::World(gfx::Renderer *render) : entities{}, renderer{render}
+	World::World(std::shared_ptr<gfx::Renderer> render) : entities{}, renderer{render}
 	{
 		systems.push_back(std::make_unique<MovementSystem>(&entities));
 	}

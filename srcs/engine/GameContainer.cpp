@@ -7,8 +7,10 @@
 
 #include "engine/GameContainer.hpp"
 
-//TODO: remove this .get() and make ecs::World take a weak_ptr
-ids::GameContainer::GameContainer() : _scenesManager{std::make_shared<gfx::Renderer>()}, _renderer{}, _ecs{&_renderer} {
+ids::GameContainer::GameContainer() : _renderer{std::make_shared<gfx::Renderer>()},
+	_music{std::make_shared<ids::Music>()}, _scenesManager{_renderer, _music},
+	_ecs{std::make_shared<ecs::World>(_renderer)}
+{
 }
 
 void ids::GameContainer::start()

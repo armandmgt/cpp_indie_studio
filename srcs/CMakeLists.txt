@@ -28,9 +28,16 @@ set(SOURCE_FILES
         menu/AMenu.cpp
         menu/Launch.cpp
         menu/Settings.cpp
+        menu/LoadGame.cpp
+        menu/Pause.cpp
         ../include/menu/AMenu.hpp
         ../include/menu/Launch.hpp
         ../include/menu/Settings.hpp
+        ../include/menu/LoadGame.hpp
+        ../include/menu/Pause.hpp
+
+        ../include/common/Music.hpp
+        Music/Music.cpp
 
         settingManager/settingManager.cpp
         ../include/settingManager/settingManager.hpp
@@ -67,4 +74,7 @@ if (WIN32)
    target_link_libraries(bomberman "../../srcs/sfml-audio")
 	add_custom_command(TARGET bomberman POST_BUILD
 	COMMAND cmd /c "start ${CMAKE_SOURCE_DIR}/WinSetupDirectory.bat")
+else ()
+    target_link_libraries(bomberman Irrlicht sfml-audio)
+   include_directories("../irrlicht/")
 endif()
