@@ -11,10 +11,9 @@
 #include "Systems.hpp"
 
 namespace ecs {
-	class ExplosionSystem : public System {
+	class BreakDestructibleSystem : public System {
 	public:
-		explicit ExplosionSystem(entityVector, std::shared_ptr<gfx::Renderer>,
-					 std::shared_ptr<ecs::World> world);
+		BreakDestructibleSystem(entityVector, std::shared_ptr<gfx::Renderer>, std::shared_ptr<ecs::World> world);
 
 		void update(double) override;
 

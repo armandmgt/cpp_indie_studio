@@ -8,9 +8,11 @@
 #pragma once
 
 #include <memory>
+#include <list>
 #include "IScene.hpp"
 #include "gfx/Renderer.hpp"
 #include "world/World.hpp"
+#include "engine/systems/Systems.hpp"
 
 namespace ids {
 	class GameScene : public IScene {
@@ -21,8 +23,12 @@ namespace ids {
 			sceneId run() final;
 
 		private:
-			std::unique_ptr<ecs::World> _world;
+			void _initSystem();
+
+		private:
+			std::shared_ptr<ecs::World> _world;
 			std::shared_ptr<gfx::Renderer> _renderer;
 			evt::MyEventReceiver &_event;
+			std::list<std::unique_ptr<ecs::System>> _systemList{};
 	};
 }

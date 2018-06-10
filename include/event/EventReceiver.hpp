@@ -13,10 +13,19 @@
 #include "enum/EventEnum.hpp"
 
 namespace evt {
-	struct eventType
+
+	using playerId = std::size_t;
+
+	struct Event
 	{
+		eventType type;
 		eventAction action;
 		eventKey key;
+	};
+
+	struct PlayerEvent {
+		playerId id;
+		Event event;
 	};
 
 	class MyEventReceiver : public irr::IEventReceiver
@@ -36,15 +45,16 @@ namespace evt {
 
 		bool isKeyDown(irr::EKEY_CODE keyCode) const;
 		const MouseState &getMousePosition() const;
-		bool getKeyPressed(irr::EKEY_CODE &keyCode) const;
+		bool getKeyPressed(irr::EKEY_CODE &keyCode);
 
-		bool pollEvent();
-		std::queue<evt::eventType> getPlayerEvent(std::size_t playerId);
+		bool hasEvent();
+		std::queue<evt::Event> getPlayerEvent(std::size_t id);
 
 	private:
-		bool _fillKey(irr::EKEY_CODE &keyCode);
+		bool _fillKey();
 
-		std::multimap<std::size_t, eventType> buffer;
+		std::multimap<playerId, Event> buffer;
+		std::vector<irr::EKEY_CODE> keyboardPressed;
 		bool keyIsDown[irr::KEY_KEY_CODES_COUNT];
 	};
 }

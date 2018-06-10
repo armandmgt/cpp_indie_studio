@@ -52,6 +52,7 @@ namespace gfx {
 		void remove2D(irr::core::stringw const &filename);
 		void addArchive(irr::core::stringw const &filename);
 		void setCameraFPS();
+		void setSizeGround(vec3d<float> &sizeGround);
 		evt::MyEventReceiver &getEventReceiver();
 
 	public:
@@ -64,6 +65,8 @@ namespace gfx {
 		std::deque<gfx::Image2D> images;
 		using animationMap = std::unordered_map<std::string, vec2d<int>>;
 		std::unordered_map<irr::scene::ISceneNode *, animationMap> animations;
+		vec3d<float> _sizeGround;
+
 	};
 };
 

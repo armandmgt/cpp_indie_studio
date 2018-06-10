@@ -7,15 +7,16 @@
 
 #pragma once
 
+#include "world/World.hpp"
 #include "Systems.hpp"
 
 namespace ecs {
-	class MovementSystem : public System {
+	class PutBombSystem : public System {
 	public:
-		MovementSystem(entityVector, std::shared_ptr<gfx::Renderer>);
+		explicit PutBombSystem(entityVector allEntities, std::shared_ptr<ecs::World> world);
 
 		void update(double delta) override;
 	private:
-		std::shared_ptr<gfx::Renderer> _renderer;
+		std::shared_ptr<ecs::World> _world;
 	};
 };

@@ -16,6 +16,10 @@
 			SPACE, DELETE, ESCAPE, MOUSE
 		};
 
+		enum eventType {
+			MOVEMENT, ACTION
+		};
+
 		enum eventAction
 		{
 			PUTBOMB, MOVEUP, MOVEDOWN, MOVERIGHT, MOVELEFT,
