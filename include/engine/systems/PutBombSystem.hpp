@@ -18,5 +18,7 @@ namespace ecs {
 		void update(double delta) override;
 	private:
 		std::shared_ptr<ecs::World> _world;
+
+		bool _isValidPosition(Position &position, std::vector<Entity *> bombs);
 	};
 };

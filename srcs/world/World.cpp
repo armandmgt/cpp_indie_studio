@@ -103,10 +103,10 @@ namespace ecs {
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Velocity>(0.f, 0.f);
+		ent.addComponent<Input>(playerId == 0 || playerId == 3);
 		ent.addComponent<Character>(false, 1, 1LU, 1L, playerId++);
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
-		ent.addComponent<Input>(playerId == 0 || playerId == 3);
 		ent.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/ninja.b3d"), 2.f);
 
 		auto &gfx = ent.getComponent<Graphic>();
@@ -118,7 +118,6 @@ namespace ecs {
 	}
 
 	void World::spawnBombSystem(Entity *player) {
-		std::cout << "spawning bomb" << std::endl;
 		if (player->hasComponent<Character>()) {
 			auto &ent = createEntity();
 			auto &posPlayer = player->getComponent<Position>();
