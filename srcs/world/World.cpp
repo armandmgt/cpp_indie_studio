@@ -142,6 +142,7 @@ namespace ecs {
 		auto &pos = box->getComponent<Position>();
 
 		ent.addComponent<Collectible>(col.item->action);
+		ent.addComponent<Orientation>(0.f);
 		ent.addComponent<Position>(box->getComponent<Position>());
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Graphic>(_renderer->createElem(

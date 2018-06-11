@@ -5,6 +5,7 @@
 ** gamescene
 */
 
+#include "engine/systems/PowerUpRotationSystem.hpp"
 #include "engine/systems/PlayerRotationSystem.hpp"
 #include "engine/systems/ExplosionSystem.hpp"
 #include "engine/systems/DespawnSystem.hpp"
@@ -46,6 +47,7 @@ void ids::GameScene::_initSystem()
 	_systemList.emplace_back(new ecs::ExplosionSystem(_world->getEntities(), _renderer, _world));
 	_systemList.emplace_back(new ecs::DespawnSystem(_world->getEntities(), _renderer, _world));
 	_systemList.emplace_back(new ecs::BreakDestructibleSystem(_world->getEntities(), _renderer, _world));
+	_systemList.emplace_back(new ecs::PowerUpRotationSystem(_world->getEntities(), _renderer));
 }
 
 bool ids::GameScene::_isWin()

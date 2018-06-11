@@ -68,7 +68,7 @@ set(SOURCE_FILES
         engine/Entity.cpp
         engine/systems/MovementSystem.cpp
         engine/systems/PlayerRotationSystem.cpp
-        ../include/engine/systems/PlayerRotationSystem.hpp)
+        ../include/engine/systems/PlayerRotationSystem.hpp engine/systems/PowerUpRotationSystem.cpp ../include/engine/systems/PowerUpRotationSystem.hpp)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/W4 /permissive")
