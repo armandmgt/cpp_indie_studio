@@ -53,11 +53,11 @@ const evt::MyEventReceiver::MouseState &evt::MyEventReceiver::getMousePosition()
 bool evt::MyEventReceiver::_fillKey()
 {
 	static std::unordered_map<irr::EKEY_CODE, evt::PlayerEvent> const mapEvent {
-		{irr::KEY_KEY_O, {1, {evt::MOVEMENT, evt::MOVEUP, evt::UP}}},
-		{irr::KEY_KEY_L, {1, {evt::MOVEMENT, evt::MOVEDOWN, evt::DOWN}}},
-		{irr::KEY_KEY_M, {1, {evt::MOVEMENT, evt::MOVERIGHT, evt::RIGHT}}},
-		{irr::KEY_KEY_K, {1, {evt::MOVEMENT, evt::MOVELEFT, evt::LEFT}}},
-		{irr::KEY_KEY_I, {1, {evt::ACTION, evt::PUTBOMB, evt::I}}},
+		{keymap.at(evt::MOVEUP), {1, {evt::MOVEMENT, evt::MOVEUP, evt::UP}}},
+		{keymap.at(evt::MOVEDOWN), {1, {evt::MOVEMENT, evt::MOVEDOWN, evt::DOWN}}},
+		{keymap.at(evt::MOVERIGHT), {1, {evt::MOVEMENT, evt::MOVERIGHT, evt::RIGHT}}},
+		{keymap.at(evt::MOVELEFT), {1, {evt::MOVEMENT, evt::MOVELEFT, evt::LEFT}}},
+		{keymap.at(evt::PUTBOMB), {1, {evt::ACTION, evt::PUTBOMB, evt::I}}},
 		{irr::KEY_DELETE, {1, {evt::ACTION, evt::RESTART, evt::DELETE}}},
 		{irr::KEY_ESCAPE, {1, {evt::ACTION, evt::QUIT, evt::ESCAPE}}},
 		{irr::KEY_LBUTTON, {1, {evt::ACTION, evt::CLICK, evt::MOUSE}}},
@@ -119,4 +119,13 @@ bool evt::MyEventReceiver::getKeyPressed(irr::EKEY_CODE &keyCode)
 		}
 	}
 	return !keyboardPressed.empty();
+}
+
+void evt::MyEventReceiver::setKeymap(std::array<irr::EKEY_CODE, 5> &keymapToSet)
+{
+	keymap[MOVEUP] = keymapToSet[0];
+	keymap[MOVEDOWN] = keymapToSet[1];
+	keymap[MOVELEFT] = keymapToSet[2];
+	keymap[MOVERIGHT] = keymapToSet[3];
+	keymap[PUTBOMB] = keymapToSet[4];
 }

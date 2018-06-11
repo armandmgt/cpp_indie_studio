@@ -50,12 +50,15 @@ namespace evt {
 		bool hasEvent();
 		std::queue<evt::Event> getPlayerEvent(std::size_t id);
 
-	private:
+		void setKeymap(std::array<irr::EKEY_CODE, 5> &keymapToSet);
+
+		private:
 		bool _fillKey();
 
 		std::multimap<playerId, Event> buffer;
 		std::vector<irr::EKEY_CODE> keyboardPressed;
 		bool keyIsDown[irr::KEY_KEY_CODES_COUNT];
+		std::map<evt::eventAction, irr::EKEY_CODE> keymap;
 	};
 }
 

@@ -7,7 +7,8 @@
 
 #include "engine/GameContainer.hpp"
 
-ids::GameContainer::GameContainer() : _renderer{std::make_shared<gfx::Renderer>()},
+ids::GameContainer::GameContainer(std::array<irr::EKEY_CODE, 5> &keymap)
+	: _renderer{std::make_shared<gfx::Renderer>(keymap)},
 	_music{std::make_shared<ids::Music>()}, _scenesManager{_renderer, _music},
 	_ecs{std::make_shared<ecs::World>(_renderer)}
 {

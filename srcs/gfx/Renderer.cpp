@@ -9,13 +9,14 @@
 #include <algorithm>
 #include "gfx/Renderer.hpp"
 
-gfx::Renderer::Renderer()
+gfx::Renderer::Renderer(std::array<irr::EKEY_CODE, 5> &keymap)
 {
 	irr::core::stringw tittleWindow = "Bomberman";
 
 	if (!(device = irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1920, 1080), 16,
 		false, true, false, &eventReceiver)))
 		throw std::runtime_error("Cannot get device");
+	eventReceiver.setKeymap(keymap);
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
 	smgr->addCameraSceneNode();

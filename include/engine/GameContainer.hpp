@@ -23,7 +23,7 @@
 namespace ids {
 	class GameContainer {
 	public:
-		GameContainer();
+		explicit GameContainer(std::array<irr::EKEY_CODE, 5> &keymap);
 		GameContainer(GameContainer &) = delete;
 		GameContainer &operator=(GameContainer &) = delete;
 
