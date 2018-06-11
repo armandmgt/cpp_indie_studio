@@ -75,7 +75,7 @@ void ids::PlayerAI::_updateMap()
 	_players.clear();
 	_bombs.clear();
 	std::transform(_world->entities->begin(), _world->entities->end(), std::back_inserter(_allEntities),
-		[](auto &e) { return e.get(); });
+		[](std::unique_ptr<ecs::Entity> &e) { return e.get(); });
 	auto it = std::find_if(_allEntities.begin(), _allEntities.end(), [this](ecs::Entity *e) {
 		return e->hasComponent<ecs::Character>() && e->getComponent<ecs::Character>().id == _id;
 	});

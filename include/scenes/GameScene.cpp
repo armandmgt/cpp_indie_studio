@@ -5,6 +5,7 @@
 ** gamescene
 */
 
+#include "engine/systems/PowerUpPickupSystem.hpp"
 #include "engine/systems/PowerUpRotationSystem.hpp"
 #include "engine/systems/PlayerRotationSystem.hpp"
 #include "engine/systems/ExplosionSystem.hpp"
@@ -44,6 +45,7 @@ void ids::GameScene::_initSystem()
 	_systemList.emplace_back(new ecs::PlayerMovement(_world->getEntities()));
 	_systemList.emplace_back(new ecs::MovementSystem(_world->getEntities(), _renderer));
 	_systemList.emplace_back(new ecs::PutBombSystem(_world->getEntities(), _world));
+	_systemList.emplace_back(new ecs::PowerUpPickupSystem(_world->getEntities(), _world));
 	_systemList.emplace_back(new ecs::ExplosionSystem(_world->getEntities(), _renderer, _world));
 	_systemList.emplace_back(new ecs::DespawnSystem(_world->getEntities(), _renderer, _world));
 	_systemList.emplace_back(new ecs::BreakDestructibleSystem(_world->getEntities(), _renderer, _world));

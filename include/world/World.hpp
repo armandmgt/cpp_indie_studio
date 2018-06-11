@@ -25,7 +25,7 @@ namespace ecs {
 		Entity &createEntity();
 		void spawnEntitiesFromMap(std::vector<std::string> &&gameMap);
 		void spawnWall(long posX, long posY);
-		void spawnFilledBox(ActionTarget type, long posX, long posY);
+		void spawnFilledBox(actionTarget type, long posX, long posY);
 		void spawnEmptyBox(long posX, long posY);
 		void spawnPlayer(long posX, long posY);
 		void spawnFlames(Position, int);
@@ -46,7 +46,7 @@ namespace ecs {
 	private:
 		vec3d<float> _sizeGround;
 		std::shared_ptr<gfx::Renderer> _renderer;
-		irr::core::stringw _queryMeshFromActionTarget(ActionTarget) const;
+		irr::core::stringw _queryMeshFromActionTarget(actionTarget) const;
 	};
 }
 

@@ -12,7 +12,7 @@
 #include <chrono>
 
 namespace ecs {
-	enum ActionTarget {
+	enum actionTarget {
 		KICK,
 		MAX_BOMBS,
 		SPEEDUP,
@@ -40,7 +40,7 @@ namespace ecs {
 	};
 
 	struct Character : public Component {
-		Character(bool footPowerUp, int power, size_t speed, size_t maxBombs, std::size_t i)
+		Character(bool footPowerUp, int power, size_t speed, long maxBombs, std::size_t i)
 			: footPowerUp(footPowerUp), power(power), speed(speed), maxBombs(maxBombs), id(i)
 		{};
 		~Character() = default;
@@ -48,26 +48,26 @@ namespace ecs {
 		bool footPowerUp;
 		int power;
 		std::size_t speed;
-		std::size_t maxBombs;
+		long maxBombs;
 		std::size_t id;
 	};
 
 	struct Explosion : public Component {
-		Explosion(int p)
-			: power(p)
+		Explosion(std::size_t ownerId, int p) : ownerId{ownerId},power(p)
 		{};
 		~Explosion() = default;
 		static comp const type = COMP_EXPLOSION;
+		std::size_t ownerId;
 		int power;
 	};
 
 	struct Collectible : public Component {
-		explicit Collectible(ActionTarget at) :
+		explicit Collectible(actionTarget at) :
 			action(at)
 		{};
 		~Collectible() = default;
 		static comp const type = COMP_COLLECTIBLE;
-		ActionTarget action;
+		actionTarget action;
 	};
 
 	struct Velocity : public Component {
@@ -97,8 +97,7 @@ namespace ecs {
 	};
 
 	struct Input : public Component {
-		Input(bool ai)
-			: goLeft(false), goRight(false), goUp(false), goDown(false), putBomb(false), isAi(ai)
+		Input(bool ai) : goLeft(false), goRight(false), goUp(false), goDown(false), putBomb(false), isAi(ai)
 		{};
 		~Input() = default;
 		static comp const type = COMP_INPUT;

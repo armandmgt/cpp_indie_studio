@@ -20,7 +20,7 @@ namespace ecs {
 
 		for (auto &entitie : entities) {
 			if (!entitie->hasComponent<Character>() && !entitie->hasComponent<Explosion>() &&
-			    !entitie->hasComponent<Collectible>()) {
+			    !entitie->hasComponent<Collectible>() && !entitie->hasComponent<Damage>()) {
 				auto &posE = entitie->getComponent<Position>();
 				auto posP = roundPos<int>(x, y);
 				auto posRounded = roundPos<int>(posE.x, posE.y);

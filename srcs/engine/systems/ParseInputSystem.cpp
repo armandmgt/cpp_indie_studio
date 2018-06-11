@@ -8,7 +8,7 @@
 #include "engine/systems/ParseInputSystem.hpp"
 
 ecs::ParseInput::ParseInput(entityVector allEntities, evt::MyEventReceiver &e, ids::PlayerAI &ai1, ids::PlayerAI &ai2)
-	: System(allEntities), event(e), _ai1(ai1), _ai2(ai2 )
+	: System(allEntities), event(e), _ai1(ai1), _ai2(ai2)
 {
 }
 
@@ -16,24 +16,25 @@ void ecs::ParseInput::update(double delta[[maybe_unused]]) {
 	auto entities = getEntities(COMP_CHARACTER, COMP_INPUT);
 
 	for (auto &e : entities) {
-		auto &InputPlayer = e->getComponent<Input>();
-		auto events = event.getPlayerEvent(e->getComponent<Character>().id);
-		if (events.empty()) {
-			events.push(_ai1.computeAction());
-			events.push(_ai2.computeAction());
-		}
+		auto &inputPlayer = e->getComponent<Input>();
+		auto id = e->getComponent<Character>().id;
+		std::queue<evt::Event> events;
+		if (!inputPlayer.isAi)
+			events = event.getPlayerEvent(id);
+		else
+			events.push((id == 0 ? _ai1 : _ai2).computeAction());
 		while (!events.empty()) {
 			auto &event = events.front();
 			if (event.action == evt::MOVEUP)
-				InputPlayer.goUp = true;
+				inputPlayer.goUp = true;
 			if (event.action == evt::MOVEDOWN)
-				InputPlayer.goDown = true;
+				inputPlayer.goDown = true;
 			if (event.action == evt::MOVELEFT)
-				InputPlayer.goLeft = true;
+				inputPlayer.goLeft = true;
 			if (event.action == evt::MOVERIGHT)
-				InputPlayer.goRight = true;
+				inputPlayer.goRight = true;
 			if (event.action == evt::PUTBOMB)
-				InputPlayer.putBomb = true;
+				inputPlayer.putBomb = true;
 			events.pop();
 		}
 	}

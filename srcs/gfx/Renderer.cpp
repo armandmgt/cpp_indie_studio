@@ -118,7 +118,7 @@ void gfx::Renderer::setAnimation(irr::scene::IAnimatedMeshSceneNode *node, const
 	animationMap &nodeAnimations = animations.at(node);
 	Animation &animation = nodeAnimations.at(identifier);
 	if (!animation.running) {
-		node->setAnimationSpeed(5.f);
+		node->setAnimationSpeed(10.f);
 		animation.running = true;
 	}
 	if (!animation.set) {

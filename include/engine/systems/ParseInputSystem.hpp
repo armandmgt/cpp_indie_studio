@@ -20,7 +20,7 @@ namespace ecs {
 
 	private:
 		evt::MyEventReceiver &event;
-		ids::PlayerAI _ai1;
-		ids::PlayerAI _ai2;
+		ids::PlayerAI &_ai1;
+		ids::PlayerAI &_ai2;
 	};
 };

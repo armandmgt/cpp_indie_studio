@@ -56,7 +56,7 @@ namespace ecs {
 		}
 	}
 
-	void World::spawnFilledBox(ActionTarget type, long posX, long posY) {
+	void World::spawnFilledBox(actionTarget type, long posX, long posY) {
 		auto &ent = createEntity();
 
 		ent.addComponent<Destructible>(std::make_unique<Collectible>(type));
@@ -103,10 +103,10 @@ namespace ecs {
 
 		ent.addComponent<Position>(static_cast<float>(posX), static_cast<float>(posY));
 		ent.addComponent<Velocity>(0.f, 0.f);
-		ent.addComponent<Character>(false, 2, 1LU, 1LU, playerId++);
+		ent.addComponent<Character>(false, 1, 1LU, 1L, playerId++);
 		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Orientation>(0.f);
-		ent.addComponent<Input>(false);
+		ent.addComponent<Input>(playerId == 0 || playerId == 3);
 		ent.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/ninja.b3d"), 2.f);
 
 		auto &gfx = ent.getComponent<Graphic>();
@@ -118,12 +118,13 @@ namespace ecs {
 	}
 
 	void World::spawnBombSystem(Entity *player) {
+		std::cout << "spawning bomb" << std::endl;
 		if (player->hasComponent<Character>()) {
 			auto &ent = createEntity();
 			auto &posPlayer = player->getComponent<Position>();
 			vec2d<int> posBomb = roundPos<int>(posPlayer.x, posPlayer.y);
 
-			ent.addComponent<Explosion>(player->getComponent<Character>().power);
+			ent.addComponent<Explosion>(player->id, player->getComponent<Character>().power);
 			ent.addComponent<Ephemere>(4LU, std::chrono::steady_clock::now());
 			ent.addComponent<Graphic>(_renderer->createAnimatedElem("../assets/meshs/bomb.obj"));
 			ent.addComponent<Position>(static_cast<float>(posBomb.x), static_cast<float>(posBomb.y));
@@ -155,7 +156,7 @@ namespace ecs {
 		_renderer->setPosition(gfx.sceneNode, {pos.x, 0, pos.y});
 	}
 
-	irr::core::stringw World::_queryMeshFromActionTarget(const ActionTarget act) const {
+	irr::core::stringw World::_queryMeshFromActionTarget(const actionTarget act) const {
 		switch (act) {
 		case KICK:
 			return "../assets/meshs/foot.obj";
