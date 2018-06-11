@@ -18,7 +18,7 @@ void ecs::BreakDestructibleSystem::update(double delta[[maybe_unused]]) {
 	auto destructibles = getEntities(COMP_DESTRUCTIBLE, COMP_POSITION);
 	auto flames = getEntities(COMP_DAMAGE, COMP_POSITION);
 
-	for (auto &flame : flames) {
+	for (auto flame : flames) {
 		auto &posFlame = flame->getComponent<Position>();
 		for (auto &destructible : destructibles) {
 			auto &posDestructible = destructible->getComponent<Position>();
@@ -31,5 +31,6 @@ void ecs::BreakDestructibleSystem::update(double delta[[maybe_unused]]) {
 					destructible));
 			}
 		}
+		flame->removeComponent<Damage>();
 	}
 }

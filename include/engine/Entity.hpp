@@ -59,7 +59,7 @@ namespace ecs {
 		void removeComponent() {
 			static_assert(std::is_base_of<Component, T>(), "T is not a component");
 			bit[T::type] = false;
-			delete componentArray[T::type];
+			componentArray[T::type].reset(nullptr);
 		}
 
 	public:

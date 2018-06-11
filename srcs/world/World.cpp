@@ -143,6 +143,7 @@ namespace ecs {
 
 		ent.addComponent<Collectible>(col.item->action);
 		ent.addComponent<Position>(box->getComponent<Position>());
+		ent.addComponent<Destructible>(nullptr);
 		ent.addComponent<Graphic>(_renderer->createElem(
 			_queryMeshFromActionTarget(col.item->action)
 		));
@@ -251,7 +252,7 @@ namespace ecs {
 		spawnFlameAtPosition(initialPos.x, initialPos.y);
 		for (auto i = 1; i <= pwr  && isValidPosition(initialPos.x, initialPos.y + i); i++)
 			spawnFlameAtPosition(initialPos.x, initialPos.y + i);
-		for (auto i = 1; i <= pwr  && isValidPosition(initialPos.x + 1, initialPos.y); i++)
+		for (auto i = 1; i <= pwr  && isValidPosition(initialPos.x + i, initialPos.y); i++)
 			spawnFlameAtPosition(initialPos.x + i, initialPos.y);
 		for (auto i = -1; i >= (pwr * -1)  && isValidPosition(initialPos.x, initialPos.y + i); i--)
 			spawnFlameAtPosition(initialPos.x, initialPos.y + i);
