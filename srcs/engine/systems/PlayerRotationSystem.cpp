@@ -16,25 +16,19 @@ ecs::PlayerRotationSystem::PlayerRotationSystem(entityVector allEntities, std::s
 
 void ecs::PlayerRotationSystem::update(double delta[[maybe_unused]])
 {
-	auto players = getEntities(COMP_CHARACTER, COMP_VELOCITY, COMP_GRAPHIC);
+	auto players = getEntities(COMP_CHARACTER, COMP_INPUT, COMP_GRAPHIC);
 
 	for (auto player : players) {
-			auto &velocity = player->getComponent<Velocity>();
+			auto &input = player->getComponent<Input>();
 			auto &gfx = player->getComponent<Graphic>();
-			if (velocity.x == 0 && velocity.y == 0)
-				continue;
-			if (std::max(velocity.x, velocity.y) > 0) {
-				if (std::max(velocity.x, velocity.y) == velocity.x) {
-					_renderer->rotate(gfx.sceneNode, {0, 90, 0});
-				} else {
-					_renderer->rotate(gfx.sceneNode, {0, 0, 0});
-				}
-			} else {
-				if (std::max(velocity.x, velocity.y) == velocity.x) {
-					_renderer->rotate(gfx.sceneNode, {0, 180, 0});
-				} else {
-					_renderer->rotate(gfx.sceneNode, {0, -90, 0});
-				}
+			if (input.goRight) {
+				_renderer->rotate(gfx.sceneNode, {0, 90, 0});
+			} else if (input.goUp) {
+				_renderer->rotate(gfx.sceneNode, {0, 0, 0});
+			} else if (input.goDown) {
+				_renderer->rotate(gfx.sceneNode, {0, 180, 0});
+			} else if (input.goLeft) {
+				_renderer->rotate(gfx.sceneNode, {0, -90, 0});
 			}
 	}
 }
