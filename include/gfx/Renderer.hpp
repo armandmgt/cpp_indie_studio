@@ -28,7 +28,7 @@ namespace gfx {
 
 	class Renderer {
 	public:
-		Renderer(std::array<irr::EKEY_CODE, 5> &keymap);
+		explicit Renderer(std::array<irr::EKEY_CODE, 5> &keymap);
 		~Renderer();
 
 		void render();

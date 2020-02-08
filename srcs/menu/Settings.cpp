@@ -34,18 +34,17 @@ ids::menu::Settings::~Settings()
 
 void	ids::menu::Settings::itemEvent()
 {
-	std::size_t id = 0;
 	if (_mouseData.leftButtonDown && insideRect(_items[0].pos, _items[0].size)) {
 		if (_items[0].state == ON) {
 			_items[0].state = OFF;
-			_musicManager->pauseMusic(id);
+			_musicManager->pauseMusic(0);
 			_rend->remove2D(_items[0].soundOn);
 			_rend->load2D(_items[0].soundOff, _items[0].pos);
 		}
 		else {
 			_rend->remove2D(_items[0].soundOff);
 			_items[0].state = ON;
-			_musicManager->playMusic(id);
+			_musicManager->playMusic(0);
 			_rend->load2D(_items[0].soundOn, _items[0].pos);
 		}
 	}
