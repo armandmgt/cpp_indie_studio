@@ -46,7 +46,7 @@ namespace {
 }
 
 ids::PlayerAI::PlayerAI(size_t _id, std::shared_ptr<ecs::World> _world, vec2d<std::size_t> _mapSize)
-	: _id{_id}, _world{_world}, _allEntities{}, _players{}, _bombs{},
+	: _id{_id}, _world{_world}, _allEntities{}, _players{}, _myself{nullptr}, _bombs{},
 	_map{_mapSize.x, std::vector<cellType>{_mapSize.y}}, _road{},
 	_directions{evt::MOVEUP, evt::MOVEDOWN, evt::MOVELEFT, evt::MOVERIGHT}
 {

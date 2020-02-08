@@ -97,7 +97,7 @@ namespace ecs {
 	};
 
 	struct Input : public Component {
-		Input(bool ai) : goLeft(false), goRight(false), goUp(false), goDown(false), putBomb(false), isAi(ai)
+		explicit Input(bool ai) : goLeft(false), goRight(false), goUp(false), goDown(false), putBomb(false), isAi(ai)
 		{};
 		~Input() = default;
 		static comp const type = COMP_INPUT;
